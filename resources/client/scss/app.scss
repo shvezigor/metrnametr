@@ -1,0 +1,18 @@
+// CORE
+// @import "color";
+// @import "typography";
+
+// Bootstrap
+//@import '~bootstrap/scss/bootstrap';
+
+@import "../fonts/lato/stylesheet.css";
+
+@import "variables";
+@import "mixin";
+@import "humburger";
+
+@import "common";
+@import "header";
+@import "news";
+@import "primary-slider";
+@import "horizontal-slider";

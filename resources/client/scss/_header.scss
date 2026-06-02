@@ -1,0 +1,20 @@
+/* header
+------------------------------------------------------------------*/
+header {
+    margin-bottom: 10px;
+    .logo-box {
+        float: left;
+        width: 68px;
+        margin-right: 20px;
+        @media(max-width: 991px) {
+            position: absolute;
+            top: 5px;
+            left: 20px;
+            z-index: 10;
+            width: 50px;
+        }
+        img {
+            width: 100%;
+        }
+    }
+}

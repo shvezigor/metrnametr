@@ -1,0 +1,29 @@
+#app {
+    display: flex;
+    min-height: 100vh;
+    flex-direction: column;
+}
+
+.page-main {
+    flex: 1;
+}
+
+.min-height-300 {
+    min-height: 160px;
+}
+
+.empty {
+    font-size: 2em;
+    color: rgba(213, 213, 213, 0.6);
+    padding: 50px 0 50px 0;
+    text-align: center;
+    margin: 0;
+}
+
+.modal-disable-body {
+    overflow: hidden;
+}
+
+.custom-switch {
+    padding-left: 0;
+}

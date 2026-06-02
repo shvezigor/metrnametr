@@ -1,0 +1,79 @@
+<footer>
+
+    <div class="container-fluid wrap-cont-footer">
+        <div class="background">
+            <div class="layer" style="background: #fff;"></div>
+        </div>
+        <div class="row">
+
+            <div class="container">
+                <div class="row">
+
+                    <div class="col-sm-2 col-md-2">
+                        <div class="logo-box"><a href="#"><img src="/images/logo-2.png" alt=""></a></div>
+                    </div>
+
+                    <div class="col-sm-3 col-md-2">
+                        <ul>
+                            <li><a href="{{ route('catalog') }}">Каталог</a></li>
+                            <li><a href="{{ route('guarantee') }}">Гарантія</a></li>
+                            <li><a href="{{ route('payment') }}">Оплата і доставка</a></li>
+                            <li><a href="{{ route('wholesale') }}">Оптовий продаж</a></li>
+                        </ul>
+                    </div>
+
+                    <div class="col-sm-2 col-md-2">
+                        <ul>
+                            <li><a href="{{ route('about') }}">Про нас</a></li>
+                            <li><a href="{{ route('articles') }}">Новини</a></li>
+                            <li><a href="{{ route('vacancies') }}">Вакансії</a></li>
+                            <li><a href="{{ route('contacts') }}">Контакти</a></li>
+                        </ul>
+                    </div>
+
+                    <div class="col-sm-5 col-md-5 col-md-offset-1 wrap-subscribe">
+                        <p>Підпишіться на нашу розсилку, щоб ми могли проінформувати вас про наші новини та пропозиції</p>
+                        <form action="{{ route('subscribe') }}" method="POST" class="subscribe-form">
+
+                            @csrf
+
+                            <input type="email" name="email" placeholder="email" value="{{ old('email') }}" />
+                            <button type="submit" class="yellow-btn blue-hover">Підписатися</button>
+                        </form>
+                    </div>
+
+                </div>
+            </div>
+
+        </div>
+    </div>
+
+
+    <div class="container wrap-copyright">
+        <div class="row">
+            <div class="col-xs-6 col-sm-6 copyright">© {{ date('Y') }} Метр на Метр</div>
+            <div class="col-xs-6 col-sm-6 social-box">
+                <ul>
+
+                    @if (\App\Models\Setting::existValue('facebook'))
+                        <li><a href="{{ \App\Models\Setting::getValue('facebook') }}" target="_blank"><i class="fa fa-facebook-f"></i></a></li>
+                    @endif
+
+                    @if (\App\Models\Setting::existValue('instagram'))
+                        <li><a href="{{ \App\Models\Setting::getValue('instagram') }}" target="_blank"><i class="fa fa-instagram"></i></a></li>
+                    @endif
+
+                    @if (\App\Models\Setting::existValue('youtube'))
+                        <li><a href="{{ \App\Models\Setting::getValue('youtube') }}" target="_blank"><i class="fa fa-youtube-play"></i></a></li>
+                    @endif
+
+                    @if (\App\Models\Setting::existValue('telegram'))
+                        <li><a href="{{ \App\Models\Setting::getValue('telegram') }}" target="_blank"><i class="fa fa-telegram"></i></a></li>
+                    @endif
+
+                </ul>
+            </div>
+        </div>
+    </div>
+
+</footer>
