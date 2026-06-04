@@ -191,10 +191,12 @@
             )
           })
           .then(response => {
-            this.list = response.data;
+            if (response.data && Array.isArray(response.data.data)) {
+              this.list = response.data;
+            }
           })
           .catch(e => {
-            if (e.response.status === 422) {
+            if (e.response?.status === 422) {
               this.errors = e.response.data.errors;
             } else {
               this.$notify({group: "app", type: "error", text: e.message});

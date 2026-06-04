@@ -59,7 +59,7 @@
 
         <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/noUiSlider/8.3.0/nouislider.min.css" integrity="sha512-5+qhRX5a0+xDxResCu4Tfkm0VSl69GB21dHJ4Ks+khYzK98N+ND+jm7C4xOAVbNHxWClAdhK6bGxLUNRd9SqPg==" crossorigin="anonymous" />
 
-        <link rel="stylesheet" href="{{ elixir('assets/client/app.css') }}" />
+        <link rel="stylesheet" href="{{ mix('assets/client/app.css') }}" />
 
         <!-- HTML5 shim and Respond.js for IE8 support of HTML5 elements and media queries -->
         <!-- WARNING: Respond.js doesn't work if you view the page via file:// -->
@@ -112,7 +112,7 @@
 
         <script src="https://cdnjs.cloudflare.com/ajax/libs/wnumb/1.2.0/wNumb.min.js" integrity="sha512-igVQ7hyQVijOUlfg3OmcTZLwYJIBXU63xL9RC12xBHNpmGJAktDnzl9Iw0J4yrSaQtDxTTVlwhY730vphoVqJQ==" crossorigin="anonymous"></script>
 
-        <script type="text/javascript" src="{{ elixir('assets/client/app.js') }}"></script>
+        <script type="text/javascript" src="{{ mix('assets/client/app.js') }}"></script>
 
     </body>
 </html>

@@ -226,7 +226,9 @@
             )
           })
           .then(response => {
-            this.list = response.data;
+            if (response.data && Array.isArray(response.data.data)) {
+              this.list = response.data;
+            }
           })
           .catch(e => {
             if (e.response?.status === 422) {

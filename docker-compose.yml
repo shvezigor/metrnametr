@@ -1,0 +1,51 @@
+version: '3.8'
+
+services:
+  app:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    container_name: metrnametr_app
+    restart: unless-stopped
+    working_dir: /var/www
+    volumes:
+      - .:/var/www
+    networks:
+      - metrnametr
+
+  nginx:
+    image: nginx:alpine
+    container_name: metrnametr_nginx
+    restart: unless-stopped
+    ports:
+      - "8080:80"
+    volumes:
+      - .:/var/www
+      - ./docker/nginx/default.conf:/etc/nginx/conf.d/default.conf
+    networks:
+      - metrnametr
+    depends_on:
+      - app
+
+  mysql:
+    image: mysql:8.0
+    container_name: metrnametr_mysql
+    restart: unless-stopped
+    environment:
+      MYSQL_DATABASE: metrnametr
+      MYSQL_ROOT_PASSWORD: root
+      MYSQL_USER: metrnametr
+      MYSQL_PASSWORD: secret
+    ports:
+      - "3307:3306"
+    volumes:
+      - mysql_data:/var/lib/mysql
+    networks:
+      - metrnametr
+
+networks:
+  metrnametr:
+    driver: bridge
+
+volumes:
+  mysql_data:

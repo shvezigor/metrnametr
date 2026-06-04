@@ -21,7 +21,7 @@
     <meta name="csrf-token" content="{{ csrf_token() }}">
     <script>window.Laravel = { csrfToken: '{{ csrf_token() }}' }</script>
 
-    <link rel="stylesheet" href="{{ elixir('assets/admin/app.css') }}" />
+    <link rel="stylesheet" href="{{ mix('assets/admin/app.css') }}" />
 
     <!-- HTML5 shim and Respond.js for IE8 support of HTML5 elements and media queries -->
     <!-- WARNING: Respond.js doesn't work if you view the page via file:// -->
@@ -58,6 +58,6 @@
     </footer>
 </div>
 
-<script type="text/javascript" src="{{ elixir('assets/admin/app.js') }}"></script>
+<script type="text/javascript" src="{{ mix('assets/admin/app.js') }}"></script>
 </body>
 </html>
