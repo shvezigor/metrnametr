@@ -106,6 +106,31 @@
               </div>
 
               <div class="form-group">
+                <label>SEO title</label>
+                <input type="text" class="form-control" v-model="record.seo_title" placeholder="SEO title" />
+              </div>
+
+              <div class="form-group">
+                <label>SEO description</label>
+                <textarea rows="4" class="form-control" v-model="record.seo_description" placeholder="SEO description"></textarea>
+              </div>
+
+              <div class="form-group">
+                <label>Canonical URL</label>
+                <input type="text" class="form-control" v-model="record.canonical_url" placeholder="https://metrnametr.com.ua/news/..." />
+              </div>
+
+              <div class="form-group">
+                <label>OG image URL</label>
+                <input type="text" class="form-control" v-model="record.og_image" placeholder="/storage/articles/image.jpg" />
+              </div>
+
+              <div class="form-group">
+                <label>FAQ JSON</label>
+                <textarea rows="8" class="form-control" v-model="record.faq" placeholder='[{"question":"Питання","answer":"Відповідь"}]'></textarea>
+              </div>
+
+              <div class="form-group">
                 <div class="form-label">{{ $t('labels.published') }}</div>
                 <div class="custom-switches-stacked">
                   <label class="custom-switch">
@@ -205,6 +230,11 @@ export default {
         cover: '',
         description: '',
         keywords: '',
+        seo_title: '',
+        seo_description: '',
+        canonical_url: '',
+        og_image: '',
+        faq: '',
         userID: null,
         published: false,
       },

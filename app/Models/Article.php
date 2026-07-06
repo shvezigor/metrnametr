@@ -17,6 +17,11 @@ class Article extends Model
         'user_id',
         'keywords',
         'description',
+        'seo_title',
+        'seo_description',
+        'canonical_url',
+        'og_image',
+        'faq',
         'published',
     ];
 

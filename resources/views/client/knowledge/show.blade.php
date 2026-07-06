@@ -27,6 +27,13 @@
                         <p>{{ $body }}</p>
                     @endforeach
 
+                    @foreach(\App\Support\SeoContent::articleLongFormBlocks($article) as $block)
+                        <h2>{{ $block['heading'] }}</h2>
+                        @foreach($block['paragraphs'] as $paragraph)
+                            <p>{{ $paragraph }}</p>
+                        @endforeach
+                    @endforeach
+
                     @if(!empty($article['comparison']))
                         <h2 id="comparison">Порівняння</h2>
                         <div class="table-responsive">

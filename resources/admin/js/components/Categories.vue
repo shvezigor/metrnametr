@@ -261,6 +261,26 @@
             </label>
           </div>
         </div>
+
+        <div class="form-group">
+          <label>SEO title</label>
+          <input type="text" class="form-control" v-model="record.seo_title" placeholder="SEO title" />
+        </div>
+
+        <div class="form-group">
+          <label>SEO description</label>
+          <textarea rows="4" class="form-control" v-model="record.seo_description" placeholder="SEO description"></textarea>
+        </div>
+
+        <div class="form-group">
+          <label>Canonical URL</label>
+          <input type="text" class="form-control" v-model="record.canonical_url" placeholder="https://metrnametr.com.ua/catalog?categories[]=..." />
+        </div>
+
+        <div class="form-group">
+          <label>FAQ JSON</label>
+          <textarea rows="8" class="form-control" v-model="record.faq" placeholder='[{"question":"Питання","answer":"Відповідь"}]'></textarea>
+        </div>
       </form>
 
       <template slot="footer">
@@ -336,6 +356,10 @@ export default {
 
       record: {
         title: "",
+        seo_title: "",
+        seo_description: "",
+        canonical_url: "",
+        faq: "",
         userID: null,
         catalogID: null,
         published: false,
@@ -465,6 +489,10 @@ export default {
     create: function () {
       this.record = {
         title: "",
+        seo_title: "",
+        seo_description: "",
+        canonical_url: "",
+        faq: "",
         userID: null,
         catalogID: null,
         published: false,
@@ -480,6 +508,10 @@ export default {
 
       const formData = new FormData();
       formData.append("title", this.record.title);
+      formData.append("seo_title", this.record.seo_title || "");
+      formData.append("seo_description", this.record.seo_description || "");
+      formData.append("canonical_url", this.record.canonical_url || "");
+      formData.append("faq", this.record.faq || "");
 
       if (this.record.userID !== null) {
         formData.append("user_id", this.record.userID);

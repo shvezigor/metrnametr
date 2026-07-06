@@ -55,6 +55,10 @@ class CategoriesController extends Controller
         $record = Category::create(
             [
                 'title' => $request->get('title'),
+                'seo_title' => $request->get('seo_title'),
+                'seo_description' => $request->get('seo_description'),
+                'canonical_url' => $request->get('canonical_url'),
+                'faq' => $request->get('faq'),
                 'user_id' => $request->has('user_id') ? (int)$request->get('user_id') : auth()->user()->id,
                 'catalog_id' => $request->get('catalog_id', null),
                 'published' => (int) $request->get('published', 0),
@@ -118,6 +122,10 @@ class CategoriesController extends Controller
                 $request->only(
                     [
                         'title',
+                        'seo_title',
+                        'seo_description',
+                        'canonical_url',
+                        'faq',
                         'published',
                         'user_id',
                         'catalog_id',

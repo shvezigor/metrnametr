@@ -10,7 +10,7 @@
 
                 <div class="col-xs-12 col-md-8 main-cont">
 
-                    <img src="{{ $article->cover }}" class="page-img" alt="{{ $article->title }}">
+                    <img src="{{ $article->cover }}" class="page-img" alt="{{ $article->title }}" title="{{ $article->title }}" loading="lazy">
                     <div class="inner-main-cont article">
 
                         <h1>{{ $article->title }}</h1>
@@ -66,5 +66,7 @@
         </div>
 
     </section>
+
+    @include('client.shared.faq', ['faq' => $faq ?? []])
 
 @endsection

@@ -62,6 +62,11 @@ class ArticlesController extends Controller
                 'text' => $request->get('text'),
                 'keywords' => $request->get('keywords'),
                 'description' => $request->get('description'),
+                'seo_title' => $request->get('seo_title'),
+                'seo_description' => $request->get('seo_description'),
+                'canonical_url' => $request->get('canonical_url'),
+                'og_image' => $request->get('og_image'),
+                'faq' => $request->get('faq'),
                 'user_id' => $request->has('user_id') ? $request->get('user_id') : auth()->user()->id,
                 'published' => (int) $request->get('published', 0),
             ]
@@ -144,6 +149,11 @@ class ArticlesController extends Controller
                         'text',
                         'description',
                         'keywords',
+                        'seo_title',
+                        'seo_description',
+                        'canonical_url',
+                        'og_image',
+                        'faq',
                         'published',
                     ]
                 )

@@ -28,31 +28,39 @@ class ArticlesController extends Controller
         }
 
         $list = Article::published()->orderBy('created_at', 'DESC')->limit(3)->get();
+        $faq = SeoContent::articleFaq($article);
+        $schema = [
+            [
+                '@context' => 'https://schema.org',
+                '@type' => 'Article',
+                'headline' => $article->title,
+                'description' => SeoContent::descriptionFor($article, $article->description),
+                'image' => SeoContent::ogImageFor($article, $article->cover),
+                'url' => SeoContent::canonicalFor($article, $article->location),
+                'publisher' => SeoContent::organizationSchema(),
+            ],
+            SeoContent::breadcrumbSchema([
+                '/' => 'Головна',
+                '/news' => 'Новини',
+                $article->location => $article->title,
+            ]),
+        ];
+
+        if (!empty($faq)) {
+            $schema[] = SeoContent::faqSchema($faq);
+        }
 
         return view('client.articles.show')
             ->with('article', $article)
             ->with('list', $list)
-            ->with('title', $article->title)
-            ->with('description', $article->description)
+            ->with('title', SeoContent::titleFor($article, $article->title))
+            ->with('description', SeoContent::descriptionFor($article, $article->description))
             ->with('keywords', $article->keywords)
             ->with('ogType', 'article')
-            ->with('ogImage', $article->cover)
-            ->with('schema', [
-                [
-                    '@context' => 'https://schema.org',
-                    '@type' => 'Article',
-                    'headline' => $article->title,
-                    'description' => $article->description,
-                    'image' => $article->cover,
-                    'url' => SeoContent::canonical($article->location),
-                    'publisher' => SeoContent::organizationSchema(),
-                ],
-                SeoContent::breadcrumbSchema([
-                    '/' => 'Головна',
-                    '/news' => 'Новини',
-                    $article->location => $article->title,
-                ]),
-            ])
+            ->with('ogImage', SeoContent::ogImageFor($article, $article->cover))
+            ->with('canonical', SeoContent::canonicalFor($article, $article->location))
+            ->with('faq', $faq)
+            ->with('schema', $schema)
             ->with('breadcrumbs', [
                 route('articles') => 'Новини',
                 $article->location => $article->title,
