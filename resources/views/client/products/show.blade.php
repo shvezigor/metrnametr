@@ -14,7 +14,7 @@
                                 data-dot="<div><img src='{{ $image->location }}' alt='{{ $product->title }}'></div><span>{{ $product->title }}</span>">
                                 <a href="{{ $image->location }}" data-fancybox="group" data-fancybox
                                    data-caption="{{ $product->title }}" class="img-box">
-                                    <img src="{{ $image->location }}" alt="{{ $product->title }}">
+                                    <img src="{{ $image->location }}" alt="Вхідні металеві двері {{ $product->title }}" title="{{ $product->title }}" loading="lazy">
                                 </a>
                             </li>
                         @endforeach
@@ -54,6 +54,41 @@
                             виключення попадання опадів.
                         </p>
                     </div>
+
+                    @if(!empty($extra))
+                        <div class="product-seo-block">
+                            <h2>Для кого ця модель</h2>
+                            <p>{{ $extra['audience'] }}</p>
+
+                            <h2>Переваги</h2>
+                            <ul>
+                                @foreach($extra['benefits'] as $benefit)
+                                    <li>{{ $benefit }}</li>
+                                @endforeach
+                            </ul>
+
+                            <h2>Технічні характеристики</h2>
+                            <table class="table table-bordered">
+                                <tbody>
+                                    @foreach($extra['specs'] as $name => $value)
+                                        @if(!empty($value))
+                                            <tr>
+                                                <th>{{ $name }}</th>
+                                                <td>{{ $value }}</td>
+                                            </tr>
+                                        @endif
+                                    @endforeach
+                                </tbody>
+                            </table>
+
+                            <h2>Рекомендовані статті</h2>
+                            <ul>
+                                <li><a href="{{ route('knowledge.show', ['slug' => 'yak-vybraty-vkhidni-dveri-dlia-kvartyry']) }}">Як вибрати вхідні двері для квартири</a></li>
+                                <li><a href="{{ route('knowledge.show', ['slug' => 'yaka-tovshchyna-metalu-u-dveriakh']) }}">Яка товщина металу має бути у вхідних дверях</a></li>
+                                <li><a href="{{ route('knowledge.show', ['slug' => 'montazh-vkhidnykh-dverei']) }}">Як проходить монтаж вхідних дверей</a></li>
+                            </ul>
+                        </div>
+                    @endif
 
                 </div>
 
@@ -124,6 +159,8 @@
             </div>
         </section>
     @endif
+
+    @include('client.shared.faq', ['faq' => $faq ?? []])
 
     @include('client.products.shared.modal')
 

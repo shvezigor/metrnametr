@@ -2288,3 +2288,139 @@ footer {
         padding-right: 0.5rem;
     }
 }
+
+.ai-summary,
+.seo-faq,
+.knowledge-page,
+.knowledge-article {
+    padding: 60px 0;
+}
+
+.ai-summary {
+    background: #fff;
+    text-align: center;
+
+    p {
+        max-width: 900px;
+        margin: 0 auto 15px;
+        font-size: 16px;
+        line-height: 1.7;
+    }
+}
+
+.seo-faq {
+    background: #f5f5f5;
+
+    .seo-faq-item {
+        background: #fff;
+        margin-bottom: 15px;
+        padding: 24px 28px;
+        box-shadow: 0 1px 2px 0 rgba(0, 0, 0, 0.08);
+
+        h3 {
+            margin-top: 0;
+            margin-bottom: 10px;
+            font-size: 18px;
+            font-family: 'latobold';
+        }
+
+        p {
+            margin-bottom: 0;
+            line-height: 1.65;
+        }
+    }
+}
+
+.knowledge-page,
+.knowledge-article {
+    h1 {
+        margin-top: 0;
+        margin-bottom: 20px;
+        font-family: 'latobold';
+    }
+
+    h2 {
+        margin-top: 34px;
+        margin-bottom: 14px;
+        font-family: 'latobold';
+        font-size: 22px;
+    }
+
+    .lead {
+        font-size: 17px;
+        line-height: 1.7;
+        color: rgba(34, 34, 34, 0.78);
+    }
+}
+
+.knowledge-grid {
+    margin-top: 35px;
+
+    .knowledge-card {
+        min-height: 255px;
+        margin-bottom: 30px;
+        padding: 28px;
+        background: #fff;
+        box-shadow: 0 1px 2px 0 rgba(0, 0, 0, 0.08);
+
+        h2 {
+            margin-top: 0;
+            font-size: 18px;
+            line-height: 1.35;
+        }
+
+        p {
+            min-height: 88px;
+            line-height: 1.6;
+        }
+    }
+}
+
+.knowledge-toc {
+    margin: 30px 0;
+    padding: 24px 28px;
+    background: #fff;
+    border-left: 4px solid $blue;
+
+    ul {
+        margin-top: 10px;
+        margin-bottom: 0;
+        padding-left: 18px;
+    }
+}
+
+.knowledge-table {
+    background: #fff;
+}
+
+.knowledge-links {
+    margin-top: 35px;
+    padding: 24px 28px;
+    background: #fff;
+}
+
+.knowledge-related {
+    padding-left: 18px;
+
+    li {
+        margin-bottom: 12px;
+    }
+}
+
+.product-seo-block {
+    margin-top: 30px;
+
+    h2 {
+        margin-top: 26px;
+        font-size: 20px;
+        font-family: 'latobold';
+    }
+
+    ul {
+        padding-left: 18px;
+    }
+
+    table {
+        background: #fff;
+    }
+}

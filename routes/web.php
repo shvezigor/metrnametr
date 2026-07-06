@@ -30,6 +30,17 @@ Route::get('/admin', 'Admin\MainController@index')
     ->middleware(['auth:web']);
 // END Admin
 
+// SEO and AI discovery
+Route::get('/llms.txt', ['as' => 'llms', 'uses' => 'SeoController@llms']);
+Route::get('/llms-full.txt', ['as' => 'llms-full', 'uses' => 'SeoController@llmsFull']);
+Route::get('/robots.txt', ['as' => 'robots', 'uses' => 'SeoController@robots']);
+Route::get('/sitemap.xml', ['as' => 'sitemap', 'uses' => 'SeoController@sitemap']);
+
+// Knowledge Base
+Route::get('/knowledge', ['as' => 'knowledge.index', 'uses' => 'KnowledgeController@index']);
+Route::get('/knowledge/{slug}', ['as' => 'knowledge.show', 'uses' => 'KnowledgeController@show']);
+Route::get('/for-ai-agents', ['as' => 'for-ai-agents', 'uses' => 'KnowledgeController@forAiAgents']);
+
 // Products
 Route::get('/catalog', ['as' => 'catalog', 'uses' => 'ProductsController@index']);
 Route::get('/product/{alias}', ['as' => 'product.show', 'uses' => 'ProductsController@show']);

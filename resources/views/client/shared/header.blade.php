@@ -126,6 +126,7 @@
                             <li><a class="{{ Request::is('payment')? 'active' : '' }}" href="{{ route('payment') }}">Оплата і доставка</a></li>
                             <li><a class="{{ Request::is('wholesale')? 'active' : '' }}" href="{{ route('wholesale') }}">Оптовий продаж</a></li>
                             <li><a class="{{ Request::is('about')? 'active' : '' }}" href="{{ route('about') }}">Про нас</a></li>
+                            <li><a class="{{ Request::is('knowledge*')? 'active' : '' }}" href="{{ route('knowledge.index') }}">База знань</a></li>
                             <li><a class="{{ Request::is('news')? 'active' : '' }}" href="{{ route('articles') }}">Новини</a></li>
                             <li><a class="{{ Request::is('vacancies')? 'active' : '' }}" href="{{ route('vacancies') }}">Вакансії</a></li>
                             <li><a class="{{ Request::is('contacts')? 'active' : '' }}" href="{{ route('contacts') }}">Контакти</a></li>

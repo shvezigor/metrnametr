@@ -178,7 +178,7 @@
 
                                         <div class="img-box product-image product-item">
                                             <a href="{{ $item->location }}">
-                                                <img src="{{ $item->cover }}" alt="{{ $item->title }}">
+                                                <img src="{{ $item->cover }}" alt="Вхідні металеві двері {{ $item->title }}" title="{{ $item->title }}" loading="lazy">
                                             </a>
                                         </div>
 
@@ -216,6 +216,8 @@
 
         </div>
     </section>
+
+    @include('client.shared.faq', ['faq' => $faq ?? []])
 
     @include('client.products.shared.modal')
 

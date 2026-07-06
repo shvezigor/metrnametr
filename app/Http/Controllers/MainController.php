@@ -12,6 +12,7 @@ use App\Models\Subscriber;
 use App\Models\Order;
 use App\Models\Message;
 use App\Models\Setting;
+use App\Support\SeoContent;
 use Illuminate\Http\Request;
 
 class MainController extends Controller
@@ -37,12 +38,27 @@ class MainController extends Controller
             ->with('title', $title)
             ->with('keywords', $keywords)
             ->with('description', $description)
+            ->with('faq', SeoContent::faq('home_faq'))
+            ->with('schema', [
+                SeoContent::organizationSchema(),
+                SeoContent::websiteSchema(),
+                SeoContent::localBusinessSchema(),
+                SeoContent::faqSchema(SeoContent::faq('home_faq')),
+            ])
             ->with('slides', $slides);
     }
 
     public function contacts() {
         return view('client.main.contacts')
             ->with('title', 'Контакти')
+            ->with('description', 'Контакти компанії Метр на Метр: адреса, телефони, email і форма для звернення щодо підбору та монтажу дверей.')
+            ->with('schema', [
+                SeoContent::localBusinessSchema(),
+                SeoContent::breadcrumbSchema([
+                    '/' => 'Головна',
+                    '/contacts' => 'Контакти',
+                ]),
+            ])
             ->with('breadcrumbs', [route('contacts') => 'Контакти']);
     }
 
