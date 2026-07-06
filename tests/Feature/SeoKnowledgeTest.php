@@ -2,6 +2,8 @@
 
 namespace Tests\Feature;
 
+use App\Models\Product;
+use App\Support\SeoContent;
 use Tests\TestCase;
 
 class SeoKnowledgeTest extends TestCase
@@ -84,5 +86,25 @@ class SeoKnowledgeTest extends TestCase
             ->assertSee('"@type": "Organization"', false)
             ->assertSee('"@type": "WebSite"', false)
             ->assertSee('"@type": "LocalBusiness"', false);
+    }
+
+    public function testSeoSchemasUseAbsoluteImagesAndSkipEmptyFaqSchema()
+    {
+        config(['app.url' => 'https://metrnametr.com.ua']);
+
+        $product = new Product([
+            'title' => 'Test Door',
+            'description' => 'Door description',
+            'alias' => 'test-door',
+            'price' => 0,
+        ]);
+        $product->setRelation('images', collect());
+
+        $schema = SeoContent::productSchema($product);
+
+        $this->assertSame('https://metrnametr.com.ua/images/placeholder-product.png', $schema['image']);
+        $this->assertNull(SeoContent::faqSchema([]));
+        $this->assertSame('https://metrnametr.com.ua/images/og.jpg', SeoContent::ogImageFor((object) ['og_image' => '/images/og.jpg'], '/fallback.jpg'));
+        $this->assertNotContains(null, SeoContent::defaultPageSchemas([SeoContent::faqSchema([])]));
     }
 }

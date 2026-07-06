@@ -62,7 +62,7 @@ class CategoriesController extends Controller
                 'user_id' => $request->has('user_id') ? (int)$request->get('user_id') : auth()->user()->id,
                 'catalog_id' => $request->get('catalog_id', null),
                 'published' => (int) $request->get('published', 0),
-                'type_id' => $request->get('type', null),
+                'type_id' => $request->get('type_id', null),
             ]
         );
 

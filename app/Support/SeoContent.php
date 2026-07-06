@@ -88,11 +88,32 @@ class SeoContent
 
     public static function ogImageFor($model, $fallback)
     {
-        return !empty($model->og_image) ? $model->og_image : $fallback;
+        return self::absoluteUrl(!empty($model->og_image) ? $model->og_image : $fallback);
+    }
+
+    public static function absoluteUrl($url)
+    {
+        if (empty($url)) {
+            return null;
+        }
+
+        if (preg_match('/^https?:\/\//', $url)) {
+            return $url;
+        }
+
+        if (strpos($url, '//') === 0) {
+            return 'https:' . $url;
+        }
+
+        return self::canonical($url);
     }
 
     public static function canonical($path = null)
     {
+        if ($path && preg_match('/^https?:\/\//', $path)) {
+            return $path;
+        }
+
         $base = rtrim(self::site('domain'), '/');
         $path = $path ?: request()->getPathInfo();
 
@@ -153,6 +174,7 @@ class SeoContent
 
     public static function defaultPageSchemas(array $schema = [])
     {
+        $schema = array_values(array_filter($schema));
         $topLevelTypes = collect($schema)->pluck('@type')->filter()->all();
         $defaults = [
             self::organizationSchema(),
@@ -192,6 +214,10 @@ class SeoContent
 
     public static function faqSchema(array $faq)
     {
+        if (empty($faq)) {
+            return null;
+        }
+
         return [
             '@context' => 'https://schema.org',
             '@type' => 'FAQPage',
@@ -288,7 +314,7 @@ class SeoContent
             '@type' => 'Product',
             'name' => $product->title,
             'description' => strip_tags($product->description ?: $product->text),
-            'image' => $product->cover,
+            'image' => self::absoluteUrl($product->cover),
             'url' => self::canonical($product->location),
         ];
 
