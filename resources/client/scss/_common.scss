@@ -2363,6 +2363,21 @@ footer {
         background: #fff;
         box-shadow: 0 1px 2px 0 rgba(0, 0, 0, 0.08);
 
+        .knowledge-card-image {
+            display: block;
+            margin: -28px -28px 22px;
+            background: #eef2f6;
+            overflow: hidden;
+
+            img {
+                display: block;
+                width: 100%;
+                height: auto;
+                aspect-ratio: 16 / 9;
+                object-fit: cover;
+            }
+        }
+
         h2 {
             margin-top: 0;
             font-size: 18px;
@@ -2373,6 +2388,26 @@ footer {
             min-height: 88px;
             line-height: 1.6;
         }
+    }
+}
+
+.knowledge-hero-image {
+    margin: 30px 0;
+    background: #fff;
+
+    img {
+        display: block;
+        width: 100%;
+        height: auto;
+        aspect-ratio: 16 / 9;
+        object-fit: cover;
+    }
+
+    figcaption {
+        padding: 12px 16px;
+        color: rgba(34, 34, 34, 0.65);
+        font-size: 13px;
+        line-height: 1.5;
     }
 }
 

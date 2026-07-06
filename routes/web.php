@@ -40,6 +40,7 @@ Route::get('/sitemap.xml', ['as' => 'sitemap', 'uses' => 'SeoController@sitemap'
 // Knowledge Base
 Route::get('/knowledge', ['as' => 'knowledge.index', 'uses' => 'KnowledgeController@index']);
 Route::get('/knowledge/plan', ['as' => 'knowledge.plan', 'uses' => 'KnowledgeController@plan']);
+Route::get('/knowledge/{slug}/image.svg', ['as' => 'knowledge.image', 'uses' => 'KnowledgeController@image']);
 Route::get('/knowledge/{slug}', ['as' => 'knowledge.show', 'uses' => 'KnowledgeController@show']);
 Route::get('/for-ai-agents', ['as' => 'for-ai-agents', 'uses' => 'KnowledgeController@forAiAgents']);
 

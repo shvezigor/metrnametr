@@ -58,7 +58,6 @@ class KnowledgePlanTest extends TestCase
             ->assertStatus(200)
             ->assertSee('/knowledge/yak-vybraty-mizhkimnatni-dveri-dlia-kvartyry')
             ->assertSee('/knowledge/dveri-dlia-ofisu-yak-obraty')
-            ->assertSee('/knowledge/yak-pidhotuvatysia-do-zamovlennia-dverei')
             ->assertDontSee('Заплановано');
 
         $this->get('/knowledge/yak-vybraty-mizhkimnatni-dveri-dlia-kvartyry')
@@ -72,5 +71,36 @@ class KnowledgePlanTest extends TestCase
             ->assertSee('Як підготуватися до замовлення дверей')
             ->assertSee('FAQPage')
             ->assertSee('Порівняння');
+    }
+
+    public function testKnowledgeIndexIsPaginatedAndUsesArticleImages()
+    {
+        $response = $this->get('/knowledge');
+
+        $response->assertStatus(200);
+        $response->assertSee('/knowledge?page=2', false);
+        $response->assertSee('/knowledge/yak-vybraty-vkhidni-dveri-dlia-kvartyry/image.svg', false);
+        $response->assertSee('loading="lazy"', false);
+        $response->assertDontSee('/knowledge/yak-pidhotuvatysia-do-zamovlennia-dverei');
+
+        $this->get('/knowledge?page=2')
+            ->assertStatus(200)
+            ->assertSee('/knowledge?page=1', false);
+
+        $this->get('/knowledge/yak-pidhotuvatysia-do-zamovlennia-dverei')
+            ->assertStatus(200)
+            ->assertSee('/knowledge/yak-pidhotuvatysia-do-zamovlennia-dverei/image.svg', false)
+            ->assertSee('alt="Як підготуватися до замовлення дверей"', false)
+            ->assertSee('width="1200"', false)
+            ->assertSee('height="675"', false);
+    }
+
+    public function testKnowledgeArticleImageEndpointReturnsSvg()
+    {
+        $this->get('/knowledge/yak-pidhotuvatysia-do-zamovlennia-dverei/image.svg')
+            ->assertStatus(200)
+            ->assertHeader('Content-Type', 'image/svg+xml; charset=UTF-8')
+            ->assertSee('<svg', false)
+            ->assertSee('Метр на Метр', false);
     }
 }

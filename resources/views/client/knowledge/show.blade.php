@@ -11,6 +11,18 @@
                     <h1>{{ $article['title'] }}</h1>
                     <p class="lead">{{ $article['intro'] }}</p>
 
+                    <figure class="knowledge-hero-image">
+                        <img
+                            src="{{ route('knowledge.image', ['slug' => $article['slug']]) }}"
+                            alt="{{ $article['title'] }}"
+                            title="{{ $article['title'] }}"
+                            width="1200"
+                            height="675"
+                            loading="eager"
+                        >
+                        <figcaption>Технічна ілюстрація до теми: {{ $article['title'] }}</figcaption>
+                    </figure>
+
                     <div class="knowledge-toc">
                         <strong>Зміст</strong>
                         <ul>

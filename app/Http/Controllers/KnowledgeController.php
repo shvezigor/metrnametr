@@ -4,13 +4,28 @@ namespace App\Http\Controllers;
 
 use App\Support\KnowledgePlan;
 use App\Support\SeoContent;
+use Illuminate\Pagination\LengthAwarePaginator;
 
 class KnowledgeController extends Controller
 {
     public function index()
     {
+        $allArticles = SeoContent::articles();
+        $page = LengthAwarePaginator::resolveCurrentPage();
+        $perPage = 12;
+        $articles = new LengthAwarePaginator(
+            $allArticles->forPage($page, $perPage)->values(),
+            $allArticles->count(),
+            $perPage,
+            $page,
+            [
+                'path' => request()->url(),
+                'pageName' => 'page',
+            ]
+        );
+
         return view('client.knowledge.index')
-            ->with('articles', SeoContent::articles())
+            ->with('articles', $articles)
             ->with('title', 'База знань про двері | Метр на Метр')
             ->with('description', 'Практичні поради Метр на Метр щодо вибору, монтажу, утеплення, замків і догляду за вхідними дверима.')
             ->with('breadcrumbs', [
@@ -22,6 +37,19 @@ class KnowledgeController extends Controller
                     '/knowledge' => 'База знань',
                 ]),
             ]);
+    }
+
+    public function image($slug)
+    {
+        $article = SeoContent::article($slug);
+
+        if (!$article) {
+            abort(404);
+        }
+
+        return response(SeoContent::articleImageSvg($article), 200)
+            ->header('Content-Type', 'image/svg+xml; charset=UTF-8')
+            ->header('Cache-Control', 'public, max-age=86400');
     }
 
     public function show($slug)

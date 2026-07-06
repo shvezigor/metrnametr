@@ -255,10 +255,55 @@ class SeoContent
             '@type' => 'Article',
             'headline' => $article['title'],
             'description' => $article['description'],
+            'image' => self::articleImageUrl($article),
             'author' => self::organizationSchema(),
             'publisher' => self::organizationSchema(),
             'mainEntityOfPage' => self::canonical('/knowledge/' . $article['slug']),
         ];
+    }
+
+    public static function articleImageUrl(array $article)
+    {
+        return self::canonical('/knowledge/' . $article['slug'] . '/image.svg');
+    }
+
+    public static function articleImageSvg(array $article)
+    {
+        $title = htmlspecialchars($article['title'], ENT_QUOTES, 'UTF-8');
+        $slug = $article['slug'];
+        $hash = substr(md5($slug), 0, 6);
+        $accent = '#' . $hash;
+        $dark = '#1f2933';
+        $muted = '#64748b';
+
+        return <<<SVG
+<svg xmlns="http://www.w3.org/2000/svg" width="1200" height="675" viewBox="0 0 1200 675" role="img" aria-labelledby="title desc">
+  <title id="title">{$title}</title>
+  <desc id="desc">Технічна ілюстрація Метр на Метр для статті про двері</desc>
+  <rect width="1200" height="675" fill="#f5f7fa"/>
+  <rect x="70" y="70" width="1060" height="535" rx="28" fill="#ffffff" stroke="#d9e2ec" stroke-width="2"/>
+  <rect x="118" y="118" width="310" height="440" rx="10" fill="#eef2f6" stroke="{$dark}" stroke-width="10"/>
+  <rect x="155" y="155" width="236" height="366" rx="4" fill="#ffffff" stroke="#94a3b8" stroke-width="4"/>
+  <rect x="181" y="185" width="184" height="128" rx="4" fill="#e2e8f0"/>
+  <rect x="181" y="336" width="184" height="154" rx="4" fill="#e2e8f0"/>
+  <circle cx="353" cy="345" r="13" fill="{$accent}"/>
+  <rect x="448" y="128" width="44" height="422" rx="6" fill="{$accent}" opacity="0.2"/>
+  <path d="M492 160h195M492 255h145M492 350h225M492 445h170" stroke="{$accent}" stroke-width="8" stroke-linecap="round"/>
+  <g transform="translate(730 140)">
+    <rect x="0" y="0" width="285" height="170" rx="16" fill="#f8fafc" stroke="#cbd5e1" stroke-width="2"/>
+    <path d="M42 118V58h52l22 60h36l24-60h64v60" fill="none" stroke="{$dark}" stroke-width="8" stroke-linecap="round" stroke-linejoin="round"/>
+    <circle cx="94" cy="58" r="13" fill="{$accent}"/>
+    <circle cx="176" cy="58" r="13" fill="{$accent}"/>
+  </g>
+  <g transform="translate(730 345)">
+    <rect x="0" y="0" width="285" height="155" rx="16" fill="#f8fafc" stroke="#cbd5e1" stroke-width="2"/>
+    <rect x="44" y="54" width="190" height="58" rx="10" fill="#e2e8f0" stroke="{$dark}" stroke-width="5"/>
+    <circle cx="84" cy="83" r="12" fill="{$accent}"/>
+    <path d="M105 83h92" stroke="{$dark}" stroke-width="7" stroke-linecap="round"/>
+  </g>
+  <text x="118" y="614" fill="{$muted}" font-family="Arial, sans-serif" font-size="28">Метр на Метр</text>
+</svg>
+SVG;
     }
 
     public static function articleLongFormBlocks(array $article)
