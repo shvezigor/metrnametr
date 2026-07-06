@@ -3,6 +3,7 @@
 namespace Tests\Feature;
 
 use App\Support\KnowledgePlan;
+use App\Support\SeoContent;
 use Tests\TestCase;
 
 class KnowledgePlanTest extends TestCase
@@ -48,15 +49,27 @@ class KnowledgePlanTest extends TestCase
 
     public function testKnowledgeIndexRendersPublishedArticlesNotPlannedStatuses()
     {
+        $publishedArticles = SeoContent::articles();
+
+        $this->assertGreaterThanOrEqual(100, $publishedArticles->count());
+        $this->assertSame($publishedArticles->count(), $publishedArticles->pluck('slug')->unique()->count());
+
         $this->get('/knowledge')
             ->assertStatus(200)
             ->assertSee('/knowledge/yak-vybraty-mizhkimnatni-dveri-dlia-kvartyry')
             ->assertSee('/knowledge/dveri-dlia-ofisu-yak-obraty')
+            ->assertSee('/knowledge/yak-pidhotuvatysia-do-zamovlennia-dverei')
             ->assertDontSee('Заплановано');
 
         $this->get('/knowledge/yak-vybraty-mizhkimnatni-dveri-dlia-kvartyry')
             ->assertStatus(200)
             ->assertSee('Як вибрати міжкімнатні двері для квартири')
+            ->assertSee('FAQPage')
+            ->assertSee('Порівняння');
+
+        $this->get('/knowledge/yak-pidhotuvatysia-do-zamovlennia-dverei')
+            ->assertStatus(200)
+            ->assertSee('Як підготуватися до замовлення дверей')
             ->assertSee('FAQPage')
             ->assertSee('Порівняння');
     }

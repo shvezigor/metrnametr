@@ -26,8 +26,16 @@ class SeoContent
                 return KnowledgeArticleFactory::make($article);
             });
 
+        $plannedArticles = KnowledgePlan::articles()
+            ->map(function ($article) {
+                return KnowledgeArticleFactory::make($article);
+            });
+
         return collect(config('seo_content.articles', []))
-            ->merge($configuredArticles);
+            ->merge($configuredArticles)
+            ->merge($plannedArticles)
+            ->unique('slug')
+            ->values();
     }
 
     public static function article($slug)

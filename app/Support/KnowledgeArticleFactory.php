@@ -7,17 +7,19 @@ class KnowledgeArticleFactory
     public static function make(array $source)
     {
         $title = $source['title'];
-        $focus = $source['focus'];
+        $focus = $source['focus'] ?? mb_strtolower($title);
+        $description = $source['description'] ?? $source['meta_description'];
+        $intro = $source['intro'] ?? $source['intro_goal'];
 
         return [
             'slug' => $source['slug'],
             'title' => $title,
-            'description' => $source['description'],
-            'intro' => $source['intro'],
+            'description' => $description,
+            'intro' => $intro,
             'sections' => self::sections($focus),
             'comparison' => self::comparison($focus),
             'faq' => self::faq($focus),
-            'image_prompts' => KnowledgePlan::articleBrief('choice', ['label' => 'Вибір дверей'], $source['slug'], $title)['image_prompts'],
+            'image_prompts' => $source['image_prompts'] ?? KnowledgePlan::articleBrief('choice', ['label' => 'Вибір дверей'], $source['slug'], $title)['image_prompts'],
         ];
     }
 
