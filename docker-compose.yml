@@ -17,6 +17,7 @@ services:
     image: nginx:alpine
     container_name: metrnametr_nginx
     restart: unless-stopped
+    command: /bin/sh -c "until getent hosts app > /dev/null; do sleep 1; done; nginx -g 'daemon off;'"
     ports:
       - "8081:80"
     volumes:
