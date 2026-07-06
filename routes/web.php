@@ -33,6 +33,7 @@ Route::get('/admin', 'Admin\MainController@index')
 // SEO and AI discovery
 Route::get('/llms.txt', ['as' => 'llms', 'uses' => 'SeoController@llms']);
 Route::get('/llms-full.txt', ['as' => 'llms-full', 'uses' => 'SeoController@llmsFull']);
+Route::get('/ai-policy.txt', ['as' => 'ai-policy', 'uses' => 'SeoController@aiPolicy']);
 Route::get('/robots.txt', ['as' => 'robots', 'uses' => 'SeoController@robots']);
 Route::get('/sitemap.xml', ['as' => 'sitemap', 'uses' => 'SeoController@sitemap']);
 

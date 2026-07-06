@@ -1,4 +1,5 @@
 User-agent: *
 Allow: /
 
+# AI usage policy: https://metrnametr.com.ua/ai-policy.txt
 Sitemap: https://metrnametr.com.ua/sitemap.xml

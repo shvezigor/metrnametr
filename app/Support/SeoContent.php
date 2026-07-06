@@ -151,6 +151,24 @@ class SeoContent
         ];
     }
 
+    public static function defaultPageSchemas(array $schema = [])
+    {
+        $topLevelTypes = collect($schema)->pluck('@type')->filter()->all();
+        $defaults = [
+            self::organizationSchema(),
+            self::websiteSchema(),
+            self::localBusinessSchema(),
+        ];
+
+        foreach ($defaults as $defaultSchema) {
+            if (!in_array($defaultSchema['@type'], $topLevelTypes, true)) {
+                $schema[] = $defaultSchema;
+            }
+        }
+
+        return $schema;
+    }
+
     public static function breadcrumbSchema(array $breadcrumbs)
     {
         $items = [];
@@ -320,7 +338,12 @@ class SeoContent
             ['loc' => '/catalog', 'lastmod' => $today, 'changefreq' => 'daily', 'priority' => '0.9'],
             ['loc' => '/knowledge', 'lastmod' => $today, 'changefreq' => 'weekly', 'priority' => '0.8'],
             ['loc' => '/for-ai-agents', 'lastmod' => $today, 'changefreq' => 'monthly', 'priority' => '0.5'],
+            ['loc' => '/ai-policy.txt', 'lastmod' => $today, 'changefreq' => 'monthly', 'priority' => '0.4'],
             ['loc' => '/contacts', 'lastmod' => $today, 'changefreq' => 'monthly', 'priority' => '0.7'],
+            ['loc' => '/guarantee', 'lastmod' => $today, 'changefreq' => 'monthly', 'priority' => '0.5'],
+            ['loc' => '/payment', 'lastmod' => $today, 'changefreq' => 'monthly', 'priority' => '0.5'],
+            ['loc' => '/about', 'lastmod' => $today, 'changefreq' => 'monthly', 'priority' => '0.5'],
+            ['loc' => '/wholesale', 'lastmod' => $today, 'changefreq' => 'monthly', 'priority' => '0.5'],
             ['loc' => '/news', 'lastmod' => $today, 'changefreq' => 'weekly', 'priority' => '0.6'],
         ];
 

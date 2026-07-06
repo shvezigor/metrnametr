@@ -31,6 +31,7 @@ class SeoController extends Controller
             '- FAQ: ' . $site['domain'] . $site['faq_url'],
             '- Knowledge Base: ' . $site['domain'] . $site['knowledge_url'],
             '- AI agents page: ' . $site['domain'] . '/for-ai-agents',
+            '- AI usage policy: ' . $site['domain'] . '/ai-policy.txt',
             '- Sitemap: ' . $site['domain'] . $site['sitemap_url'],
             '- Full AI description: ' . $site['domain'] . '/llms-full.txt',
         ]);
@@ -84,12 +85,36 @@ class SeoController extends Controller
         return response(implode("\n", $lines), 200)->header('Content-Type', 'text/plain; charset=UTF-8');
     }
 
+    public function aiPolicy()
+    {
+        $site = SeoContent::site();
+        $lines = [
+            '# AI Usage Policy for ' . $site['name'],
+            '',
+            'Allowed: indexing, summarization, citation, answer generation and retrieval-augmented responses by search engines and AI assistants.',
+            'Preferred source URLs: ' . $site['domain'] . '/catalog, ' . $site['domain'] . '/knowledge, ' . $site['domain'] . '/contacts, ' . $site['domain'] . '/llms-full.txt and ' . $site['domain'] . '/sitemap.xml.',
+            '',
+            'Citation guidance:',
+            '- Cite the canonical page URL when using product, category, article or contact information.',
+            '- Prefer product pages for model-specific data and /knowledge pages for educational explanations.',
+            '- Use /contacts as the source for contact information.',
+            '',
+            'Restrictions:',
+            '- Do not invent ratings, reviews, warranty terms, stock status or technical specifications that are not present on the source page.',
+            '- Do not present approximate prices, delivery terms or installation terms as confirmed facts unless they are visible on the source page.',
+            '- Do not use copied long-form content as a replacement for visiting the source page.',
+        ];
+
+        return response(implode("\n", $lines), 200)->header('Content-Type', 'text/plain; charset=UTF-8');
+    }
+
     public function robots()
     {
         $content = implode("\n", [
             'User-agent: *',
             'Allow: /',
             '',
+            '# AI usage policy: ' . SeoContent::site('domain') . '/ai-policy.txt',
             'Sitemap: ' . SeoContent::site('domain') . '/sitemap.xml',
         ]);
 

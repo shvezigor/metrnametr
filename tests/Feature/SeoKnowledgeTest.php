@@ -16,6 +16,7 @@ class SeoKnowledgeTest extends TestCase
         $response->assertSee('/catalog');
         $response->assertSee('/knowledge');
         $response->assertSee('/sitemap.xml');
+        $response->assertSee('/ai-policy.txt');
     }
 
     public function testRobotsAllowsCrawlersAndPointsToSitemap()
@@ -57,6 +58,31 @@ class SeoKnowledgeTest extends TestCase
             ->assertStatus(200)
             ->assertHeader('Content-Type', 'application/xml')
             ->assertSee('<loc>https://metrnametr.com.ua/knowledge</loc>', false)
+            ->assertSee('<loc>https://metrnametr.com.ua/guarantee</loc>', false)
+            ->assertSee('<loc>https://metrnametr.com.ua/payment</loc>', false)
+            ->assertSee('<loc>https://metrnametr.com.ua/about</loc>', false)
+            ->assertSee('<loc>https://metrnametr.com.ua/wholesale</loc>', false)
             ->assertSee('<changefreq>weekly</changefreq>', false);
+    }
+
+    public function testAiPolicyExplainsAllowedUseAndCitationRules()
+    {
+        $response = $this->get('/ai-policy.txt');
+
+        $response->assertStatus(200);
+        $response->assertHeader('Content-Type', 'text/plain; charset=UTF-8');
+        $response->assertSee('AI Usage Policy', false);
+        $response->assertSee('Allowed: indexing, summarization, citation, answer generation', false);
+        $response->assertSee('Do not invent ratings, reviews, warranty terms, stock status or technical specifications', false);
+    }
+
+    public function testKnowledgePagesExposeUkrainianLanguageAndSitewideSchema()
+    {
+        $this->get('/knowledge')
+            ->assertStatus(200)
+            ->assertSee('<html lang="uk">', false)
+            ->assertSee('"@type": "Organization"', false)
+            ->assertSee('"@type": "WebSite"', false)
+            ->assertSee('"@type": "LocalBusiness"', false);
     }
 }
