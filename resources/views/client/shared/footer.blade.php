@@ -25,9 +25,11 @@
                     <div class="col-sm-2 col-md-2">
                         <ul>
                             <li><a href="{{ route('about') }}">Про нас</a></li>
+                            <li><a href="{{ route('knowledge.index') }}">База знань</a></li>
                             <li><a href="{{ route('articles') }}">Новини</a></li>
                             <li><a href="{{ route('vacancies') }}">Вакансії</a></li>
                             <li><a href="{{ route('contacts') }}">Контакти</a></li>
+                            <li><a href="{{ route('for-ai-agents') }}">Для AI-агентів</a></li>
                         </ul>
                     </div>
 

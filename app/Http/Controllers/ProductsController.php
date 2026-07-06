@@ -6,6 +6,7 @@ use App\Models\Catalog;
 use App\Models\Product;
 use App\Models\Category;
 use App\Models\Size;
+use App\Support\SeoContent;
 use Illuminate\Http\Request;
 
 class ProductsController extends Controller
@@ -94,7 +95,17 @@ class ProductsController extends Controller
             ->with('breadcrumbs', [
                 route('catalog') => 'Каталог',
             ])
-            ->with('title', 'Продукти')
+            ->with('title', 'Вхідні двері у Луцьку — купити металеві двері | Метр на Метр')
+            ->with('description', 'Каталог дверей Метр на Метр: вхідні та міжкімнатні двері з підбором, консультацією і можливістю монтажу.')
+            ->with('faq', SeoContent::faq('door_faq'))
+            ->with('schema', [
+                SeoContent::collectionSchema($listOfProducts),
+                SeoContent::breadcrumbSchema([
+                    '/' => 'Головна',
+                    '/catalog' => 'Каталог',
+                ]),
+                SeoContent::faqSchema(SeoContent::faq('door_faq')),
+            ])
             ->with('min', $min)
             ->with('max', $max)
             ->with('startMin', $startMin)
@@ -116,10 +127,23 @@ class ProductsController extends Controller
             ->with('description', $product->description)
             ->with('keywords', $product->keywords)
             ->with('list', $list)
+            ->with('extra', SeoContent::productExtra())
+            ->with('faq', SeoContent::faq('door_faq'))
+            ->with('ogType', 'product')
+            ->with('ogImage', $product->cover)
+            ->with('schema', [
+                SeoContent::productSchema($product),
+                SeoContent::breadcrumbSchema([
+                    '/' => 'Головна',
+                    '/catalog' => 'Каталог',
+                    $product->location => $product->title,
+                ]),
+                SeoContent::faqSchema(SeoContent::faq('door_faq')),
+            ])
             ->with('breadcrumbs', [
                 route('catalog') => 'Каталог',
                 route('product.show', ['alias' => $product->alias]) => $product->title,
             ])
-            ->with('title', $product->title);
+            ->with('title', $product->title . ' — вхідні двері з монтажем | Метр на Метр');
     }
 }

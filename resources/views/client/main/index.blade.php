@@ -15,7 +15,7 @@
             </div>
 
             <div class="col-xs-12 col-sm-6">
-                <div class="img-box"><img src="/images/logo-2.png" alt=""></div>
+                <div class="img-box"><img src="/images/logo-2.png" alt="Метр на Метр - двері у Луцьку" title="Метр на Метр"></div>
             </div>
 
         </div>
@@ -44,7 +44,7 @@
 
                             <div class="col-xs-12 col-sm-6">
                                 <div class="img-box product-image product-slider">
-                                    <img src="{{ $slide->cover }}" alt="{{ $slide->title }}">
+                                    <img src="{{ $slide->cover }}" alt="Вхідні металеві двері {{ $slide->title }}" title="{{ $slide->title }}" loading="lazy">
                                 </div>
                             </div>
 
@@ -104,7 +104,7 @@
 
                                 <div class="img-box product-image product-item">
                                     <a href="{{ $product->location }}">
-                                        <img src="{{ $product->cover }}" alt="{{ $product->title }}">
+                                        <img src="{{ $product->cover }}" alt="Вхідні металеві двері {{ $product->title }}" title="{{ $product->title }}" loading="lazy">
                                     </a>
                                 </div>
 
@@ -177,6 +177,19 @@
         </div>
     </div>
 </section>
+
+<section class="ai-summary">
+    <div class="container">
+        <div class="row">
+            <div class="col-xs-12 col-md-10 col-md-offset-1">
+                <p>Метр на Метр — компанія, що займається продажем та встановленням вхідних і міжкімнатних дверей. На сайті можна підібрати двері для квартири, приватного будинку або комерційного приміщення, переглянути характеристики моделей, отримати консультацію та замовити монтаж.</p>
+                <p><a href="{{ route('knowledge.index') }}">Перейти до бази знань про двері</a></p>
+            </div>
+        </div>
+    </div>
+</section>
+
+@include('client.shared.faq', ['faq' => $faq ?? []])
 
 @include('client.main.shared.map')
 

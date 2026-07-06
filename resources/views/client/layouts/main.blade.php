@@ -15,10 +15,31 @@
         <meta name="msapplication-config" content="/favicon/browserconfig.xml">
         <meta name="theme-color" content="#ffffff">
 
-        <title>{{ $title ?? '' }}</title>
+        @php
+            $canonical = $canonical ?? \App\Support\SeoContent::canonical();
+            $metaTitle = $title ?? \App\Support\SeoContent::site('name');
+            $metaDescription = $description ?? \App\Support\SeoContent::site('description');
+            $metaImage = $ogImage ?? \App\Support\SeoContent::canonical(\App\Support\SeoContent::site('default_image'));
+        @endphp
+
+        <title>{{ $metaTitle }}</title>
         
-        <meta name="description" content="{{ $description ?? '' }}" />
+        <meta name="description" content="{{ $metaDescription }}" />
         <meta name="keywords" content="{{ $keywords ?? '' }}" />
+        <link rel="canonical" href="{{ $canonical }}" />
+        <meta property="og:title" content="{{ $ogTitle ?? $metaTitle }}" />
+        <meta property="og:description" content="{{ $ogDescription ?? $metaDescription }}" />
+        <meta property="og:image" content="{{ $metaImage }}" />
+        <meta property="og:type" content="{{ $ogType ?? 'website' }}" />
+        <meta property="og:url" content="{{ $canonical }}" />
+        <meta name="twitter:card" content="summary_large_image" />
+        <meta name="twitter:title" content="{{ $ogTitle ?? $metaTitle }}" />
+        <meta name="twitter:description" content="{{ $ogDescription ?? $metaDescription }}" />
+        <meta name="twitter:image" content="{{ $metaImage }}" />
+
+        @foreach($schema ?? [] as $schemaItem)
+            <script type="application/ld+json">{!! json_encode($schemaItem, JSON_UNESCAPED_UNICODE | JSON_UNESCAPED_SLASHES | JSON_PRETTY_PRINT) !!}</script>
+        @endforeach
 
         <!-- CSRF Stuff -->
         <meta name="csrf-token" content="{{ csrf_token() }}">

@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
 use App\Models\Article;
+use App\Support\SeoContent;
 
 class ArticlesController extends Controller
 {
@@ -34,6 +35,24 @@ class ArticlesController extends Controller
             ->with('title', $article->title)
             ->with('description', $article->description)
             ->with('keywords', $article->keywords)
+            ->with('ogType', 'article')
+            ->with('ogImage', $article->cover)
+            ->with('schema', [
+                [
+                    '@context' => 'https://schema.org',
+                    '@type' => 'Article',
+                    'headline' => $article->title,
+                    'description' => $article->description,
+                    'image' => $article->cover,
+                    'url' => SeoContent::canonical($article->location),
+                    'publisher' => SeoContent::organizationSchema(),
+                ],
+                SeoContent::breadcrumbSchema([
+                    '/' => 'Головна',
+                    '/news' => 'Новини',
+                    $article->location => $article->title,
+                ]),
+            ])
             ->with('breadcrumbs', [
                 route('articles') => 'Новини',
                 $article->location => $article->title,
