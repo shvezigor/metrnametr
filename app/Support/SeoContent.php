@@ -363,6 +363,7 @@ class SeoContent
             ['loc' => '/', 'lastmod' => $today, 'changefreq' => 'weekly', 'priority' => '1.0'],
             ['loc' => '/catalog', 'lastmod' => $today, 'changefreq' => 'daily', 'priority' => '0.9'],
             ['loc' => '/knowledge', 'lastmod' => $today, 'changefreq' => 'weekly', 'priority' => '0.8'],
+            ['loc' => '/knowledge/plan', 'lastmod' => $today, 'changefreq' => 'monthly', 'priority' => '0.5'],
             ['loc' => '/for-ai-agents', 'lastmod' => $today, 'changefreq' => 'monthly', 'priority' => '0.5'],
             ['loc' => '/ai-policy.txt', 'lastmod' => $today, 'changefreq' => 'monthly', 'priority' => '0.4'],
             ['loc' => '/contacts', 'lastmod' => $today, 'changefreq' => 'monthly', 'priority' => '0.7'],

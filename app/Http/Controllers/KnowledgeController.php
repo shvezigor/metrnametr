@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Support\KnowledgePlan;
 use App\Support\SeoContent;
 
 class KnowledgeController extends Controller
@@ -47,6 +48,30 @@ class KnowledgeController extends Controller
                     '/' => 'Головна',
                     '/knowledge' => 'База знань',
                     '/knowledge/' . $article['slug'] => $article['title'],
+                ]),
+            ]);
+    }
+
+    public function plan()
+    {
+        $clusters = KnowledgePlan::clusters();
+        $articles = KnowledgePlan::articles();
+
+        return view('client.knowledge.plan')
+            ->with('clusters', $clusters)
+            ->with('articlesByCluster', $articles->groupBy('cluster'))
+            ->with('totalArticles', $articles->count())
+            ->with('title', 'План бази знань про двері | Метр на Метр')
+            ->with('description', 'Редакційний план AI-friendly бази знань Метр на Метр: 100 експертних статей про вибір, виробництво, монтаж, безпеку, дизайн і догляд за дверима.')
+            ->with('breadcrumbs', [
+                route('knowledge.index') => 'База знань',
+                route('knowledge.plan') => 'План бази знань',
+            ])
+            ->with('schema', [
+                SeoContent::breadcrumbSchema([
+                    '/' => 'Головна',
+                    '/knowledge' => 'База знань',
+                    '/knowledge/plan' => 'План бази знань',
                 ]),
             ]);
     }
