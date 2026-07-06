@@ -45,4 +45,19 @@ class KnowledgePlanTest extends TestCase
             ->assertSee('Вибір дверей')
             ->assertSee('Технології виробництва');
     }
+
+    public function testKnowledgeIndexRendersPublishedArticlesNotPlannedStatuses()
+    {
+        $this->get('/knowledge')
+            ->assertStatus(200)
+            ->assertSee('/knowledge/yak-vybraty-mizhkimnatni-dveri-dlia-kvartyry')
+            ->assertSee('/knowledge/dveri-dlia-ofisu-yak-obraty')
+            ->assertDontSee('Заплановано');
+
+        $this->get('/knowledge/yak-vybraty-mizhkimnatni-dveri-dlia-kvartyry')
+            ->assertStatus(200)
+            ->assertSee('Як вибрати міжкімнатні двері для квартири')
+            ->assertSee('FAQPage')
+            ->assertSee('Порівняння');
+    }
 }
