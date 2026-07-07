@@ -33,11 +33,20 @@ Route::get('/admin', 'Admin\MainController@index')
 // SEO and AI discovery
 Route::get('/llms.txt', ['as' => 'llms', 'uses' => 'SeoController@llms']);
 Route::get('/llms-full.txt', ['as' => 'llms-full', 'uses' => 'SeoController@llmsFull']);
+Route::get('/ai-policy.txt', ['as' => 'ai-policy', 'uses' => 'SeoController@aiPolicy']);
 Route::get('/robots.txt', ['as' => 'robots', 'uses' => 'SeoController@robots']);
 Route::get('/sitemap.xml', ['as' => 'sitemap', 'uses' => 'SeoController@sitemap']);
+Route::get('/vkhidni-dveri-lutsk', ['as' => 'seo.vkhidni-dveri-lutsk', 'uses' => 'SeoController@landing'])->defaults('slug', 'vkhidni-dveri-lutsk');
+Route::get('/mizhkimnatni-dveri-lutsk', ['as' => 'seo.mizhkimnatni-dveri-lutsk', 'uses' => 'SeoController@landing'])->defaults('slug', 'mizhkimnatni-dveri-lutsk');
+Route::get('/dveri-dlya-kvartyry', ['as' => 'seo.dveri-dlya-kvartyry', 'uses' => 'SeoController@landing'])->defaults('slug', 'dveri-dlya-kvartyry');
+Route::get('/dveri-dlya-budynku', ['as' => 'seo.dveri-dlya-budynku', 'uses' => 'SeoController@landing'])->defaults('slug', 'dveri-dlya-budynku');
+Route::get('/dveri-z-termorozryvom', ['as' => 'seo.dveri-z-termorozryvom', 'uses' => 'SeoController@landing'])->defaults('slug', 'dveri-z-termorozryvom');
+Route::get('/protypozhezhni-dveri', ['as' => 'seo.protypozhezhni-dveri', 'uses' => 'SeoController@landing'])->defaults('slug', 'protypozhezhni-dveri');
 
 // Knowledge Base
 Route::get('/knowledge', ['as' => 'knowledge.index', 'uses' => 'KnowledgeController@index']);
+Route::get('/knowledge/plan', ['as' => 'knowledge.plan', 'uses' => 'KnowledgeController@plan']);
+Route::get('/knowledge/{slug}/image.svg', ['as' => 'knowledge.image', 'uses' => 'KnowledgeController@image']);
 Route::get('/knowledge/{slug}', ['as' => 'knowledge.show', 'uses' => 'KnowledgeController@show']);
 Route::get('/for-ai-agents', ['as' => 'for-ai-agents', 'uses' => 'KnowledgeController@forAiAgents']);
 

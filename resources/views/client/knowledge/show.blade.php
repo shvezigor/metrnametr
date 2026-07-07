@@ -11,6 +11,18 @@
                     <h1>{{ $article['title'] }}</h1>
                     <p class="lead">{{ $article['intro'] }}</p>
 
+                    <figure class="knowledge-hero-image">
+                        <img
+                            src="{{ route('knowledge.image', ['slug' => $article['slug']]) }}"
+                            alt="{{ $article['title'] }}"
+                            title="{{ $article['title'] }}"
+                            width="1200"
+                            height="675"
+                            loading="eager"
+                        >
+                        <figcaption>Технічна ілюстрація до теми: {{ $article['title'] }}</figcaption>
+                    </figure>
+
                     <div class="knowledge-toc">
                         <strong>Зміст</strong>
                         <ul>
@@ -25,6 +37,13 @@
                     @foreach($article['sections'] as $heading => $body)
                         <h2 id="{{ \Illuminate\Support\Str::slug($heading) }}">{{ $heading }}</h2>
                         <p>{{ $body }}</p>
+                    @endforeach
+
+                    @foreach(\App\Support\SeoContent::articleLongFormBlocks($article) as $block)
+                        <h2>{{ $block['heading'] }}</h2>
+                        @foreach($block['paragraphs'] as $paragraph)
+                            <p>{{ $paragraph }}</p>
+                        @endforeach
                     @endforeach
 
                     @if(!empty($article['comparison']))

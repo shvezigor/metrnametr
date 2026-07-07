@@ -37,6 +37,12 @@ class ProductsController extends Controller
             }
         }
 
+        $selectedCategory = null;
+        $selectedCategories = $request->get('categories', []);
+        if (is_array($selectedCategories) && count($selectedCategories) === 1) {
+            $selectedCategory = Category::published()->find($selectedCategories[0]);
+        }
+
         if ($request->has('sizes')) {
             $sizes = $request->get('sizes', []);
 
@@ -86,6 +92,16 @@ class ProductsController extends Controller
         $categories = Category::published()->orderBy('title', 'ASC')->get();
         $sizes = Size::orderBy('title', 'ASC')->get();
 
+        $catalogTitle = $selectedCategory
+            ? SeoContent::titleFor($selectedCategory, $selectedCategory->title . ' — двері у Луцьку | Метр на Метр')
+            : 'Вхідні двері у Луцьку — купити металеві двері | Метр на Метр';
+        $catalogDescription = $selectedCategory
+            ? SeoContent::descriptionFor($selectedCategory, 'Категорія ' . $selectedCategory->title . ' у каталозі Метр на Метр: підбір дверей, консультація та монтаж.')
+            : 'Каталог дверей Метр на Метр: вхідні та міжкімнатні двері з підбором, консультацією і можливістю монтажу.';
+        $catalogFaq = $selectedCategory && !empty(SeoContent::decodedList($selectedCategory->faq))
+            ? SeoContent::decodedList($selectedCategory->faq)
+            : SeoContent::faq('door_faq');
+
         return view('client.products.index')
             ->with('list', $listOfProducts)
             ->with('catalogForFilter', $catalog)
@@ -95,16 +111,17 @@ class ProductsController extends Controller
             ->with('breadcrumbs', [
                 route('catalog') => 'Каталог',
             ])
-            ->with('title', 'Вхідні двері у Луцьку — купити металеві двері | Метр на Метр')
-            ->with('description', 'Каталог дверей Метр на Метр: вхідні та міжкімнатні двері з підбором, консультацією і можливістю монтажу.')
-            ->with('faq', SeoContent::faq('door_faq'))
+            ->with('title', $catalogTitle)
+            ->with('description', $catalogDescription)
+            ->with('canonical', $selectedCategory ? SeoContent::canonicalFor($selectedCategory, '/catalog?categories[]=' . $selectedCategory->id) : SeoContent::canonical('/catalog'))
+            ->with('faq', $catalogFaq)
             ->with('schema', [
                 SeoContent::collectionSchema($listOfProducts),
                 SeoContent::breadcrumbSchema([
                     '/' => 'Головна',
                     '/catalog' => 'Каталог',
                 ]),
-                SeoContent::faqSchema(SeoContent::faq('door_faq')),
+                SeoContent::faqSchema($catalogFaq),
             ])
             ->with('min', $min)
             ->with('max', $max)
@@ -114,7 +131,7 @@ class ProductsController extends Controller
 
     public function show($alias) {
 
-        $product = Product::published()->where('alias', $alias)->first();
+        $product = Product::published()->with('categories.type')->where('alias', $alias)->first();
 
         if ($product === null) {
             abort(404);
@@ -124,13 +141,14 @@ class ProductsController extends Controller
 
         return view('client.products.show')
             ->with('product', $product)
-            ->with('description', $product->description)
+            ->with('description', SeoContent::productMetaDescription($product))
             ->with('keywords', $product->keywords)
             ->with('list', $list)
-            ->with('extra', SeoContent::productExtra())
-            ->with('faq', SeoContent::faq('door_faq'))
+            ->with('extra', SeoContent::productExtraFor($product))
+            ->with('faq', SeoContent::productFaq($product))
             ->with('ogType', 'product')
-            ->with('ogImage', $product->cover)
+            ->with('ogImage', SeoContent::ogImageFor($product, $product->cover))
+            ->with('canonical', SeoContent::canonicalFor($product, $product->location))
             ->with('schema', [
                 SeoContent::productSchema($product),
                 SeoContent::breadcrumbSchema([
@@ -138,12 +156,12 @@ class ProductsController extends Controller
                     '/catalog' => 'Каталог',
                     $product->location => $product->title,
                 ]),
-                SeoContent::faqSchema(SeoContent::faq('door_faq')),
+                SeoContent::faqSchema(SeoContent::productFaq($product)),
             ])
             ->with('breadcrumbs', [
                 route('catalog') => 'Каталог',
                 route('product.show', ['alias' => $product->alias]) => $product->title,
             ])
-            ->with('title', $product->title . ' — вхідні двері з монтажем | Метр на Метр');
+            ->with('title', SeoContent::titleFor($product, $product->title . ' — вхідні двері з монтажем | Метр на Метр'));
     }
 }

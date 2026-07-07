@@ -150,6 +150,36 @@
               </div>
 
               <div class="form-group">
+                <label>SEO title</label>
+                <input type="text" class="form-control" v-model="record.seo_title" placeholder="SEO title" />
+              </div>
+
+              <div class="form-group">
+                <label>SEO description</label>
+                <textarea rows="4" class="form-control" v-model="record.seo_description" placeholder="SEO description"></textarea>
+              </div>
+
+              <div class="form-group">
+                <label>Canonical URL</label>
+                <input type="text" class="form-control" v-model="record.canonical_url" placeholder="https://metrnametr.com.ua/product/..." />
+              </div>
+
+              <div class="form-group">
+                <label>OG image URL</label>
+                <input type="text" class="form-control" v-model="record.og_image" placeholder="/storage/products/image.jpg" />
+              </div>
+
+              <div class="form-group">
+                <label>FAQ JSON</label>
+                <textarea rows="8" class="form-control" v-model="record.faq" placeholder='[{"question":"Питання","answer":"Відповідь"}]'></textarea>
+              </div>
+
+              <div class="form-group">
+                <label>Product extra fields JSON</label>
+                <textarea rows="10" class="form-control" v-model="record.extra_fields" placeholder='{"audience":"...","benefits":["..."],"specs":{"Матеріали":"..."}}'></textarea>
+              </div>
+
+              <div class="form-group">
                 <div class="form-label">{{ $t('labels.published') }}</div>
                 <div class="custom-switches-stacked">
                   <label class="custom-switch">
@@ -255,6 +285,12 @@
           text: '',
           description: '',
           keywords: '',
+          seo_title: '',
+          seo_description: '',
+          canonical_url: '',
+          og_image: '',
+          faq: '',
+          extra_fields: '',
           user_id: null,
           label: 0,
           published: false,
@@ -376,6 +412,12 @@
         formData.append('text', this.record.text);
         formData.append('description', this.record.description);
         formData.append('keywords', this.record.keywords);
+        formData.append('seo_title', this.record.seo_title || '');
+        formData.append('seo_description', this.record.seo_description || '');
+        formData.append('canonical_url', this.record.canonical_url || '');
+        formData.append('og_image', this.record.og_image || '');
+        formData.append('faq', this.record.faq || '');
+        formData.append('extra_fields', this.record.extra_fields || '');
         formData.append('published', +this.record.published);
         formData.append('slider', +this.record.slider);
 

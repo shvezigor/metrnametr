@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="uk">
     <head>
         <meta charset="utf-8">
         <meta http-equiv="X-UA-Compatible" content="IE=edge">
@@ -20,6 +20,7 @@
             $metaTitle = $title ?? \App\Support\SeoContent::site('name');
             $metaDescription = $description ?? \App\Support\SeoContent::site('description');
             $metaImage = $ogImage ?? \App\Support\SeoContent::canonical(\App\Support\SeoContent::site('default_image'));
+            $pageSchema = \App\Support\SeoContent::defaultPageSchemas($schema ?? []);
         @endphp
 
         <title>{{ $metaTitle }}</title>
@@ -37,7 +38,7 @@
         <meta name="twitter:description" content="{{ $ogDescription ?? $metaDescription }}" />
         <meta name="twitter:image" content="{{ $metaImage }}" />
 
-        @foreach($schema ?? [] as $schemaItem)
+        @foreach($pageSchema as $schemaItem)
             <script type="application/ld+json">{!! json_encode($schemaItem, JSON_UNESCAPED_UNICODE | JSON_UNESCAPED_SLASHES | JSON_PRETTY_PRINT) !!}</script>
         @endforeach
 
