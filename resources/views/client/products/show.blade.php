@@ -3,6 +3,8 @@
 
     <section class="item-cont">
 
+        @include('client.shared.breadcrumb', ['breadcrumbs' => $breadcrumbs ?? []])
+
         <div class="container">
             <div class="row">
 
@@ -23,8 +25,6 @@
                 </div>
 
                 <div class="col-xs-12 col-md-6 main-content">
-
-                    @include('client.shared.breadcrumb', ['breadcrumbs' => $breadcrumbs ?? []])
 
                     <h1>{{ $product->title }}</h1>
 

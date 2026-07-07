@@ -176,6 +176,25 @@ class SeoKnowledgeTest extends TestCase
             ->assertSee('Технічні характеристики');
     }
 
+    public function testProductBreadcrumbRendersBeforeProductColumns()
+    {
+        $product = factory(Product::class)->create([
+            'title' => 'Door Layout',
+            'alias' => 'door-layout',
+            'published' => 1,
+            'text' => '<p>Short product text.</p>',
+        ]);
+
+        $content = $this->get(route('product.show', ['alias' => $product->alias]))
+            ->assertStatus(200)
+            ->getContent();
+
+        $this->assertLessThan(
+            strpos($content, 'dot-slider'),
+            strpos($content, 'breadcrumb-wrap')
+        );
+    }
+
     public function testCatalogPageRendersBuyerIntentGuide()
     {
         $this->get(route('catalog'))
