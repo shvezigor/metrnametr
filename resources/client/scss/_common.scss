@@ -2464,8 +2464,8 @@ footer {
 ------------------------------------------------------------------*/
 .home-hero-modern {
     padding: 54px 0 62px;
-    background: #fff;
-    border-top: 1px solid rgba(34, 34, 34, 0.06);
+    background: $blue;
+    border-top: 6px solid $yellow;
 
     .home-hero-grid {
         display: flex;
@@ -2487,7 +2487,7 @@ footer {
         h1 {
             max-width: 720px;
             margin: 0 0 22px;
-            color: #151515;
+            color: #fff;
             font-family: 'latoblack';
             font-size: 42px;
             line-height: 1.14;
@@ -2505,7 +2505,7 @@ footer {
         p {
             max-width: 680px;
             margin-bottom: 28px;
-            color: rgba(34, 34, 34, 0.76);
+            color: rgba(255, 255, 255, 0.92);
             font-size: 17px;
             line-height: 1.65;
 
@@ -2526,6 +2526,30 @@ footer {
             margin: 0;
             min-width: 190px;
             text-align: center;
+        }
+
+        .yellow-btn {
+            background: $yellow;
+            color: #222;
+            box-shadow: 0 6px 14px rgba(0, 0, 0, 0.18);
+
+            &:hover {
+                background: #fff;
+                color: $blue;
+            }
+        }
+
+        .blue-btn {
+            background: transparent;
+            border: 2px solid #fff;
+            color: #fff;
+            line-height: 46px;
+            box-shadow: none;
+
+            &:hover {
+                background: #fff;
+                color: $blue;
+            }
         }
 
         @media(max-width: 520px) {
@@ -2549,7 +2573,7 @@ footer {
         li {
             position: relative;
             padding-left: 22px;
-            color: #222;
+            color: #fff;
             font-family: 'latobold';
             line-height: 1.35;
 
@@ -2576,7 +2600,7 @@ footer {
         align-items: center;
         justify-content: center;
         background: #f5f5f5;
-        border: 1px solid rgba(34, 34, 34, 0.08);
+        border: 6px solid $yellow;
 
         img {
             max-width: 78%;
@@ -2624,7 +2648,7 @@ footer {
 }
 
 .home-category-section {
-    background: #f5f5f5;
+    background: #fff;
 }
 
 .home-category-grid,
@@ -2650,7 +2674,8 @@ footer {
     min-height: 220px;
     padding: 28px;
     background: #fff;
-    border: 1px solid rgba(34, 34, 34, 0.08);
+    border: 1px solid rgba(0, 139, 210, 0.16);
+    border-top: 4px solid $blue;
     color: #222;
 
     &:hover {
@@ -2666,7 +2691,8 @@ footer {
         width: 48px;
         height: 48px;
         margin-bottom: 20px;
-        background: rgba(255, 211, 47, 0.22);
+        background: $yellow;
+        border: 2px solid rgba(0, 139, 210, 0.16);
 
         img {
             max-width: 26px;
@@ -2700,7 +2726,7 @@ footer {
 }
 
 .home-trust-section {
-    background: #fff;
+    background: #f5f5f5;
 }
 
 .home-trust-grid {
@@ -2717,8 +2743,9 @@ footer {
 
 .home-trust-card {
     padding: 28px 24px;
-    background: #f8f8f8;
-    border: 1px solid rgba(34, 34, 34, 0.06);
+    background: #fff;
+    border: 1px solid rgba(0, 139, 210, 0.14);
+    border-left: 4px solid $yellow;
 
     .trust-icon {
         width: 44px;
@@ -2727,7 +2754,7 @@ footer {
         display: flex;
         align-items: center;
         justify-content: center;
-        background: #fff;
+        background: $yellow;
 
         img {
             max-width: 25px;
@@ -2778,8 +2805,8 @@ footer {
     span {
         display: inline-block;
         padding: 5px 8px;
-        background: rgba(0, 139, 210, 0.08);
-        color: #21566f;
+        background: $yellow;
+        color: #175f83;
         font-family: 'latobold';
         font-size: 11px;
         line-height: 1;
