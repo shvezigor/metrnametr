@@ -41,6 +41,11 @@
             <div class="clearfix"></div>
         </div>
 
+        @include('client.shared.secondary-page-cta', [
+            'title' => 'Потрібні двері гуртом?',
+            'text' => 'Підберемо асортимент, комплектацію та умови регулярних поставок для дилерів і будівельних команд.',
+        ])
+
 
         <div class="row wrap-contact-manager">
 

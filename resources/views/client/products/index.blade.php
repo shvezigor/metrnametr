@@ -2,7 +2,35 @@
 @section('content')
     @include('client.shared.breadcrumb', ['breadcrumbs' => $breadcrumbs ?? []])
 
-    <section class="">
+    @php
+        $catalogIntentLinks = [
+            ['title' => 'Двері в квартиру', 'text' => 'Для під’їзду, щоденного користування, шумоізоляції та безпеки.', 'url' => '/dveri-dlya-kvartyry'],
+            ['title' => 'Двері в будинок', 'text' => 'Для вулиці, перепадів температур, утеплення та стійкого покриття.', 'url' => '/dveri-dlya-budynku'],
+            ['title' => 'Міжкімнатні двері', 'text' => 'Для житлових кімнат, офісів і комерційних інтер’єрів.', 'url' => '/mizhkimnatni-dveri-lutsk'],
+            ['title' => 'Протипожежні двері', 'text' => 'Для об’єктів із вимогами до сертифікації та безпеки.', 'url' => '/protypozhezhni-dveri'],
+            ['title' => 'Для гуртових клієнтів', 'text' => 'Для дилерів, будівельних компаній і регулярних поставок.', 'url' => '/wholesale'],
+        ];
+    @endphp
+
+    <section class="catalog-intent-guide">
+        <div class="container">
+            <div class="catalog-intent-header">
+                <h1>Оберіть двері за призначенням</h1>
+                <p>Почніть з типу об’єкта або задачі, а потім уточніть модель через фільтр, характеристики чи консультацію.</p>
+            </div>
+
+            <div class="catalog-intent-grid">
+                @foreach($catalogIntentLinks as $link)
+                    <a href="{{ $link['url'] }}" class="catalog-intent-card">
+                        <span>{{ $link['title'] }}</span>
+                        <small>{{ $link['text'] }}</small>
+                    </a>
+                @endforeach
+            </div>
+        </div>
+    </section>
+
+    <section class="catalog-products-section">
         <div class="container">
 
             <div class="row">
@@ -195,12 +223,24 @@
                                                     data-toggle="modal"
                                                     data-target="#order-form"
                                                     data-id="{{$item->id}}"
-                                                >Замовити</a>
+                                                >Запитати ціну</a>
                                             </div>
                                         </div>
 
                                     </div>
-                                    <div class="title-box"><a href="{{ $item->location }}">{{ $item->title }}</a></div>
+                                    <div class="title-box">
+                                        <a href="{{ $item->location }}">{{ $item->title }}</a>
+                                        <div class="product-card-type">Вхідні / технічні двері</div>
+                                        <div class="product-card-badges">
+                                            <span>ДСТУ</span>
+                                            <span>Гарантія</span>
+                                            <span>Покриття</span>
+                                        </div>
+                                        <div class="product-card-actions">
+                                            <a href="{{ $item->location }}">Детальніше</a>
+                                            <a href="#" data-toggle="modal" data-target="#order-form" data-id="{{$item->id}}">Консультація</a>
+                                        </div>
+                                    </div>
                                 </div>
                             </div>
                         @endforeach

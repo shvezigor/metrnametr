@@ -1,7 +1,63 @@
 @extends('client.layouts.main')
 @section('content')
 
-@include('client.main.shared.slider')
+@php
+    $heroProduct = $slides->first() ?: $products->first();
+    $heroImage = $heroProduct ? $heroProduct->cover : '/images/logo-2.png';
+    $homeCategories = [
+        ['title' => 'Двері в квартиру', 'text' => 'Надійні вхідні двері для щоденного використання у багатоквартирних будинках.', 'url' => '/dveri-dlya-kvartyry', 'icon' => '/images/icons/door.svg'],
+        ['title' => 'Двері в будинок', 'text' => 'Вуличні моделі з утепленням, покриттям і рішеннями для приватного будинку.', 'url' => '/dveri-dlya-budynku', 'icon' => '/images/icons/door-knob.svg'],
+        ['title' => 'Міжкімнатні двері', 'text' => 'Практичні рішення для житлових і комерційних інтер’єрів.', 'url' => '/mizhkimnatni-dveri-lutsk', 'icon' => '/images/icons/catalog.svg'],
+        ['title' => 'Протипожежні двері', 'text' => 'Сертифіковані двері для об’єктів із підвищеними вимогами безпеки.', 'url' => '/protypozhezhni-dveri', 'icon' => '/images/icons/lock.svg'],
+        ['title' => 'Технічні двері', 'text' => 'Двері для підсобних, складських, виробничих і технічних приміщень.', 'url' => '/catalog', 'icon' => '/images/icons/wallet.svg'],
+        ['title' => 'Для гуртових клієнтів', 'text' => 'Постачання для дилерів, будівельних компаній і партнерських проєктів.', 'url' => '/wholesale', 'icon' => '/images/icons/handshake.svg'],
+    ];
+    $trustItems = [
+        ['icon' => '/images/icons/door.svg', 'title' => 'Власне виробництво з 2011 року', 'text' => 'Контролюємо конструкцію, комплектацію та якість дверей на виробництві.'],
+        ['icon' => '/images/icons/lock.svg', 'title' => 'ДСТУ та ISO 9001', 'text' => 'Працюємо з сертифікованими рішеннями для житлових і комерційних об’єктів.'],
+        ['icon' => '/images/icons/handshake.svg', 'title' => 'Гурт і роздріб', 'text' => 'Підбираємо двері для приватних покупців, дилерів і будівельних команд.'],
+        ['icon' => '/images/icons/delivery-truck.svg', 'title' => 'Доставка по Україні', 'text' => 'Організовуємо постачання дверей з Луцька в інші регіони України.'],
+    ];
+    $aboutPoints = [
+        ['title' => 'Виробництво', 'text' => 'Виготовляємо двері у Луцьку та контролюємо ключові етапи комплектації.'],
+        ['title' => 'Якість', 'text' => 'Працюємо з сертифікацією ДСТУ, системою ISO 9001 і зрозумілими гарантійними умовами.'],
+        ['title' => 'Асортимент', 'text' => 'Пропонуємо вхідні, міжкімнатні, протипожежні та технічні двері для різних задач.'],
+        ['title' => 'Для кого працюємо', 'text' => 'Допомагаємо приватним покупцям, дилерам, будівельним компаніям і комерційним об’єктам.'],
+        ['title' => 'Доставка та співпраця', 'text' => 'Постачаємо двері по Україні та підбираємо рішення для роздрібних і гуртових замовлень.'],
+    ];
+    $homeIntro = [
+        'Метр на Метр — виробник дверей у Луцьку, який працює з вхідними, міжкімнатними, технічними та протипожежними рішеннями.',
+        'Допомагаємо підібрати модель під квартиру, будинок, комерційне приміщення або гуртове замовлення.',
+        'Пояснюємо комплектацію, гарантію, сертифікацію та доставку до покупки, щоб вибір був зрозумілим.',
+    ];
+@endphp
+
+<section class="home-hero-modern">
+    <div class="container">
+        <div class="home-hero-grid">
+            <div class="home-hero-copy">
+                <h1>Вхідні та міжкімнатні двері від виробника у Луцьку</h1>
+                <p>Виготовляємо, продаємо та постачаємо двері для квартир, будинків, комерційних і технічних приміщень. Гурт і роздріб, доставка по Україні.</p>
+
+                <div class="home-hero-actions">
+                    <a href="{{ route('catalog') }}" class="yellow-btn blue-hover">Перейти в каталог</a>
+                    <a href="#order-form" class="blue-btn" data-toggle="modal" data-target="#order-form">Отримати консультацію</a>
+                </div>
+
+                <ul class="home-hero-proof">
+                    <li>Власне виробництво</li>
+                    <li>ДСТУ та ISO 9001</li>
+                    <li>Гурт і роздріб</li>
+                    <li>Доставка по Україні</li>
+                </ul>
+            </div>
+
+            <div class="home-hero-media">
+                <img src="{{ $heroImage }}" alt="Вхідні та міжкімнатні двері Метр на Метр" loading="eager">
+            </div>
+        </div>
+    </div>
+</section>
 
 <section class="about-us">
     <div class="container">
@@ -9,9 +65,12 @@
 
             <div class="col-xs-12 col-sm-6 col-md-5 col-md-offset-1">
                 <h2>{{ \App\Models\Setting::getValue('main_title') }}</h2>
-                @foreach(preg_split('/$/m', \App\Models\Setting::getValue('main_text'), -1, PREG_SPLIT_NO_EMPTY) as $text)
-                    <p>{{ $text }}</p>
-                @endforeach
+                <div class="home-about-intro">
+                    @foreach($homeIntro as $text)
+                        <p>{{ $text }}</p>
+                    @endforeach
+                </div>
+                <a href="{{ route('about') }}" class="blue-btn about-more">Детальніше про виробництво</a>
             </div>
 
             <div class="col-xs-12 col-sm-6">
@@ -19,8 +78,39 @@
             </div>
 
         </div>
+
+        <div class="home-about-points">
+            @foreach($aboutPoints as $point)
+                <div class="home-about-point">
+                    <h3>{{ $point['title'] }}</h3>
+                    <p>{{ $point['text'] }}</p>
+                </div>
+            @endforeach
+        </div>
     </div>
 
+</section>
+
+<section class="home-category-section">
+    <div class="container">
+        <div class="row">
+            <div class="col-xs-12">
+                <div class="small-title black">Категорії дверей</div>
+                <h2 class="section-heading">Швидко оберіть двері під вашу задачу</h2>
+            </div>
+        </div>
+
+        <div class="home-category-grid">
+            @foreach($homeCategories as $category)
+                <a class="home-category-card" href="{{ $category['url'] }}">
+                    <span class="category-icon"><img src="{{ $category['icon'] }}" alt="" loading="lazy"></span>
+                    <span class="category-title">{{ $category['title'] }}</span>
+                    <span class="category-text">{{ $category['text'] }}</span>
+                    <span class="category-link">Дивитися</span>
+                </a>
+            @endforeach
+        </div>
+    </div>
 </section>
 
 <section class="door-groups">
@@ -117,7 +207,7 @@
                                             data-target="#order-form"
                                             data-id="{{$product->id}}"
                                         >
-                                            Замовити
+                                            Запитати ціну
                                         </a>
                                     </div>
                                 </div>
@@ -125,6 +215,16 @@
 
                             <div class="title-box">
                                 <a href="{{ $product->location }}">{{ $product->title }}</a>
+                                <div class="product-card-type">Вхідні / технічні двері</div>
+                                <div class="product-card-badges">
+                                    <span>ДСТУ</span>
+                                    <span>Гарантія</span>
+                                    <span>Покриття</span>
+                                </div>
+                                <div class="product-card-actions">
+                                    <a href="{{ $product->location }}">Детальніше</a>
+                                    <a href="#" data-toggle="modal" data-target="#order-form" data-id="{{$product->id}}">Консультація</a>
+                                </div>
                             </div>
                         </div>
                     </div>
@@ -134,6 +234,26 @@
             </div>
         </div>
 
+    </div>
+</section>
+
+<section class="home-trust-section">
+    <div class="container">
+        <div class="row">
+            <div class="col-xs-12">
+                <div class="small-title black">Чому обирають Метр на Метр</div>
+            </div>
+        </div>
+
+        <div class="home-trust-grid">
+            @foreach($trustItems as $item)
+                <div class="home-trust-card">
+                    <div class="trust-icon"><img src="{{ $item['icon'] }}" alt="" loading="lazy"></div>
+                    <h3>{{ $item['title'] }}</h3>
+                    <p>{{ $item['text'] }}</p>
+                </div>
+            @endforeach
+        </div>
     </div>
 </section>
 

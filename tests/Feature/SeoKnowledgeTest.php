@@ -6,10 +6,13 @@ use App\Models\Product;
 use App\Models\Category;
 use App\Models\Type;
 use App\Support\SeoContent;
+use Illuminate\Foundation\Testing\DatabaseTransactions;
 use Tests\TestCase;
 
 class SeoKnowledgeTest extends TestCase
 {
+    use DatabaseTransactions;
+
     public function testLlmsTxtDescribesSiteAndReferencesKeyResources()
     {
         $response = $this->get('/llms.txt');
@@ -88,6 +91,118 @@ class SeoKnowledgeTest extends TestCase
             ->assertSee('"@type": "Organization"', false)
             ->assertSee('"@type": "WebSite"', false)
             ->assertSee('"@type": "LocalBusiness"', false);
+    }
+
+    public function testHomepageRendersModernCommercialStructure()
+    {
+        $this->get('/')
+            ->assertStatus(200)
+            ->assertSee('home-hero-modern')
+            ->assertSee('home-category-grid')
+            ->assertSee('home-trust-grid')
+            ->assertSee('product-card-badges')
+            ->assertSee('Вхідні та міжкімнатні двері від виробника у Луцьку')
+            ->assertSee('Отримати консультацію')
+            ->assertSee('Чому обирають Метр на Метр');
+    }
+
+    public function testHomepageRendersAboutStructureAndCompleteFaq()
+    {
+        $this->get('/')
+            ->assertStatus(200)
+            ->assertSee('home-about-intro')
+            ->assertSee('home-about-points')
+            ->assertSee('Виробництво')
+            ->assertSee('Якість')
+            ->assertSee('Доставка та співпраця')
+            ->assertSee('Які двері краще обрати для квартири?')
+            ->assertSee('Чим відрізняються вуличні двері від квартирних?')
+            ->assertSee('Як отримати консультацію перед покупкою?')
+            ->assertSee('FAQPage');
+    }
+
+    public function testLayoutRendersMobileContactCta()
+    {
+        $this->get('/')
+            ->assertStatus(200)
+            ->assertSee('mobile-contact-cta')
+            ->assertSee('Подзвонити')
+            ->assertSee('Запитати ціну')
+            ->assertSee('Перейти в каталог')
+            ->assertSee('href="' . route('contacts') . '"', false)
+            ->assertSee('href="tel:', false);
+    }
+
+    public function testServicePagesRenderConsistentCtaBlock()
+    {
+        foreach ([route('guarantee'), route('payment'), route('wholesale'), route('contacts')] as $url) {
+            $this->get($url)
+                ->assertStatus(200)
+                ->assertSee('secondary-page-cta')
+                ->assertSee('Перейти в каталог')
+                ->assertSee('Отримати консультацію')
+                ->assertSee('Подзвонити')
+                ->assertSee('href="tel:', false);
+        }
+    }
+
+    public function testProductPageRendersStructuredDecisionBlocks()
+    {
+        $product = factory(Product::class)->create([
+            'title' => 'Door Comfort',
+            'alias' => 'door-comfort',
+            'published' => 1,
+            'text' => '<p>Short product text.</p>',
+            'extra_fields' => json_encode([
+                'audience' => 'For apartments and private houses.',
+                'benefits' => ['Reliable construction', 'Factory quality control'],
+                'specs' => [
+                    'Тип дверей' => 'Вхідні',
+                    'Призначення' => 'Для квартири',
+                    'Гарантія' => 'Від виробника',
+                ],
+            ]),
+            'faq' => json_encode([
+                ['question' => 'Can I request a consultation?', 'answer' => 'Yes, leave a request.'],
+            ]),
+        ]);
+
+        $this->get(route('product.show', ['alias' => $product->alias]))
+            ->assertStatus(200)
+            ->assertSee('product-decision-grid')
+            ->assertSee('product-spec-table')
+            ->assertSee('Кому підходить')
+            ->assertSee('Переваги моделі')
+            ->assertSee('Технічні характеристики');
+    }
+
+    public function testProductBreadcrumbRendersBeforeProductColumns()
+    {
+        $product = factory(Product::class)->create([
+            'title' => 'Door Layout',
+            'alias' => 'door-layout',
+            'published' => 1,
+            'text' => '<p>Short product text.</p>',
+        ]);
+
+        $content = $this->get(route('product.show', ['alias' => $product->alias]))
+            ->assertStatus(200)
+            ->getContent();
+
+        $this->assertLessThan(
+            strpos($content, 'dot-slider'),
+            strpos($content, 'breadcrumb-wrap')
+        );
+    }
+
+    public function testCatalogPageRendersBuyerIntentGuide()
+    {
+        $this->get(route('catalog'))
+            ->assertStatus(200)
+            ->assertSee('catalog-intent-guide')
+            ->assertSee('Оберіть двері за призначенням')
+            ->assertSee('Двері в квартиру')
+            ->assertSee('Для гуртових клієнтів');
     }
 
     public function testSeoSchemasUseAbsoluteImagesAndSkipEmptyFaqSchema()
