@@ -74,18 +74,24 @@
 
                     @if(!empty($extra))
                         <div class="product-seo-block">
-                            <h2>Для кого ця модель</h2>
-                            <p>{{ $extra['audience'] }}</p>
+                            <div class="product-decision-grid">
+                                <div class="product-decision-card">
+                                    <h2>Кому підходить</h2>
+                                    <p>{{ $extra['audience'] }}</p>
+                                </div>
 
-                            <h2>Переваги</h2>
-                            <ul>
-                                @foreach($extra['benefits'] as $benefit)
-                                    <li>{{ $benefit }}</li>
-                                @endforeach
-                            </ul>
+                                <div class="product-decision-card">
+                                    <h2>Переваги моделі</h2>
+                                    <ul>
+                                        @foreach($extra['benefits'] as $benefit)
+                                            <li>{{ $benefit }}</li>
+                                        @endforeach
+                                    </ul>
+                                </div>
+                            </div>
 
                             <h2>Технічні характеристики</h2>
-                            <table class="table table-bordered">
+                            <table class="table table-bordered product-spec-table">
                                 <tbody>
                                     @foreach($extra['specs'] as $name => $value)
                                         @if(!empty($value))

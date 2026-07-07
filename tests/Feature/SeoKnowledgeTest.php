@@ -6,10 +6,13 @@ use App\Models\Product;
 use App\Models\Category;
 use App\Models\Type;
 use App\Support\SeoContent;
+use Illuminate\Foundation\Testing\DatabaseTransactions;
 use Tests\TestCase;
 
 class SeoKnowledgeTest extends TestCase
 {
+    use DatabaseTransactions;
+
     public function testLlmsTxtDescribesSiteAndReferencesKeyResources()
     {
         $response = $this->get('/llms.txt');
@@ -101,6 +104,36 @@ class SeoKnowledgeTest extends TestCase
             ->assertSee('Вхідні та міжкімнатні двері від виробника у Луцьку')
             ->assertSee('Отримати консультацію')
             ->assertSee('Чому обирають Метр на Метр');
+    }
+
+    public function testProductPageRendersStructuredDecisionBlocks()
+    {
+        $product = factory(Product::class)->create([
+            'title' => 'Door Comfort',
+            'alias' => 'door-comfort',
+            'published' => 1,
+            'text' => '<p>Short product text.</p>',
+            'extra_fields' => json_encode([
+                'audience' => 'For apartments and private houses.',
+                'benefits' => ['Reliable construction', 'Factory quality control'],
+                'specs' => [
+                    'Тип дверей' => 'Вхідні',
+                    'Призначення' => 'Для квартири',
+                    'Гарантія' => 'Від виробника',
+                ],
+            ]),
+            'faq' => json_encode([
+                ['question' => 'Can I request a consultation?', 'answer' => 'Yes, leave a request.'],
+            ]),
+        ]);
+
+        $this->get(route('product.show', ['alias' => $product->alias]))
+            ->assertStatus(200)
+            ->assertSee('product-decision-grid')
+            ->assertSee('product-spec-table')
+            ->assertSee('Кому підходить')
+            ->assertSee('Переваги моделі')
+            ->assertSee('Технічні характеристики');
     }
 
     public function testSeoSchemasUseAbsoluteImagesAndSkipEmptyFaqSchema()
