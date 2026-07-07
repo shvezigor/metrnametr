@@ -121,6 +121,18 @@ class SeoKnowledgeTest extends TestCase
             ->assertSee('FAQPage');
     }
 
+    public function testLayoutRendersMobileContactCta()
+    {
+        $this->get('/')
+            ->assertStatus(200)
+            ->assertSee('mobile-contact-cta')
+            ->assertSee('Подзвонити')
+            ->assertSee('Запитати ціну')
+            ->assertSee('Перейти в каталог')
+            ->assertSee('data-target="#order-form"', false)
+            ->assertSee('href="tel:', false);
+    }
+
     public function testProductPageRendersStructuredDecisionBlocks()
     {
         $product = factory(Product::class)->create([

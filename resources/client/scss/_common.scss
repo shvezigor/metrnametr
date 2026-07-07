@@ -1829,6 +1829,7 @@ section {
         box-shadow: none;
         border-radius: 0;
         border: none;
+        background: #fff;
     }
 
     .modal-header {
@@ -1934,6 +1935,11 @@ section {
 
         .modal-body {
             padding-bottom: 50px;
+
+            @media(max-width: 419px) {
+                padding-right: 24px;
+                padding-left: 24px;
+            }
 
             p {
                 text-align: center;
@@ -3067,4 +3073,67 @@ footer {
 
 .catalog-products-section {
     padding-top: 10px;
+}
+
+.mobile-contact-cta {
+    display: none;
+
+    @media(max-width: 767px) {
+        position: fixed;
+        right: 0;
+        bottom: 0;
+        left: 0;
+        z-index: 995;
+        display: grid;
+        grid-template-columns: repeat(3, minmax(0, 1fr));
+        background: #fff;
+        border-top: 1px solid rgba(0, 0, 0, 0.12);
+        box-shadow: 0 -8px 24px rgba(0, 0, 0, 0.12);
+    }
+}
+
+.mobile-contact-cta__item {
+    display: flex;
+    min-height: 58px;
+    padding: 8px 6px;
+    align-items: center;
+    justify-content: center;
+    flex-direction: column;
+    gap: 4px;
+    color: #151515;
+    font-family: 'latobold';
+    font-size: 11px;
+    line-height: 1.15;
+    text-align: center;
+    border-right: 1px solid rgba(0, 0, 0, 0.08);
+
+    &:last-child {
+        border-right: 0;
+    }
+
+    &:hover,
+    &:focus {
+        color: #151515;
+    }
+
+    i {
+        color: $blue;
+        font-size: 16px;
+        line-height: 1;
+    }
+}
+
+.mobile-contact-cta__item--primary {
+    color: #151515;
+    background: $yellow;
+
+    i {
+        color: $blue;
+    }
+}
+
+@media(max-width: 767px) {
+    body {
+        padding-bottom: 64px;
+    }
 }
