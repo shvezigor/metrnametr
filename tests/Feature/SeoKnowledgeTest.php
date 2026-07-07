@@ -136,6 +136,16 @@ class SeoKnowledgeTest extends TestCase
             ->assertSee('Технічні характеристики');
     }
 
+    public function testCatalogPageRendersBuyerIntentGuide()
+    {
+        $this->get(route('catalog'))
+            ->assertStatus(200)
+            ->assertSee('catalog-intent-guide')
+            ->assertSee('Оберіть двері за призначенням')
+            ->assertSee('Двері в квартиру')
+            ->assertSee('Для гуртових клієнтів');
+    }
+
     public function testSeoSchemasUseAbsoluteImagesAndSkipEmptyFaqSchema()
     {
         config(['app.url' => 'https://metrnametr.com.ua']);
