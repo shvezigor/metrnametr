@@ -195,12 +195,24 @@
                                                     data-toggle="modal"
                                                     data-target="#order-form"
                                                     data-id="{{$item->id}}"
-                                                >Замовити</a>
+                                                >Запитати ціну</a>
                                             </div>
                                         </div>
 
                                     </div>
-                                    <div class="title-box"><a href="{{ $item->location }}">{{ $item->title }}</a></div>
+                                    <div class="title-box">
+                                        <a href="{{ $item->location }}">{{ $item->title }}</a>
+                                        <div class="product-card-type">Вхідні / технічні двері</div>
+                                        <div class="product-card-badges">
+                                            <span>ДСТУ</span>
+                                            <span>Гарантія</span>
+                                            <span>Покриття</span>
+                                        </div>
+                                        <div class="product-card-actions">
+                                            <a href="{{ $item->location }}">Детальніше</a>
+                                            <a href="#" data-toggle="modal" data-target="#order-form" data-id="{{$item->id}}">Консультація</a>
+                                        </div>
+                                    </div>
                                 </div>
                             </div>
                         @endforeach

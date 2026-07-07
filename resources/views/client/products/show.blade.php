@@ -28,22 +28,39 @@
 
                     <h1>{{ $product->title }}</h1>
 
+                    <p class="product-intro">Підберемо комплектацію, покриття та розмір під ваш об’єкт. Можна замовити консультацію або уточнити ціну перед покупкою.</p>
+
+                    <div class="product-page-badges">
+                        <span>ДСТУ</span>
+                        <span>Гарантія</span>
+                        <span>Виробник</span>
+                        <span>Доставка</span>
+                    </div>
+
                     <div class="feature-list">
                         {!! $product->text !!}
                     </div>
 
-                    <div class="row">
+                    <div class="row product-cta-row">
                         <div class="col-xs-6 product-price">
                             <span class="product-price">{{ $product->price_text }}</span>
                         </div>
-                        <div class="col-xs-6 text-right">
+                        <div class="col-xs-6 text-right product-cta-buttons">
                             <button
                                 class="yellow-btn blue-hover"
                                 data-toggle="modal"
                                 data-target="#order-form"
                                 data-id="{{$product->id}}"
                             >
-                                Замовити
+                                Запитати ціну
+                            </button>
+                            <button
+                                class="blue-btn"
+                                data-toggle="modal"
+                                data-target="#order-form"
+                                data-id="{{$product->id}}"
+                            >
+                                Отримати консультацію
                             </button>
                         </div>
                     </div>
@@ -144,11 +161,23 @@
                                             <div class="price">{{ $item->price_text }}</div>
                                             <div class="order">
                                                 <a href="#" data-toggle="modal" data-target="#order-form"
-                                                   data-id="{{$item->id}}">Замовити</a>
+                                                   data-id="{{$item->id}}">Запитати ціну</a>
                                             </div>
                                         </div>
                                     </div>
-                                    <div class="title-box"><a href="{{ $item->location }}">{{ $item->title }}</a></div>
+                                    <div class="title-box">
+                                        <a href="{{ $item->location }}">{{ $item->title }}</a>
+                                        <div class="product-card-type">Вхідні / технічні двері</div>
+                                        <div class="product-card-badges">
+                                            <span>ДСТУ</span>
+                                            <span>Гарантія</span>
+                                            <span>Покриття</span>
+                                        </div>
+                                        <div class="product-card-actions">
+                                            <a href="{{ $item->location }}">Детальніше</a>
+                                            <a href="#" data-toggle="modal" data-target="#order-form" data-id="{{$item->id}}">Консультація</a>
+                                        </div>
+                                    </div>
                                 </div>
                             </div>
                         @endforeach

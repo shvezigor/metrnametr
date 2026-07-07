@@ -90,6 +90,19 @@ class SeoKnowledgeTest extends TestCase
             ->assertSee('"@type": "LocalBusiness"', false);
     }
 
+    public function testHomepageRendersModernCommercialStructure()
+    {
+        $this->get('/')
+            ->assertStatus(200)
+            ->assertSee('home-hero-modern')
+            ->assertSee('home-category-grid')
+            ->assertSee('home-trust-grid')
+            ->assertSee('product-card-badges')
+            ->assertSee('Вхідні та міжкімнатні двері від виробника у Луцьку')
+            ->assertSee('Отримати консультацію')
+            ->assertSee('Чому обирають Метр на Метр');
+    }
+
     public function testSeoSchemasUseAbsoluteImagesAndSkipEmptyFaqSchema()
     {
         config(['app.url' => 'https://metrnametr.com.ua']);
