@@ -18,6 +18,18 @@
         ['icon' => '/images/icons/handshake.svg', 'title' => 'Гурт і роздріб', 'text' => 'Підбираємо двері для приватних покупців, дилерів і будівельних команд.'],
         ['icon' => '/images/icons/delivery-truck.svg', 'title' => 'Доставка по Україні', 'text' => 'Організовуємо постачання дверей з Луцька в інші регіони України.'],
     ];
+    $aboutPoints = [
+        ['title' => 'Виробництво', 'text' => 'Виготовляємо двері у Луцьку та контролюємо ключові етапи комплектації.'],
+        ['title' => 'Якість', 'text' => 'Працюємо з сертифікацією ДСТУ, системою ISO 9001 і зрозумілими гарантійними умовами.'],
+        ['title' => 'Асортимент', 'text' => 'Пропонуємо вхідні, міжкімнатні, протипожежні та технічні двері для різних задач.'],
+        ['title' => 'Для кого працюємо', 'text' => 'Допомагаємо приватним покупцям, дилерам, будівельним компаніям і комерційним об’єктам.'],
+        ['title' => 'Доставка та співпраця', 'text' => 'Постачаємо двері по Україні та підбираємо рішення для роздрібних і гуртових замовлень.'],
+    ];
+    $homeIntro = [
+        'Метр на Метр — виробник дверей у Луцьку, який працює з вхідними, міжкімнатними, технічними та протипожежними рішеннями.',
+        'Допомагаємо підібрати модель під квартиру, будинок, комерційне приміщення або гуртове замовлення.',
+        'Пояснюємо комплектацію, гарантію, сертифікацію та доставку до покупки, щоб вибір був зрозумілим.',
+    ];
 @endphp
 
 <section class="home-hero-modern">
@@ -53,9 +65,11 @@
 
             <div class="col-xs-12 col-sm-6 col-md-5 col-md-offset-1">
                 <h2>{{ \App\Models\Setting::getValue('main_title') }}</h2>
-                @foreach(array_slice(preg_split('/$/m', \App\Models\Setting::getValue('main_text'), -1, PREG_SPLIT_NO_EMPTY), 0, 4) as $text)
-                    <p>{{ $text }}</p>
-                @endforeach
+                <div class="home-about-intro">
+                    @foreach($homeIntro as $text)
+                        <p>{{ $text }}</p>
+                    @endforeach
+                </div>
                 <a href="{{ route('about') }}" class="blue-btn about-more">Детальніше про виробництво</a>
             </div>
 
@@ -63,6 +77,15 @@
                 <div class="img-box"><img src="/images/logo-2.png" alt="Метр на Метр - двері у Луцьку" title="Метр на Метр"></div>
             </div>
 
+        </div>
+
+        <div class="home-about-points">
+            @foreach($aboutPoints as $point)
+                <div class="home-about-point">
+                    <h3>{{ $point['title'] }}</h3>
+                    <p>{{ $point['text'] }}</p>
+                </div>
+            @endforeach
         </div>
     </div>
 

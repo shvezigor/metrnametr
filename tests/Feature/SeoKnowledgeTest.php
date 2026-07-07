@@ -106,6 +106,21 @@ class SeoKnowledgeTest extends TestCase
             ->assertSee('Чому обирають Метр на Метр');
     }
 
+    public function testHomepageRendersAboutStructureAndCompleteFaq()
+    {
+        $this->get('/')
+            ->assertStatus(200)
+            ->assertSee('home-about-intro')
+            ->assertSee('home-about-points')
+            ->assertSee('Виробництво')
+            ->assertSee('Якість')
+            ->assertSee('Доставка та співпраця')
+            ->assertSee('Які двері краще обрати для квартири?')
+            ->assertSee('Чим відрізняються вуличні двері від квартирних?')
+            ->assertSee('Як отримати консультацію перед покупкою?')
+            ->assertSee('FAQPage');
+    }
+
     public function testProductPageRendersStructuredDecisionBlocks()
     {
         $product = factory(Product::class)->create([
