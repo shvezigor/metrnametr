@@ -95,8 +95,8 @@
     <div class="container">
         <div class="row">
             <div class="col-xs-12">
-                <div class="small-title black">Категорії дверей</div>
-                <h2 class="section-heading">Швидко оберіть двері під вашу задачу</h2>
+                <h2 class="small-title black">Категорії дверей</h2>
+                <div class="section-heading">Швидко оберіть двері під вашу задачу</div>
             </div>
         </div>
 
@@ -121,7 +121,7 @@
         <div class="row">
 
             <div class="col-xs-12 col-md-10 col-md-offset-1">
-                <div class="small-title">Групи дверей</div>
+                <h2 class="small-title">Групи дверей</h2>
             </div>
 
             <div class="col-xs-12 col-sm-12 col-md-10 col-md-offset-1">
@@ -140,7 +140,7 @@
 
                             <div class="col-xs-12 col-sm-6">
                                 <div class="cont-box">
-                                    <h2>{{ $slide->lastPublishedCatalog()->title }}</h2>
+                                    <h3>{{ $slide->lastPublishedCatalog()->title }}</h3>
 
                                     <p>{!! $slide->text !!}</p>
 
@@ -165,7 +165,7 @@
 
         <div class="row">
             <div class="col-xs-12">
-                <div class="small-title black">Популярні товари</div>
+                <h2 class="small-title black">Популярні товари</h2>
             </div>
         </div>
 
@@ -202,7 +202,7 @@
                                     <div class="price">{{ $product->price_text }}</div>
                                     <div class="order">
                                         <a
-                                            href="#"
+                                            href="#order-form"
                                             data-toggle="modal"
                                             data-target="#order-form"
                                             data-id="{{$product->id}}"
@@ -222,8 +222,8 @@
                                     <span>Покриття</span>
                                 </div>
                                 <div class="product-card-actions">
-                                    <a href="{{ $product->location }}">Детальніше</a>
-                                    <a href="#" data-toggle="modal" data-target="#order-form" data-id="{{$product->id}}">Консультація</a>
+                                    <a href="{{ $product->location }}" class="product-card-details">Детальніше</a>
+                                    <a href="#order-form" class="product-card-consult" data-toggle="modal" data-target="#order-form" data-id="{{$product->id}}">Запитати ціну</a>
                                 </div>
                             </div>
                         </div>
@@ -241,7 +241,7 @@
     <div class="container">
         <div class="row">
             <div class="col-xs-12">
-                <div class="small-title black">Чому обирають Метр на Метр</div>
+                <h2 class="small-title black">Чому обирають Метр на Метр</h2>
             </div>
         </div>
 

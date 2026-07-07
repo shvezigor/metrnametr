@@ -12,7 +12,11 @@
         </a>
     @endif
 
-    <a href="{{ route('contacts') }}" class="mobile-contact-cta__item mobile-contact-cta__item--primary">
+    <a
+        href="{{ route('contacts') }}#order-form"
+        class="mobile-contact-cta__item mobile-contact-cta__item--primary"
+        data-mobile-order-cta
+    >
         <i class="fa fa-comment" aria-hidden="true"></i>
         <span>Запитати ціну</span>
     </a>

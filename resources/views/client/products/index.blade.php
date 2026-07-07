@@ -219,7 +219,7 @@
                                             <div class="price">{{ $item->price_text }}</div>
                                             <div class="order">
                                                 <a
-                                                    href="#"
+                                                    href="#order-form"
                                                     data-toggle="modal"
                                                     data-target="#order-form"
                                                     data-id="{{$item->id}}"
@@ -237,8 +237,8 @@
                                             <span>Покриття</span>
                                         </div>
                                         <div class="product-card-actions">
-                                            <a href="{{ $item->location }}">Детальніше</a>
-                                            <a href="#" data-toggle="modal" data-target="#order-form" data-id="{{$item->id}}">Консультація</a>
+                                            <a href="{{ $item->location }}" class="product-card-details">Детальніше</a>
+                                            <a href="#order-form" class="product-card-consult" data-toggle="modal" data-target="#order-form" data-id="{{$item->id}}">Запитати ціну</a>
                                         </div>
                                     </div>
                                 </div>
