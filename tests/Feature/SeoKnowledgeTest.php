@@ -129,8 +129,21 @@ class SeoKnowledgeTest extends TestCase
             ->assertSee('Подзвонити')
             ->assertSee('Запитати ціну')
             ->assertSee('Перейти в каталог')
-            ->assertSee('data-target="#order-form"', false)
+            ->assertSee('href="' . route('contacts') . '"', false)
             ->assertSee('href="tel:', false);
+    }
+
+    public function testServicePagesRenderConsistentCtaBlock()
+    {
+        foreach ([route('guarantee'), route('payment'), route('wholesale'), route('contacts')] as $url) {
+            $this->get($url)
+                ->assertStatus(200)
+                ->assertSee('secondary-page-cta')
+                ->assertSee('Перейти в каталог')
+                ->assertSee('Отримати консультацію')
+                ->assertSee('Подзвонити')
+                ->assertSee('href="tel:', false);
+        }
     }
 
     public function testProductPageRendersStructuredDecisionBlocks()
