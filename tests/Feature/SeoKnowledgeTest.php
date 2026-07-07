@@ -3,6 +3,8 @@
 namespace Tests\Feature;
 
 use App\Models\Product;
+use App\Models\Category;
+use App\Models\Type;
 use App\Support\SeoContent;
 use Tests\TestCase;
 
@@ -106,5 +108,70 @@ class SeoKnowledgeTest extends TestCase
         $this->assertNull(SeoContent::faqSchema([]));
         $this->assertSame('https://metrnametr.com.ua/images/og.jpg', SeoContent::ogImageFor((object) ['og_image' => '/images/og.jpg'], '/fallback.jpg'));
         $this->assertNotContains(null, SeoContent::defaultPageSchemas([SeoContent::faqSchema([])]));
+    }
+
+    public function testSeoLandingPagesRenderMetaCanonicalFaqAndSchemas()
+    {
+        $pages = [
+            '/vkhidni-dveri-lutsk' => 'Вхідні двері Луцьк',
+            '/mizhkimnatni-dveri-lutsk' => 'Міжкімнатні двері Луцьк',
+            '/dveri-dlya-kvartyry' => 'Двері для квартири',
+            '/dveri-dlya-budynku' => 'Двері для будинку',
+            '/dveri-z-termorozryvom' => 'Двері з терморозривом',
+            '/protypozhezhni-dveri' => 'Протипожежні двері',
+        ];
+
+        foreach ($pages as $url => $h1) {
+            $this->get($url)
+                ->assertStatus(200)
+                ->assertSee('<h1>' . $h1 . '</h1>', false)
+                ->assertSee('<link rel="canonical" href="https://metrnametr.com.ua' . $url . '"', false)
+                ->assertSee('FAQPage')
+                ->assertSee('BreadcrumbList')
+                ->assertSee('Популярні питання');
+        }
+    }
+
+    public function testSeoLandingPagesAreIncludedInSitemapAndLlmsFiles()
+    {
+        $this->get('/sitemap.xml')
+            ->assertStatus(200)
+            ->assertSee('<loc>https://metrnametr.com.ua/vkhidni-dveri-lutsk</loc>', false)
+            ->assertSee('<loc>https://metrnametr.com.ua/mizhkimnatni-dveri-lutsk</loc>', false)
+            ->assertSee('<loc>https://metrnametr.com.ua/dveri-dlya-kvartyry</loc>', false)
+            ->assertSee('<loc>https://metrnametr.com.ua/dveri-dlya-budynku</loc>', false)
+            ->assertSee('<loc>https://metrnametr.com.ua/dveri-z-termorozryvom</loc>', false)
+            ->assertSee('<loc>https://metrnametr.com.ua/protypozhezhni-dveri</loc>', false);
+
+        $this->get('/llms.txt')
+            ->assertStatus(200)
+            ->assertSee('/vkhidni-dveri-lutsk')
+            ->assertSee('/protypozhezhni-dveri');
+
+        $this->get('/llms-full.txt')
+            ->assertStatus(200)
+            ->assertSee('/dveri-z-termorozryvom')
+            ->assertSee('/mizhkimnatni-dveri-lutsk');
+    }
+
+    public function testProductMetaDescriptionUsesNameTypeCategoryAndPurpose()
+    {
+        $type = new Type(['title' => 'Вхідні двері']);
+        $category = new Category(['title' => 'Терморозрив']);
+        $category->setRelation('type', $type);
+
+        $product = new Product([
+            'title' => 'Арктика Люкс',
+            'description' => '',
+            'seo_description' => '',
+        ]);
+        $product->setRelation('categories', collect([$category]));
+
+        $description = SeoContent::productMetaDescription($product);
+
+        $this->assertStringContainsString('Арктика Люкс', $description);
+        $this->assertStringContainsString('Вхідні двері', $description);
+        $this->assertStringContainsString('Терморозрив', $description);
+        $this->assertStringContainsString('для будинку', $description);
     }
 }

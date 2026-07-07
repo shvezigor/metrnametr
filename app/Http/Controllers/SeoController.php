@@ -7,6 +7,34 @@ use Illuminate\Http\Response;
 
 class SeoController extends Controller
 {
+    public function landing($slug)
+    {
+        $landing = SeoContent::landingPage($slug);
+
+        if (empty($landing)) {
+            abort(404);
+        }
+
+        $breadcrumbs = [
+            $landing['path'] => $landing['h1'],
+        ];
+
+        return view('client.seo.landing')
+            ->with('landing', $landing)
+            ->with('title', $landing['title'])
+            ->with('description', $landing['description'])
+            ->with('canonical', SeoContent::canonical($landing['path']))
+            ->with('breadcrumbs', $breadcrumbs)
+            ->with('faq', $landing['faq'])
+            ->with('schema', [
+                SeoContent::breadcrumbSchema([
+                    '/' => 'Головна',
+                    $landing['path'] => $landing['h1'],
+                ]),
+                SeoContent::faqSchema($landing['faq']),
+            ]);
+    }
+
     public function llms()
     {
         $site = SeoContent::site();
@@ -34,7 +62,13 @@ class SeoController extends Controller
             '- AI usage policy: ' . $site['domain'] . '/ai-policy.txt',
             '- Sitemap: ' . $site['domain'] . $site['sitemap_url'],
             '- Full AI description: ' . $site['domain'] . '/llms-full.txt',
+            '',
+            'SEO landing pages:',
         ]);
+
+        foreach (SeoContent::landingPages() as $landing) {
+            $lines[] = '- ' . $landing['h1'] . ': ' . $site['domain'] . $landing['path'];
+        }
 
         return response(implode("\n", $lines), 200)->header('Content-Type', 'text/plain; charset=UTF-8');
     }
@@ -65,6 +99,12 @@ class SeoController extends Controller
 
         foreach ($site['main_pages'] as $url => $description) {
             $lines[] = '- ' . $site['domain'] . $url . ' - ' . $description;
+        }
+
+        $lines[] = '';
+        $lines[] = 'SEO landing pages:';
+        foreach (SeoContent::landingPages() as $landing) {
+            $lines[] = '- ' . $site['domain'] . $landing['path'] . ' - ' . $landing['description'];
         }
 
         $lines[] = '';

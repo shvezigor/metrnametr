@@ -131,7 +131,7 @@ class ProductsController extends Controller
 
     public function show($alias) {
 
-        $product = Product::published()->where('alias', $alias)->first();
+        $product = Product::published()->with('categories.type')->where('alias', $alias)->first();
 
         if ($product === null) {
             abort(404);
@@ -141,7 +141,7 @@ class ProductsController extends Controller
 
         return view('client.products.show')
             ->with('product', $product)
-            ->with('description', SeoContent::descriptionFor($product, $product->description))
+            ->with('description', SeoContent::productMetaDescription($product))
             ->with('keywords', $product->keywords)
             ->with('list', $list)
             ->with('extra', SeoContent::productExtraFor($product))

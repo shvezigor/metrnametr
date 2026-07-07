@@ -48,6 +48,16 @@ class SeoContent
         return config("seo_content.{$key}", []);
     }
 
+    public static function landingPages()
+    {
+        return collect(config('seo_landings', []));
+    }
+
+    public static function landingPage($slug)
+    {
+        return self::landingPages()->get($slug);
+    }
+
     public static function productExtra()
     {
         return config('seo_content.product_extra', []);
@@ -93,6 +103,50 @@ class SeoContent
     public static function descriptionFor($model, $fallback = null)
     {
         return !empty($model->seo_description) ? $model->seo_description : ($fallback ?: $model->description);
+    }
+
+    public static function productMetaDescription(Product $product)
+    {
+        if (!empty($product->seo_description)) {
+            return $product->seo_description;
+        }
+
+        $categories = $product->relationLoaded('categories')
+            ? $product->categories
+            : $product->categories()->with('type')->get();
+
+        $category = $categories->first();
+        $type = $category && $category->relationLoaded('type') ? $category->type : ($category ? $category->type()->first() : null);
+        $typeTitle = $type ? $type->title : 'двері';
+        $categoryTitle = $category ? $category->title : 'каталог дверей';
+        $purpose = self::productPurpose($product, $typeTitle, $categoryTitle);
+
+        return trim(sprintf(
+            '%s %s з категорії %s %s. Підбір за розміром, комплектацією і бюджетом, консультація щодо замків, утеплення та монтажу.',
+            $typeTitle,
+            $product->title,
+            $categoryTitle,
+            $purpose
+        ));
+    }
+
+    private static function productPurpose(Product $product, $typeTitle, $categoryTitle)
+    {
+        $text = mb_strtolower($product->title . ' ' . $typeTitle . ' ' . $categoryTitle);
+
+        if (strpos($text, 'термо') !== false || strpos($text, 'будин') !== false || strpos($text, 'котедж') !== false) {
+            return 'для будинку';
+        }
+
+        if (strpos($text, 'міжкім') !== false || strpos($text, 'mizh') !== false) {
+            return 'для інтерʼєру';
+        }
+
+        if (strpos($text, 'протипож') !== false || strpos($text, 'пожеж') !== false) {
+            return 'для технічних і комерційних приміщень';
+        }
+
+        return 'для квартири';
     }
 
     public static function canonicalFor($model, $path)
@@ -431,6 +485,10 @@ SVG;
             ['loc' => '/wholesale', 'lastmod' => $today, 'changefreq' => 'monthly', 'priority' => '0.5'],
             ['loc' => '/news', 'lastmod' => $today, 'changefreq' => 'weekly', 'priority' => '0.6'],
         ];
+
+        foreach (self::landingPages() as $landing) {
+            $urls[] = ['loc' => $landing['path'], 'lastmod' => $today, 'changefreq' => 'monthly', 'priority' => '0.8'];
+        }
 
         foreach (self::articles() as $article) {
             $urls[] = ['loc' => '/knowledge/' . $article['slug'], 'lastmod' => $today, 'changefreq' => 'monthly', 'priority' => '0.7'];
