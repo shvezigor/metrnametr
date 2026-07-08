@@ -79,7 +79,8 @@ class KnowledgePlanTest extends TestCase
 
         $response->assertStatus(200);
         $response->assertSee('/knowledge?page=2', false);
-        $response->assertSee('/knowledge/yak-vybraty-vkhidni-dveri-dlia-kvartyry/image.svg', false);
+        $response->assertSee('/images/knowledge/yak-vybraty-vkhidni-dveri-dlia-kvartyry.webp', false);
+        $response->assertDontSee('/knowledge/yak-vybraty-vkhidni-dveri-dlia-kvartyry/image.svg', false);
         $response->assertSee('loading="lazy"', false);
         $response->assertDontSee('/knowledge/yak-pidhotuvatysia-do-zamovlennia-dverei');
 
@@ -91,7 +92,8 @@ class KnowledgePlanTest extends TestCase
 
         $this->get('/knowledge/yak-pidhotuvatysia-do-zamovlennia-dverei')
             ->assertStatus(200)
-            ->assertSee('/knowledge/yak-pidhotuvatysia-do-zamovlennia-dverei/image.svg', false)
+            ->assertSee('/images/knowledge/yak-pidhotuvatysia-do-zamovlennia-dverei.webp', false)
+            ->assertDontSee('/knowledge/yak-pidhotuvatysia-do-zamovlennia-dverei/image.svg', false)
             ->assertSee('alt="' . $article['image']['alt'] . '"', false)
             ->assertSee('width="1200"', false)
             ->assertSee('height="675"', false);
@@ -128,32 +130,37 @@ class KnowledgePlanTest extends TestCase
         config(['seo_content.site.domain' => 'https://metrnametr.com.ua']);
 
         $slug = 'yak-vybraty-vkhidni-dveri-dlia-kvartyry';
-        $directory = public_path('images/knowledge');
-        $path = $directory . '/' . $slug . '.webp';
+        $article = SeoContent::article($slug);
 
-        if (!is_dir($directory)) {
-            mkdir($directory, 0777, true);
-        }
+        $this->assertFileExists(public_path('images/knowledge/' . $slug . '.webp'));
+        $this->assertSame('/images/knowledge/' . $slug . '.webp', $article['image']['src']);
+        $this->assertSame(
+            'https://metrnametr.com.ua/images/knowledge/' . $slug . '.webp',
+            SeoContent::articleImageUrl($article)
+        );
 
-        file_put_contents($path, 'test image placeholder');
+        $this->get('/knowledge/' . $slug)
+            ->assertStatus(200)
+            ->assertSee('/images/knowledge/' . $slug . '.webp', false)
+            ->assertDontSee('/knowledge/' . $slug . '/image.svg', false)
+            ->assertSee($article['image']['caption'])
+            ->assertSee($article['image']['alt']);
+    }
 
-        try {
-            $article = SeoContent::article($slug);
+    public function testAllKnowledgeArticlesUseGeneratedRasterCovers()
+    {
+        $articles = SeoContent::articles();
 
-            $this->assertSame('/images/knowledge/' . $slug . '.webp', $article['image']['src']);
+        $this->assertGreaterThanOrEqual(100, $articles->count());
+
+        $articles->each(function ($article) {
             $this->assertSame(
-                'https://metrnametr.com.ua/images/knowledge/' . $slug . '.webp',
-                SeoContent::articleImageUrl($article)
+                '/images/knowledge/' . $article['slug'] . '.webp',
+                $article['image']['src']
             );
-
-            $this->get('/knowledge/' . $slug)
-                ->assertStatus(200)
-                ->assertSee('/images/knowledge/' . $slug . '.webp', false)
-                ->assertSee($article['image']['caption'])
-                ->assertSee($article['image']['alt']);
-        } finally {
-            @unlink($path);
-        }
+            $this->assertFileExists(public_path('images/knowledge/' . $article['slug'] . '.webp'));
+            $this->assertStringNotContainsString('/image.svg', $article['image']['src']);
+        });
     }
 
     public function testKnowledgeArticleImageEndpointReturnsSvg()
