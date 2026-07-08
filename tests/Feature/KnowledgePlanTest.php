@@ -64,13 +64,13 @@ class KnowledgePlanTest extends TestCase
             ->assertStatus(200)
             ->assertSee('Як вибрати міжкімнатні двері для квартири')
             ->assertSee('FAQPage')
-            ->assertSee('Порівняння');
+            ->assertSee('id="comparison"', false);
 
         $this->get('/knowledge/yak-pidhotuvatysia-do-zamovlennia-dverei')
             ->assertStatus(200)
             ->assertSee('Як підготуватися до замовлення дверей')
             ->assertSee('FAQPage')
-            ->assertSee('Порівняння');
+            ->assertSee('id="comparison"', false);
     }
 
     public function testKnowledgeIndexIsPaginatedAndUsesArticleImages()
@@ -87,12 +87,73 @@ class KnowledgePlanTest extends TestCase
             ->assertStatus(200)
             ->assertSee('/knowledge?page=1', false);
 
+        $article = SeoContent::article('yak-pidhotuvatysia-do-zamovlennia-dverei');
+
         $this->get('/knowledge/yak-pidhotuvatysia-do-zamovlennia-dverei')
             ->assertStatus(200)
             ->assertSee('/knowledge/yak-pidhotuvatysia-do-zamovlennia-dverei/image.svg', false)
-            ->assertSee('alt="Як підготуватися до замовлення дверей"', false)
+            ->assertSee('alt="' . $article['image']['alt'] . '"', false)
             ->assertSee('width="1200"', false)
             ->assertSee('height="675"', false);
+    }
+
+    public function testKnowledgeArticlesHaveTopicAwareImageMetadata()
+    {
+        $articles = SeoContent::articles();
+
+        $this->assertGreaterThanOrEqual(100, $articles->count());
+
+        $articles->each(function ($article) {
+            $this->assertArrayHasKey('image', $article);
+            $this->assertNotEmpty($article['image']['filename']);
+            $this->assertNotEmpty($article['image']['src']);
+            $this->assertNotEmpty($article['image']['fallback']);
+            $this->assertNotEmpty($article['image']['alt']);
+            $this->assertNotEmpty($article['image']['title']);
+            $this->assertNotEmpty($article['image']['caption']);
+            $this->assertNotEmpty($article['image']['prompt']);
+            $this->assertStringEndsWith('.webp', $article['image']['filename']);
+            $this->assertStringStartsWith('/images/knowledge/', $article['image']['raster']);
+            $this->assertStringContainsString('/knowledge/' . $article['slug'] . '/image.svg', $article['image']['fallback']);
+            $this->assertStringContainsString('Ukrainian door market', $article['image']['prompt']);
+            $this->assertStringContainsString('horizontal 16:9', $article['image']['prompt']);
+            $this->assertStringContainsString('no text', $article['image']['prompt']);
+            $this->assertStringContainsString('no logos', $article['image']['prompt']);
+            $this->assertStringContainsString('no watermarks', $article['image']['prompt']);
+        });
+    }
+
+    public function testKnowledgePagesAndSchemaPreferRasterImagesWhenAvailable()
+    {
+        config(['seo_content.site.domain' => 'https://metrnametr.com.ua']);
+
+        $slug = 'yak-vybraty-vkhidni-dveri-dlia-kvartyry';
+        $directory = public_path('images/knowledge');
+        $path = $directory . '/' . $slug . '.webp';
+
+        if (!is_dir($directory)) {
+            mkdir($directory, 0777, true);
+        }
+
+        file_put_contents($path, 'test image placeholder');
+
+        try {
+            $article = SeoContent::article($slug);
+
+            $this->assertSame('/images/knowledge/' . $slug . '.webp', $article['image']['src']);
+            $this->assertSame(
+                'https://metrnametr.com.ua/images/knowledge/' . $slug . '.webp',
+                SeoContent::articleImageUrl($article)
+            );
+
+            $this->get('/knowledge/' . $slug)
+                ->assertStatus(200)
+                ->assertSee('/images/knowledge/' . $slug . '.webp', false)
+                ->assertSee($article['image']['caption'])
+                ->assertSee($article['image']['alt']);
+        } finally {
+            @unlink($path);
+        }
     }
 
     public function testKnowledgeArticleImageEndpointReturnsSvg()

@@ -17,11 +17,12 @@
                 @foreach($articles as $article)
                     <div class="col-xs-12 col-sm-6 col-md-4">
                         <article class="knowledge-card">
+                            @php($image = $article['image'])
                             <a href="{{ route('knowledge.show', ['slug' => $article['slug']]) }}" class="knowledge-card-image">
                                 <img
-                                    src="{{ route('knowledge.image', ['slug' => $article['slug']]) }}"
-                                    alt="{{ $article['title'] }}"
-                                    title="{{ $article['title'] }}"
+                                    src="{{ $image['src'] }}"
+                                    alt="{{ $image['alt'] }}"
+                                    title="{{ $image['title'] }}"
                                     width="1200"
                                     height="675"
                                     loading="lazy"

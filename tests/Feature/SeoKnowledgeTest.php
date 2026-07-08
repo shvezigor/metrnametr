@@ -50,7 +50,7 @@ class SeoKnowledgeTest extends TestCase
             ->assertSee('Як вибрати вхідні двері для квартири')
             ->assertSee('FAQPage')
             ->assertSee('Article')
-            ->assertSee('Порівняння');
+            ->assertSee('id="comparison"', false);
     }
 
     public function testAiAgentPageAndSitemapExposeSeoResources()

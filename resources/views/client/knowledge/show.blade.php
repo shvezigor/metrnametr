@@ -11,16 +11,17 @@
                     <h1>{{ $article['title'] }}</h1>
                     <p class="lead">{{ $article['intro'] }}</p>
 
+                    @php($image = $article['image'])
                     <figure class="knowledge-hero-image">
                         <img
-                            src="{{ route('knowledge.image', ['slug' => $article['slug']]) }}"
-                            alt="{{ $article['title'] }}"
-                            title="{{ $article['title'] }}"
+                            src="{{ $image['src'] }}"
+                            alt="{{ $image['alt'] }}"
+                            title="{{ $image['title'] }}"
                             width="1200"
                             height="675"
                             loading="eager"
                         >
-                        <figcaption>Технічна ілюстрація до теми: {{ $article['title'] }}</figcaption>
+                        <figcaption>{{ $image['caption'] }}</figcaption>
                     </figure>
 
                     <div class="knowledge-toc">

@@ -11,7 +11,7 @@ class KnowledgeArticleFactory
         $description = $source['description'] ?? $source['meta_description'];
         $intro = $source['intro'] ?? $source['intro_goal'];
 
-        return [
+        $article = [
             'slug' => $source['slug'],
             'title' => $title,
             'description' => $description,
@@ -21,6 +21,10 @@ class KnowledgeArticleFactory
             'faq' => self::faq($focus),
             'image_prompts' => $source['image_prompts'] ?? KnowledgePlan::articleBrief('choice', ['label' => 'Вибір дверей'], $source['slug'], $title)['image_prompts'],
         ];
+
+        $article['image'] = KnowledgeImage::forArticle($article);
+
+        return $article;
     }
 
     private static function sections($focus)

@@ -35,6 +35,13 @@ class SeoContent
             ->merge($configuredArticles)
             ->merge($plannedArticles)
             ->unique('slug')
+            ->map(function ($article) {
+                if (empty($article['image'])) {
+                    $article['image'] = KnowledgeImage::forArticle($article);
+                }
+
+                return $article;
+            })
             ->values();
     }
 
@@ -318,7 +325,9 @@ class SeoContent
 
     public static function articleImageUrl(array $article)
     {
-        return self::canonical('/knowledge/' . $article['slug'] . '/image.svg');
+        $image = $article['image'] ?? KnowledgeImage::forArticle($article);
+
+        return self::canonical($image['src']);
     }
 
     public static function articleImageSvg(array $article)
