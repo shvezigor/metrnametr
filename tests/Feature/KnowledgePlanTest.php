@@ -150,17 +150,30 @@ class KnowledgePlanTest extends TestCase
     public function testAllKnowledgeArticlesUseGeneratedRasterCovers()
     {
         $articles = SeoContent::articles();
+        $paths = [];
+        $hashes = [];
 
         $this->assertGreaterThanOrEqual(100, $articles->count());
 
-        $articles->each(function ($article) {
+        $articles->each(function ($article) use (&$paths) {
+            $path = public_path('images/knowledge/' . $article['slug'] . '.webp');
+
             $this->assertSame(
                 '/images/knowledge/' . $article['slug'] . '.webp',
                 $article['image']['src']
             );
-            $this->assertFileExists(public_path('images/knowledge/' . $article['slug'] . '.webp'));
+            $this->assertFileExists($path);
+            $this->assertGreaterThan(45000, filesize($path));
             $this->assertStringNotContainsString('/image.svg', $article['image']['src']);
+
+            $paths[] = $path;
         });
+
+        collect($paths)->each(function ($path) use (&$hashes) {
+            $hashes[] = hash_file('sha256', $path);
+        });
+
+        $this->assertCount($articles->count(), array_unique($hashes));
     }
 
     public function testKnowledgeArticleImageEndpointReturnsSvg()
