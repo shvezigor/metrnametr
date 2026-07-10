@@ -288,6 +288,50 @@ class SeoKnowledgeTest extends TestCase
         }
     }
 
+    public function testRegionalLandingPagesExposeStrongInternalLinks()
+    {
+        foreach (['/dveri-volyn', '/dveri-rivne', '/vkhidni-dveri-rivne', '/mizhkimnatni-dveri-rivne'] as $url) {
+            $this->get($url)
+                ->assertStatus(200)
+                ->assertSee('Дивитися каталог дверей')
+                ->assertSee('Вхідні двері у Рівному')
+                ->assertSee('Міжкімнатні двері у Рівному')
+                ->assertSee('Двері у Волинській області')
+                ->assertSee('Зв’язатися для консультації')
+                ->assertSee('href="' . route('catalog') . '"', false)
+                ->assertSee('href="/vkhidni-dveri-rivne"', false)
+                ->assertSee('href="/mizhkimnatni-dveri-rivne"', false)
+                ->assertSee('href="/dveri-volyn"', false)
+                ->assertSee('href="' . route('contacts') . '"', false);
+        }
+    }
+
+    public function testContactsPageHasPrimaryHeading()
+    {
+        $this->get(route('contacts'))
+            ->assertStatus(200)
+            ->assertSee('<h1>Контакти Метр на Метр</h1>', false);
+    }
+
+    public function testSiteLogoImagesHaveAltText()
+    {
+        $this->get('/dveri-rivne')
+            ->assertStatus(200)
+            ->assertSee('alt="Метр на Метр - двері у Луцьку та Волині"', false)
+            ->assertSee('alt="Метр на Метр"', false);
+    }
+
+    public function testHomepageProductImagesReferenceExistingLocalFiles()
+    {
+        Product::published()->orderBy('created_at', 'DESC')->limit(8)->get()->each(function ($product) {
+            $path = parse_url($product->cover, PHP_URL_PATH);
+
+            if ($path && strpos($path, '/storage/products/') === 0) {
+                $this->assertFileExists(public_path(ltrim($path, '/')), $product->cover);
+            }
+        });
+    }
+
     public function testSeoLandingPagesAreIncludedInSitemapAndLlmsFiles()
     {
         $this->get('/sitemap.xml')

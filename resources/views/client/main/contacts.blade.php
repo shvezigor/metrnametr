@@ -5,6 +5,12 @@
 <section class="page-cont vacancies-page">
 
     <div class="container">
+        <div class="row">
+            <div class="col-xs-12">
+                <h1>Контакти Метр на Метр</h1>
+            </div>
+        </div>
+
         <div class="row wrap-contact-manager">
 
             <div class="col-xs-12 col-md-4">

@@ -10,7 +10,7 @@
                 <div class="row">
 
                     <div class="col-sm-2 col-md-2">
-                        <div class="logo-box"><a href="#"><img src="/images/logo-2.png" alt=""></a></div>
+                        <div class="logo-box"><a href="{{ route('home') }}"><img src="/images/logo-2.png" alt="Метр на Метр"></a></div>
                     </div>
 
                     <div class="col-sm-3 col-md-2">
