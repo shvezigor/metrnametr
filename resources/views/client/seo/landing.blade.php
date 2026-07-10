@@ -21,6 +21,9 @@
                     <h2>Корисні сторінки</h2>
                     <ul>
                         <li><a href="{{ route('catalog') }}">Дивитися каталог дверей</a></li>
+                        <li><a href="/vkhidni-dveri-lutsk">Вхідні двері у Луцьку</a></li>
+                        <li><a href="/mizhkimnatni-dveri-lutsk">Міжкімнатні двері у Луцьку</a></li>
+                        <li><a href="/dveri-rivne">Двері у Рівному</a></li>
                         <li><a href="/vkhidni-dveri-rivne">Вхідні двері у Рівному</a></li>
                         <li><a href="/mizhkimnatni-dveri-rivne">Міжкімнатні двері у Рівному</a></li>
                         <li><a href="/dveri-volyn">Двері у Волинській області</a></li>

@@ -294,15 +294,38 @@ class SeoKnowledgeTest extends TestCase
             $this->get($url)
                 ->assertStatus(200)
                 ->assertSee('Дивитися каталог дверей')
+                ->assertSee('Вхідні двері у Луцьку')
+                ->assertSee('Міжкімнатні двері у Луцьку')
                 ->assertSee('Вхідні двері у Рівному')
                 ->assertSee('Міжкімнатні двері у Рівному')
                 ->assertSee('Двері у Волинській області')
                 ->assertSee('Зв’язатися для консультації')
                 ->assertSee('href="' . route('catalog') . '"', false)
+                ->assertSee('href="/vkhidni-dveri-lutsk"', false)
+                ->assertSee('href="/mizhkimnatni-dveri-lutsk"', false)
                 ->assertSee('href="/vkhidni-dveri-rivne"', false)
                 ->assertSee('href="/mizhkimnatni-dveri-rivne"', false)
                 ->assertSee('href="/dveri-volyn"', false)
                 ->assertSee('href="' . route('contacts') . '"', false);
+        }
+    }
+
+    public function testRegionalLandingPagesHaveSubstantialLocalContentAndUseCases()
+    {
+        foreach (['dveri-volyn', 'dveri-rivne', 'vkhidni-dveri-rivne', 'mizhkimnatni-dveri-rivne'] as $slug) {
+            $landing = SeoContent::landingPage($slug);
+            $content = $landing['intro']
+                . ' ' . implode(' ', array_keys($landing['sections']))
+                . ' ' . implode(' ', $landing['sections'])
+                . ' ' . implode(' ', array_map(function ($item) {
+                    return $item['question'] . ' ' . $item['answer'];
+                }, $landing['faq']));
+
+            $this->assertGreaterThanOrEqual(4000, mb_strlen($content), $slug);
+            $this->assertLessThanOrEqual(6000, mb_strlen($content), $slug);
+            $this->assertStringContainsString('двері для квартири', mb_strtolower($content), $slug);
+            $this->assertStringContainsString('для будинку', mb_strtolower($content), $slug);
+            $this->assertStringContainsString('для офісу', mb_strtolower($content), $slug);
         }
     }
 
@@ -321,9 +344,9 @@ class SeoKnowledgeTest extends TestCase
             ->assertSee('alt="Метр на Метр"', false);
     }
 
-    public function testHomepageProductImagesReferenceExistingLocalFiles()
+    public function testPublishedProductImagesReferenceExistingLocalFiles()
     {
-        Product::published()->orderBy('created_at', 'DESC')->limit(8)->get()->each(function ($product) {
+        Product::published()->get()->each(function ($product) {
             $path = parse_url($product->cover, PHP_URL_PATH);
 
             if ($path && strpos($path, '/storage/products/') === 0) {
