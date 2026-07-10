@@ -7,7 +7,12 @@
     $homeCategories = [
         ['title' => 'Двері в квартиру', 'text' => 'Надійні вхідні двері для щоденного використання у багатоквартирних будинках.', 'url' => '/dveri-dlya-kvartyry', 'icon' => '/images/icons/door.svg'],
         ['title' => 'Двері в будинок', 'text' => 'Вуличні моделі з утепленням, покриттям і рішеннями для приватного будинку.', 'url' => '/dveri-dlya-budynku', 'icon' => '/images/icons/door-knob.svg'],
-        ['title' => 'Міжкімнатні двері', 'text' => 'Практичні рішення для житлових і комерційних інтер’єрів.', 'url' => '/mizhkimnatni-dveri-lutsk', 'icon' => '/images/icons/catalog.svg'],
+        ['title' => 'Вхідні двері Луцьк', 'text' => 'Металеві двері для квартири, будинку та комерційних приміщень у Луцьку.', 'url' => '/vkhidni-dveri-lutsk', 'icon' => '/images/icons/door.svg'],
+        ['title' => 'Міжкімнатні двері Луцьк', 'text' => 'Практичні рішення для житлових і комерційних інтер’єрів у Луцьку.', 'url' => '/mizhkimnatni-dveri-lutsk', 'icon' => '/images/icons/catalog.svg'],
+        ['title' => 'Двері Волинь', 'text' => 'Підбір вхідних і міжкімнатних дверей для клієнтів у Волинській області.', 'url' => '/dveri-volyn', 'icon' => '/images/icons/delivery-truck.svg'],
+        ['title' => 'Двері Рівне', 'text' => 'Підбір дверей для клієнтів у Рівному та Рівненській області.', 'url' => '/dveri-rivne', 'icon' => '/images/icons/wallet.svg'],
+        ['title' => 'Вхідні двері Рівне', 'text' => 'Металеві вхідні двері для квартир, будинків і технічних приміщень.', 'url' => '/vkhidni-dveri-rivne', 'icon' => '/images/icons/lock.svg'],
+        ['title' => 'Міжкімнатні двері Рівне', 'text' => 'Підбір міжкімнатних дверей за стилем, покриттям, розміром і бюджетом.', 'url' => '/mizhkimnatni-dveri-rivne', 'icon' => '/images/icons/catalog.svg'],
         ['title' => 'Протипожежні двері', 'text' => 'Сертифіковані двері для об’єктів із підвищеними вимогами безпеки.', 'url' => '/protypozhezhni-dveri', 'icon' => '/images/icons/lock.svg'],
         ['title' => 'Технічні двері', 'text' => 'Двері для підсобних, складських, виробничих і технічних приміщень.', 'url' => '/catalog', 'icon' => '/images/icons/wallet.svg'],
         ['title' => 'Для гуртових клієнтів', 'text' => 'Постачання для дилерів, будівельних компаній і партнерських проєктів.', 'url' => '/wholesale', 'icon' => '/images/icons/handshake.svg'],
@@ -27,7 +32,7 @@
     ];
     $homeIntro = [
         'Метр на Метр — виробник дверей у Луцьку, який працює з вхідними, міжкімнатними, технічними та протипожежними рішеннями.',
-        'Допомагаємо підібрати модель під квартиру, будинок, комерційне приміщення або гуртове замовлення.',
+        'Допомагаємо підібрати двері у Луцьку та Волинській області під квартиру, будинок, комерційне приміщення або гуртове замовлення.',
         'Пояснюємо комплектацію, гарантію, сертифікацію та доставку до покупки, щоб вибір був зрозумілим.',
     ];
 @endphp
@@ -37,7 +42,7 @@
         <div class="home-hero-grid">
             <div class="home-hero-copy">
                 <h1>Вхідні та міжкімнатні двері від виробника у Луцьку</h1>
-                <p>Виготовляємо, продаємо та постачаємо двері для квартир, будинків, комерційних і технічних приміщень. Гурт і роздріб, доставка по Україні.</p>
+                <p>Виготовляємо, продаємо та постачаємо двері у Луцьку й Волинській області: вхідні двері, міжкімнатні двері, рішення для квартир, будинків, комерційних і технічних приміщень. Гурт і роздріб, консультація, монтаж і доставка.</p>
 
                 <div class="home-hero-actions">
                     <a href="{{ route('catalog') }}" class="yellow-btn blue-hover">Перейти в каталог</a>
@@ -53,7 +58,7 @@
             </div>
 
             <div class="home-hero-media">
-                <img src="{{ $heroImage }}" alt="Вхідні та міжкімнатні двері Метр на Метр" loading="eager">
+                <img src="{{ $heroImage }}" alt="Вхідні металеві та міжкімнатні двері у Луцьку від Метр на Метр" loading="eager">
             </div>
         </div>
     </div>
@@ -134,7 +139,7 @@
 
                             <div class="col-xs-12 col-sm-6">
                                 <div class="img-box product-image product-slider">
-                                    <img src="{{ $slide->cover }}" alt="Вхідні металеві двері {{ $slide->title }}" title="{{ $slide->title }}" loading="lazy">
+                    <img src="{{ $slide->cover }}" alt="Вхідні металеві двері у Луцьку {{ $slide->title }}" title="{{ $slide->title }}" loading="lazy">
                                 </div>
                             </div>
 
@@ -194,7 +199,7 @@
 
                                 <div class="img-box product-image product-item">
                                     <a href="{{ $product->location }}">
-                                        <img src="{{ $product->cover }}" alt="Вхідні металеві двері {{ $product->title }}" title="{{ $product->title }}" loading="lazy">
+                                        <img src="{{ $product->cover }}" alt="Металеві двері з утепленням для будинку або квартири {{ $product->title }}" title="{{ $product->title }}" loading="lazy">
                                     </a>
                                 </div>
 
