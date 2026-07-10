@@ -11,11 +11,13 @@ class KnowledgeImage
         $filename = $slug . '.webp';
         $raster = '/images/knowledge/' . $filename;
         $fallback = '/knowledge/' . $slug . '/image.svg';
-        $src = self::rasterExists($filename) ? $raster : $fallback;
+        $version = self::rasterVersion($filename);
+        $src = $version ? $raster . '?v=' . $version : $fallback;
 
         return [
             'filename' => $filename,
             'raster' => $raster,
+            'version' => $version,
             'fallback' => $fallback,
             'src' => $src,
             'alt' => sprintf('%s для статті %s', $bucket['alt'], $article['title']),
@@ -43,7 +45,19 @@ class KnowledgeImage
 
     public static function rasterExists($filename)
     {
-        return file_exists(public_path('images/knowledge/' . $filename));
+        return file_exists(self::rasterPath($filename));
+    }
+
+    public static function rasterVersion($filename)
+    {
+        $path = self::rasterPath($filename);
+
+        return file_exists($path) ? filemtime($path) : null;
+    }
+
+    private static function rasterPath($filename)
+    {
+        return public_path('images/knowledge/' . $filename);
     }
 
     private static function prompt(array $article, array $bucket)

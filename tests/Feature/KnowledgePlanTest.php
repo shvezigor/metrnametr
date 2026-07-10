@@ -133,15 +133,17 @@ class KnowledgePlanTest extends TestCase
         $article = SeoContent::article($slug);
 
         $this->assertFileExists(public_path('images/knowledge/' . $slug . '.webp'));
-        $this->assertSame('/images/knowledge/' . $slug . '.webp', $article['image']['src']);
+        $versionedImage = '/images/knowledge/' . $slug . '.webp?v=' . filemtime(public_path('images/knowledge/' . $slug . '.webp'));
+
+        $this->assertSame($versionedImage, $article['image']['src']);
         $this->assertSame(
-            'https://metrnametr.com.ua/images/knowledge/' . $slug . '.webp',
+            'https://metrnametr.com.ua' . $versionedImage,
             SeoContent::articleImageUrl($article)
         );
 
         $this->get('/knowledge/' . $slug)
             ->assertStatus(200)
-            ->assertSee('/images/knowledge/' . $slug . '.webp', false)
+            ->assertSee($versionedImage, false)
             ->assertDontSee('/knowledge/' . $slug . '/image.svg', false)
             ->assertSee($article['image']['caption'])
             ->assertSee($article['image']['alt']);
@@ -157,11 +159,12 @@ class KnowledgePlanTest extends TestCase
 
         $articles->each(function ($article) use (&$paths) {
             $path = public_path('images/knowledge/' . $article['slug'] . '.webp');
+            $raster = '/images/knowledge/' . $article['slug'] . '.webp';
+            $versionedRaster = $raster . '?v=' . filemtime($path);
 
-            $this->assertSame(
-                '/images/knowledge/' . $article['slug'] . '.webp',
-                $article['image']['src']
-            );
+            $this->assertSame($raster, $article['image']['raster']);
+            $this->assertSame(filemtime($path), $article['image']['version']);
+            $this->assertSame($versionedRaster, $article['image']['src']);
             $this->assertFileExists($path);
             $this->assertGreaterThan(10000, filesize($path));
             $this->assertStringNotContainsString('/image.svg', $article['image']['src']);
