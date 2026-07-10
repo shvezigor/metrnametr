@@ -42,6 +42,10 @@ Route::get('/dveri-dlya-kvartyry', ['as' => 'seo.dveri-dlya-kvartyry', 'uses' =>
 Route::get('/dveri-dlya-budynku', ['as' => 'seo.dveri-dlya-budynku', 'uses' => 'SeoController@landing'])->defaults('slug', 'dveri-dlya-budynku');
 Route::get('/dveri-z-termorozryvom', ['as' => 'seo.dveri-z-termorozryvom', 'uses' => 'SeoController@landing'])->defaults('slug', 'dveri-z-termorozryvom');
 Route::get('/protypozhezhni-dveri', ['as' => 'seo.protypozhezhni-dveri', 'uses' => 'SeoController@landing'])->defaults('slug', 'protypozhezhni-dveri');
+Route::get('/dveri-volyn', ['as' => 'seo.dveri-volyn', 'uses' => 'SeoController@landing'])->defaults('slug', 'dveri-volyn');
+Route::get('/dveri-rivne', ['as' => 'seo.dveri-rivne', 'uses' => 'SeoController@landing'])->defaults('slug', 'dveri-rivne');
+Route::get('/vkhidni-dveri-rivne', ['as' => 'seo.vkhidni-dveri-rivne', 'uses' => 'SeoController@landing'])->defaults('slug', 'vkhidni-dveri-rivne');
+Route::get('/mizhkimnatni-dveri-rivne', ['as' => 'seo.mizhkimnatni-dveri-rivne', 'uses' => 'SeoController@landing'])->defaults('slug', 'mizhkimnatni-dveri-rivne');
 
 // Knowledge Base
 Route::get('/knowledge', ['as' => 'knowledge.index', 'uses' => 'KnowledgeController@index']);

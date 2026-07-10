@@ -114,6 +114,28 @@ $(document).ready(function () {
     $(this).find("input[name='product']").val(id);
   });
 
+  $('[data-mobile-order-cta]').on('click', function (e) {
+    var $modal = $('#order-form.modal');
+
+    if ($modal.length > 0) {
+      e.preventDefault();
+      $modal.modal('show');
+    }
+  });
+
+  if (window.location.hash === '#order-form') {
+    var $orderTarget = $('#order-form');
+
+    if ($orderTarget.length > 0 && !$orderTarget.hasClass('modal')) {
+      setTimeout(function () {
+        $('html, body').animate({
+          scrollTop: Math.max($orderTarget.offset().top - 90, 0)
+        }, 450);
+        $orderTarget.find('input, textarea, button').filter(':visible:first').focus();
+      }, 250);
+    }
+  }
+
   if (mobile == true) {
     $('body').addClass('mobile');
   } else {

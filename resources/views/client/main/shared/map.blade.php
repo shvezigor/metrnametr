@@ -18,6 +18,12 @@
                  data-map-longitude="25.3356367"
                  data-cursor-latitude="50.754183"
                  data-cursor-longitude="25.3416367">
+                @unless(config('common.google.map.key'))
+                    <div class="map-fallback">
+                        <strong>{{ \App\Models\Setting::getValue('address') }}</strong>
+                        <span>{{ \App\Models\Setting::getValue('phones') }}</span>
+                    </div>
+                @endunless
             </div>
 
             <div class="col-xs-12 wrap-cont-box">
@@ -52,8 +58,8 @@
 
 </section>
 
-@section('scripts-for-map')
-    <script src="https://developers.google.com/maps/documentation/javascript/examples/markerclusterer/markerclusterer.js"></script>
+@if(config('common.google.map.key'))
+    @section('scripts-for-map')
     <script>
 
         // Create the script tag, set the appropriate attributes
@@ -177,6 +183,5 @@
         document.head.appendChild(script);
 
     </script>
-
-@endsection
-
+    @endsection
+@endif

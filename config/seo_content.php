@@ -12,7 +12,7 @@ return [
         'sitemap_url' => '/sitemap.xml',
         'logo' => '/images/logo-2.png',
         'default_image' => '/images/logo-2.png',
-        'address' => 'Луцьк, Україна',
+        'address' => 'м. Луцьк, пр. Перемоги, 24',
         'phone' => '+380',
         'email' => 'info@metrnametr.com.ua',
         'categories' => [

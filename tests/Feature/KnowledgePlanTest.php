@@ -64,13 +64,13 @@ class KnowledgePlanTest extends TestCase
             ->assertStatus(200)
             ->assertSee('Як вибрати міжкімнатні двері для квартири')
             ->assertSee('FAQPage')
-            ->assertSee('Порівняння');
+            ->assertSee('id="comparison"', false);
 
         $this->get('/knowledge/yak-pidhotuvatysia-do-zamovlennia-dverei')
             ->assertStatus(200)
             ->assertSee('Як підготуватися до замовлення дверей')
             ->assertSee('FAQPage')
-            ->assertSee('Порівняння');
+            ->assertSee('id="comparison"', false);
     }
 
     public function testKnowledgeIndexIsPaginatedAndUsesArticleImages()
@@ -79,7 +79,8 @@ class KnowledgePlanTest extends TestCase
 
         $response->assertStatus(200);
         $response->assertSee('/knowledge?page=2', false);
-        $response->assertSee('/knowledge/yak-vybraty-vkhidni-dveri-dlia-kvartyry/image.svg', false);
+        $response->assertSee('/images/knowledge/yak-vybraty-vkhidni-dveri-dlia-kvartyry.webp', false);
+        $response->assertDontSee('/knowledge/yak-vybraty-vkhidni-dveri-dlia-kvartyry/image.svg', false);
         $response->assertSee('loading="lazy"', false);
         $response->assertDontSee('/knowledge/yak-pidhotuvatysia-do-zamovlennia-dverei');
 
@@ -87,12 +88,95 @@ class KnowledgePlanTest extends TestCase
             ->assertStatus(200)
             ->assertSee('/knowledge?page=1', false);
 
+        $article = SeoContent::article('yak-pidhotuvatysia-do-zamovlennia-dverei');
+
         $this->get('/knowledge/yak-pidhotuvatysia-do-zamovlennia-dverei')
             ->assertStatus(200)
-            ->assertSee('/knowledge/yak-pidhotuvatysia-do-zamovlennia-dverei/image.svg', false)
-            ->assertSee('alt="Як підготуватися до замовлення дверей"', false)
+            ->assertSee('/images/knowledge/yak-pidhotuvatysia-do-zamovlennia-dverei.webp', false)
+            ->assertDontSee('/knowledge/yak-pidhotuvatysia-do-zamovlennia-dverei/image.svg', false)
+            ->assertSee('alt="' . $article['image']['alt'] . '"', false)
             ->assertSee('width="1200"', false)
             ->assertSee('height="675"', false);
+    }
+
+    public function testKnowledgeArticlesHaveTopicAwareImageMetadata()
+    {
+        $articles = SeoContent::articles();
+
+        $this->assertGreaterThanOrEqual(100, $articles->count());
+
+        $articles->each(function ($article) {
+            $this->assertArrayHasKey('image', $article);
+            $this->assertNotEmpty($article['image']['filename']);
+            $this->assertNotEmpty($article['image']['src']);
+            $this->assertNotEmpty($article['image']['fallback']);
+            $this->assertNotEmpty($article['image']['alt']);
+            $this->assertNotEmpty($article['image']['title']);
+            $this->assertNotEmpty($article['image']['caption']);
+            $this->assertNotEmpty($article['image']['prompt']);
+            $this->assertStringEndsWith('.webp', $article['image']['filename']);
+            $this->assertStringStartsWith('/images/knowledge/', $article['image']['raster']);
+            $this->assertStringContainsString('/knowledge/' . $article['slug'] . '/image.svg', $article['image']['fallback']);
+            $this->assertStringContainsString('Ukrainian door market', $article['image']['prompt']);
+            $this->assertStringContainsString('horizontal 16:9', $article['image']['prompt']);
+            $this->assertStringContainsString('no text', $article['image']['prompt']);
+            $this->assertStringContainsString('no logos', $article['image']['prompt']);
+            $this->assertStringContainsString('no watermarks', $article['image']['prompt']);
+        });
+    }
+
+    public function testKnowledgePagesAndSchemaPreferRasterImagesWhenAvailable()
+    {
+        config(['seo_content.site.domain' => 'https://metrnametr.com.ua']);
+
+        $slug = 'yak-vybraty-vkhidni-dveri-dlia-kvartyry';
+        $article = SeoContent::article($slug);
+
+        $this->assertFileExists(public_path('images/knowledge/' . $slug . '.webp'));
+        $versionedImage = '/images/knowledge/' . $slug . '.webp?v=' . filemtime(public_path('images/knowledge/' . $slug . '.webp'));
+
+        $this->assertSame($versionedImage, $article['image']['src']);
+        $this->assertSame(
+            'https://metrnametr.com.ua' . $versionedImage,
+            SeoContent::articleImageUrl($article)
+        );
+
+        $this->get('/knowledge/' . $slug)
+            ->assertStatus(200)
+            ->assertSee($versionedImage, false)
+            ->assertDontSee('/knowledge/' . $slug . '/image.svg', false)
+            ->assertSee($article['image']['caption'])
+            ->assertSee($article['image']['alt']);
+    }
+
+    public function testAllKnowledgeArticlesUseGeneratedRasterCovers()
+    {
+        $articles = SeoContent::articles();
+        $paths = [];
+        $hashes = [];
+
+        $this->assertGreaterThanOrEqual(100, $articles->count());
+
+        $articles->each(function ($article) use (&$paths) {
+            $path = public_path('images/knowledge/' . $article['slug'] . '.webp');
+            $raster = '/images/knowledge/' . $article['slug'] . '.webp';
+            $versionedRaster = $raster . '?v=' . filemtime($path);
+
+            $this->assertSame($raster, $article['image']['raster']);
+            $this->assertSame(filemtime($path), $article['image']['version']);
+            $this->assertSame($versionedRaster, $article['image']['src']);
+            $this->assertFileExists($path);
+            $this->assertGreaterThan(10000, filesize($path));
+            $this->assertStringNotContainsString('/image.svg', $article['image']['src']);
+
+            $paths[] = $path;
+        });
+
+        collect($paths)->each(function ($path) use (&$hashes) {
+            $hashes[] = hash_file('sha256', $path);
+        });
+
+        $this->assertCount($articles->count(), array_unique($hashes));
     }
 
     public function testKnowledgeArticleImageEndpointReturnsSvg()

@@ -69,7 +69,7 @@
 
                 <div class="logo-box">
                     <a href="{{ route('home') }}">
-                        <img src="/images/logo-2.png" alt="">
+                        <img src="/images/logo-2.png" alt="Метр на Метр - двері у Луцьку та Волині">
                     </a>
                 </div>
 

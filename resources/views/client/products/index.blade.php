@@ -4,9 +4,14 @@
 
     @php
         $catalogIntentLinks = [
+            ['title' => 'Вхідні двері Луцьк', 'text' => 'Металеві двері для квартири, будинку та комерційних приміщень у Луцьку.', 'url' => '/vkhidni-dveri-lutsk'],
+            ['title' => 'Міжкімнатні двері Луцьк', 'text' => 'Підбір дверей за стилем, покриттям, кольором, фурнітурою і розміром.', 'url' => '/mizhkimnatni-dveri-lutsk'],
+            ['title' => 'Двері Волинь', 'text' => 'Підбір і постачання дверей для клієнтів у Волинській області.', 'url' => '/dveri-volyn'],
+            ['title' => 'Двері Рівне', 'text' => 'Вхідні та міжкімнатні двері для клієнтів у Рівному.', 'url' => '/dveri-rivne'],
+            ['title' => 'Вхідні двері Рівне', 'text' => 'Металеві двері з підбором за розміром, ціною, замками й утепленням.', 'url' => '/vkhidni-dveri-rivne'],
+            ['title' => 'Міжкімнатні двері Рівне', 'text' => 'Двері для квартири й будинку з підбором покриття та фурнітури.', 'url' => '/mizhkimnatni-dveri-rivne'],
             ['title' => 'Двері в квартиру', 'text' => 'Для під’їзду, щоденного користування, шумоізоляції та безпеки.', 'url' => '/dveri-dlya-kvartyry'],
             ['title' => 'Двері в будинок', 'text' => 'Для вулиці, перепадів температур, утеплення та стійкого покриття.', 'url' => '/dveri-dlya-budynku'],
-            ['title' => 'Міжкімнатні двері', 'text' => 'Для житлових кімнат, офісів і комерційних інтер’єрів.', 'url' => '/mizhkimnatni-dveri-lutsk'],
             ['title' => 'Протипожежні двері', 'text' => 'Для об’єктів із вимогами до сертифікації та безпеки.', 'url' => '/protypozhezhni-dveri'],
             ['title' => 'Для гуртових клієнтів', 'text' => 'Для дилерів, будівельних компаній і регулярних поставок.', 'url' => '/wholesale'],
         ];
@@ -15,8 +20,8 @@
     <section class="catalog-intent-guide">
         <div class="container">
             <div class="catalog-intent-header">
-                <h1>Оберіть двері за призначенням</h1>
-                <p>Почніть з типу об’єкта або задачі, а потім уточніть модель через фільтр, характеристики чи консультацію.</p>
+                <h1>Каталог дверей у Луцьку</h1>
+                <p>У каталозі Метр на Метр можна підібрати вхідні, металеві та міжкімнатні двері для квартири, приватного будинку, офісу чи технічного приміщення. Допомагаємо з вибором моделі, комплектації, замків, покриття та монтажу у Луцьку й Волинській області.</p>
             </div>
 
             <div class="catalog-intent-grid">
@@ -219,7 +224,7 @@
                                             <div class="price">{{ $item->price_text }}</div>
                                             <div class="order">
                                                 <a
-                                                    href="#"
+                                                    href="#order-form"
                                                     data-toggle="modal"
                                                     data-target="#order-form"
                                                     data-id="{{$item->id}}"
@@ -237,8 +242,8 @@
                                             <span>Покриття</span>
                                         </div>
                                         <div class="product-card-actions">
-                                            <a href="{{ $item->location }}">Детальніше</a>
-                                            <a href="#" data-toggle="modal" data-target="#order-form" data-id="{{$item->id}}">Консультація</a>
+                                            <a href="{{ $item->location }}" class="product-card-details">Детальніше</a>
+                                            <a href="#order-form" class="product-card-consult" data-toggle="modal" data-target="#order-form" data-id="{{$item->id}}">Запитати ціну</a>
                                         </div>
                                     </div>
                                 </div>

@@ -35,6 +35,13 @@ class SeoContent
             ->merge($configuredArticles)
             ->merge($plannedArticles)
             ->unique('slug')
+            ->map(function ($article) {
+                if (empty($article['image'])) {
+                    $article['image'] = KnowledgeImage::forArticle($article);
+                }
+
+                return $article;
+            })
             ->values();
     }
 
@@ -240,6 +247,22 @@ class SeoContent
         ];
     }
 
+    public static function landingPageSchema(array $landing)
+    {
+        return [
+            '@context' => 'https://schema.org',
+            '@type' => 'WebPage',
+            'name' => $landing['h1'],
+            'description' => $landing['description'],
+            'url' => self::canonical($landing['path']),
+            'isPartOf' => [
+                '@type' => 'WebSite',
+                'name' => self::site('name'),
+                'url' => self::site('domain'),
+            ],
+        ];
+    }
+
     public static function defaultPageSchemas(array $schema = [])
     {
         $schema = array_values(array_filter($schema));
@@ -318,7 +341,9 @@ class SeoContent
 
     public static function articleImageUrl(array $article)
     {
-        return self::canonical('/knowledge/' . $article['slug'] . '/image.svg');
+        $image = $article['image'] ?? KnowledgeImage::forArticle($article);
+
+        return self::canonical($image['src']);
     }
 
     public static function articleImageSvg(array $article)

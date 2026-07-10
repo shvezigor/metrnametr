@@ -50,7 +50,7 @@ class SeoKnowledgeTest extends TestCase
             ->assertSee('Як вибрати вхідні двері для квартири')
             ->assertSee('FAQPage')
             ->assertSee('Article')
-            ->assertSee('Порівняння');
+            ->assertSee('id="comparison"', false);
     }
 
     public function testAiAgentPageAndSitemapExposeSeoResources()
@@ -200,9 +200,33 @@ class SeoKnowledgeTest extends TestCase
         $this->get(route('catalog'))
             ->assertStatus(200)
             ->assertSee('catalog-intent-guide')
-            ->assertSee('Оберіть двері за призначенням')
+            ->assertSee('Каталог дверей у Луцьку')
             ->assertSee('Двері в квартиру')
             ->assertSee('Для гуртових клієнтів');
+    }
+
+    public function testLocalSeoHomeAndCatalogUseLutskVolynCommercialPhrases()
+    {
+        $this->get('/')
+            ->assertStatus(200)
+            ->assertSee('<title>Двері у Луцьку та Волині — вхідні й міжкімнатні | Метр на Метр</title>', false)
+            ->assertSee('Купити вхідні та міжкімнатні двері у Луцьку й Волині.', false)
+            ->assertSee('<h1>Вхідні та міжкімнатні двері від виробника у Луцьку</h1>', false)
+            ->assertSee('/vkhidni-dveri-lutsk', false)
+            ->assertSee('/mizhkimnatni-dveri-lutsk', false)
+            ->assertSee('/dveri-volyn', false)
+            ->assertSee('/dveri-rivne', false)
+            ->assertSee('/vkhidni-dveri-rivne', false)
+            ->assertSee('/mizhkimnatni-dveri-rivne', false);
+
+        $this->get(route('catalog'))
+            ->assertStatus(200)
+            ->assertSee('<title>Каталог дверей у Луцьку — вхідні, металеві та міжкімнатні | Метр на Метр</title>', false)
+            ->assertSee('Каталог дверей Метр на Метр: вхідні, металеві та міжкімнатні двері у Луцьку.', false)
+            ->assertSee('<h1>Каталог дверей у Луцьку</h1>', false)
+            ->assertSee('У каталозі Метр на Метр можна підібрати вхідні, металеві та міжкімнатні двері', false)
+            ->assertSee('/dveri-volyn', false)
+            ->assertSee('/dveri-rivne', false);
     }
 
     public function testSeoSchemasUseAbsoluteImagesAndSkipEmptyFaqSchema()
@@ -228,12 +252,16 @@ class SeoKnowledgeTest extends TestCase
     public function testSeoLandingPagesRenderMetaCanonicalFaqAndSchemas()
     {
         $pages = [
-            '/vkhidni-dveri-lutsk' => 'Вхідні двері Луцьк',
-            '/mizhkimnatni-dveri-lutsk' => 'Міжкімнатні двері Луцьк',
+            '/vkhidni-dveri-lutsk' => 'Вхідні двері у Луцьку',
+            '/mizhkimnatni-dveri-lutsk' => 'Міжкімнатні двері у Луцьку',
             '/dveri-dlya-kvartyry' => 'Двері для квартири',
             '/dveri-dlya-budynku' => 'Двері для будинку',
             '/dveri-z-termorozryvom' => 'Двері з терморозривом',
             '/protypozhezhni-dveri' => 'Протипожежні двері',
+            '/dveri-volyn' => 'Двері у Волинській області',
+            '/dveri-rivne' => 'Двері у Рівному',
+            '/vkhidni-dveri-rivne' => 'Вхідні двері у Рівному',
+            '/mizhkimnatni-dveri-rivne' => 'Міжкімнатні двері у Рівному',
         ];
 
         foreach ($pages as $url => $h1) {
@@ -243,8 +271,88 @@ class SeoKnowledgeTest extends TestCase
                 ->assertSee('<link rel="canonical" href="https://metrnametr.com.ua' . $url . '"', false)
                 ->assertSee('FAQPage')
                 ->assertSee('BreadcrumbList')
+                ->assertSee('WebPage')
+                ->assertSee('LocalBusiness')
+                ->assertSee('пр. Перемоги, 24')
                 ->assertSee('Популярні питання');
         }
+    }
+
+    public function testRivneLandingPagesDoNotClaimPhysicalStoreInRivne()
+    {
+        foreach (['/dveri-rivne', '/vkhidni-dveri-rivne', '/mizhkimnatni-dveri-rivne'] as $url) {
+            $this->get($url)
+                ->assertStatus(200)
+                ->assertSee('для клієнтів у Рівному', false)
+                ->assertDontSee('магазин у Рівному');
+        }
+    }
+
+    public function testRegionalLandingPagesExposeStrongInternalLinks()
+    {
+        foreach (['/dveri-volyn', '/dveri-rivne', '/vkhidni-dveri-rivne', '/mizhkimnatni-dveri-rivne'] as $url) {
+            $this->get($url)
+                ->assertStatus(200)
+                ->assertSee('Дивитися каталог дверей')
+                ->assertSee('Вхідні двері у Луцьку')
+                ->assertSee('Міжкімнатні двері у Луцьку')
+                ->assertSee('Вхідні двері у Рівному')
+                ->assertSee('Міжкімнатні двері у Рівному')
+                ->assertSee('Двері у Волинській області')
+                ->assertSee('Зв’язатися для консультації')
+                ->assertSee('href="' . route('catalog') . '"', false)
+                ->assertSee('href="/vkhidni-dveri-lutsk"', false)
+                ->assertSee('href="/mizhkimnatni-dveri-lutsk"', false)
+                ->assertSee('href="/vkhidni-dveri-rivne"', false)
+                ->assertSee('href="/mizhkimnatni-dveri-rivne"', false)
+                ->assertSee('href="/dveri-volyn"', false)
+                ->assertSee('href="' . route('contacts') . '"', false);
+        }
+    }
+
+    public function testRegionalLandingPagesHaveSubstantialLocalContentAndUseCases()
+    {
+        foreach (['dveri-volyn', 'dveri-rivne', 'vkhidni-dveri-rivne', 'mizhkimnatni-dveri-rivne'] as $slug) {
+            $landing = SeoContent::landingPage($slug);
+            $content = $landing['intro']
+                . ' ' . implode(' ', array_keys($landing['sections']))
+                . ' ' . implode(' ', $landing['sections'])
+                . ' ' . implode(' ', array_map(function ($item) {
+                    return $item['question'] . ' ' . $item['answer'];
+                }, $landing['faq']));
+
+            $this->assertGreaterThanOrEqual(4000, mb_strlen($content), $slug);
+            $this->assertLessThanOrEqual(6000, mb_strlen($content), $slug);
+            $this->assertStringContainsString('двері для квартири', mb_strtolower($content), $slug);
+            $this->assertStringContainsString('для будинку', mb_strtolower($content), $slug);
+            $this->assertStringContainsString('для офісу', mb_strtolower($content), $slug);
+        }
+    }
+
+    public function testContactsPageHasPrimaryHeading()
+    {
+        $this->get(route('contacts'))
+            ->assertStatus(200)
+            ->assertSee('<h1>Контакти Метр на Метр</h1>', false);
+    }
+
+    public function testSiteLogoImagesHaveAltText()
+    {
+        $this->get('/dveri-rivne')
+            ->assertStatus(200)
+            ->assertSee('alt="Метр на Метр - двері у Луцьку та Волині"', false)
+            ->assertSee('alt="Метр на Метр"', false);
+    }
+
+    public function testPublishedProductImagesReferenceExistingLocalFiles()
+    {
+        Product::published()->get()->each(function ($product) {
+            $path = parse_url($product->cover, PHP_URL_PATH);
+
+            if ($path && strpos($path, '/storage/products/') === 0) {
+                $this->assertFileExists(public_path(ltrim($path, '/')), $product->cover);
+            }
+        });
     }
 
     public function testSeoLandingPagesAreIncludedInSitemapAndLlmsFiles()
@@ -253,6 +361,10 @@ class SeoKnowledgeTest extends TestCase
             ->assertStatus(200)
             ->assertSee('<loc>https://metrnametr.com.ua/vkhidni-dveri-lutsk</loc>', false)
             ->assertSee('<loc>https://metrnametr.com.ua/mizhkimnatni-dveri-lutsk</loc>', false)
+            ->assertSee('<loc>https://metrnametr.com.ua/dveri-volyn</loc>', false)
+            ->assertSee('<loc>https://metrnametr.com.ua/dveri-rivne</loc>', false)
+            ->assertSee('<loc>https://metrnametr.com.ua/vkhidni-dveri-rivne</loc>', false)
+            ->assertSee('<loc>https://metrnametr.com.ua/mizhkimnatni-dveri-rivne</loc>', false)
             ->assertSee('<loc>https://metrnametr.com.ua/dveri-dlya-kvartyry</loc>', false)
             ->assertSee('<loc>https://metrnametr.com.ua/dveri-dlya-budynku</loc>', false)
             ->assertSee('<loc>https://metrnametr.com.ua/dveri-z-termorozryvom</loc>', false)
@@ -266,7 +378,9 @@ class SeoKnowledgeTest extends TestCase
         $this->get('/llms-full.txt')
             ->assertStatus(200)
             ->assertSee('/dveri-z-termorozryvom')
-            ->assertSee('/mizhkimnatni-dveri-lutsk');
+            ->assertSee('/mizhkimnatni-dveri-lutsk')
+            ->assertSee('/dveri-rivne')
+            ->assertSee('Метр на Метр знаходиться у Луцьку');
     }
 
     public function testProductMetaDescriptionUsesNameTypeCategoryAndPurpose()

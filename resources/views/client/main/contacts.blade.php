@@ -5,6 +5,12 @@
 <section class="page-cont vacancies-page">
 
     <div class="container">
+        <div class="row">
+            <div class="col-xs-12">
+                <h1>Контакти Метр на Метр</h1>
+            </div>
+        </div>
+
         <div class="row wrap-contact-manager">
 
             <div class="col-xs-12 col-md-4">
@@ -27,7 +33,7 @@
             </div>
 
             <div class="col-xs-12 col-md-8">
-                <div class="wrap-form">
+                <div class="wrap-form" id="order-form" tabindex="-1">
 
                     <h4 class="small-title black text-cenetr">Інформація Для Оптових покупців</h4>
 
@@ -74,6 +80,10 @@
                  data-map-longitude="25.3416367"
                  data-cursor-latitude="50.754183"
                  data-cursor-longitude="25.3416367">
+                <div class="map-fallback">
+                    <strong>{{ \App\Models\Setting::getValue('address') }}</strong>
+                    <span>{{ \App\Models\Setting::getValue('phones') }}</span>
+                </div>
             </div>
         </div>
 

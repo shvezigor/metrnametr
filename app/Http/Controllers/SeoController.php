@@ -27,6 +27,7 @@ class SeoController extends Controller
             ->with('breadcrumbs', $breadcrumbs)
             ->with('faq', $landing['faq'])
             ->with('schema', [
+                SeoContent::landingPageSchema($landing),
                 SeoContent::breadcrumbSchema([
                     '/' => 'Головна',
                     $landing['path'] => $landing['h1'],
@@ -81,6 +82,7 @@ class SeoController extends Controller
             '',
             $site['name'] . ' is a Ukrainian website for selecting, buying and arranging installation of entrance and interior doors.',
             'The site is useful for homeowners, apartment owners, landlords, renovation teams and commercial property managers who need doors with clear characteristics and installation guidance.',
+            'Метр на Метр знаходиться у Луцьку, але може допомагати з підбором і постачанням дверей для клієнтів у Волинській області та Рівному/Рівненській області, якщо така послуга фактично надається для конкретного замовлення.',
             '',
             'Product scope:',
             '- Entrance metal doors for apartments.',

@@ -28,9 +28,9 @@ class MainController extends Controller
             });
         })->get();
 
-        $title = Setting::getValue('meta_title');
+        $title = 'Двері у Луцьку та Волині — вхідні й міжкімнатні | Метр на Метр';
         $keywords = Setting::getValue('meta_keywords');
-        $description = Setting::getValue('meta_description');
+        $description = 'Купити вхідні та міжкімнатні двері у Луцьку й Волині. Підбір, консультація, замір, монтаж, двері для квартири, будинку та комерційних приміщень.';
 
         return view('client.main.index')
             ->with('products', $products)

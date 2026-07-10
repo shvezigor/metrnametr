@@ -94,10 +94,10 @@ class ProductsController extends Controller
 
         $catalogTitle = $selectedCategory
             ? SeoContent::titleFor($selectedCategory, $selectedCategory->title . ' — двері у Луцьку | Метр на Метр')
-            : 'Вхідні двері у Луцьку — купити металеві двері | Метр на Метр';
+            : 'Каталог дверей у Луцьку — вхідні, металеві та міжкімнатні | Метр на Метр';
         $catalogDescription = $selectedCategory
             ? SeoContent::descriptionFor($selectedCategory, 'Категорія ' . $selectedCategory->title . ' у каталозі Метр на Метр: підбір дверей, консультація та монтаж.')
-            : 'Каталог дверей Метр на Метр: вхідні та міжкімнатні двері з підбором, консультацією і можливістю монтажу.';
+            : 'Каталог дверей Метр на Метр: вхідні, металеві та міжкімнатні двері у Луцьку. Підбір за призначенням, розміром, ціною, покриттям і комплектацією.';
         $catalogFaq = $selectedCategory && !empty(SeoContent::decodedList($selectedCategory->faq))
             ? SeoContent::decodedList($selectedCategory->faq)
             : SeoContent::faq('door_faq');
