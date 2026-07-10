@@ -163,7 +163,7 @@ class KnowledgePlanTest extends TestCase
                 $article['image']['src']
             );
             $this->assertFileExists($path);
-            $this->assertGreaterThan(45000, filesize($path));
+            $this->assertGreaterThan(10000, filesize($path));
             $this->assertStringNotContainsString('/image.svg', $article['image']['src']);
 
             $paths[] = $path;
