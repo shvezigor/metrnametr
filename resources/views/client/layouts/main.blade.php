@@ -21,6 +21,8 @@
             $metaDescription = $description ?? \App\Support\SeoContent::site('description');
             $metaImage = $ogImage ?? \App\Support\SeoContent::canonical(\App\Support\SeoContent::site('default_image'));
             $pageSchema = \App\Support\SeoContent::defaultPageSchemas($schema ?? []);
+            $analyticsId = env('GA_KEY', 'G-Y8R2Q5QV0F');
+            $analyticsId = \Illuminate\Support\Str::startsWith($analyticsId, 'UA-') ? 'G-Y8R2Q5QV0F' : $analyticsId;
         @endphp
 
         <title>{{ $metaTitle }}</title>
@@ -46,15 +48,17 @@
         <meta name="csrf-token" content="{{ csrf_token() }}">
         <script>window.Laravel = { csrfToken: '{{ csrf_token() }}' }</script>
 
-        <!-- Global site tag (gtag.js) - Google Analytics -->
-        <script async src="https://www.googletagmanager.com/gtag/js?id={{ env('GA_KEY') }}"></script>
-        <script>
-            window.dataLayer = window.dataLayer || [];
-            function gtag(){dataLayer.push(arguments);}
-            gtag('js', new Date());
+        @if(!empty($analyticsId))
+            <!-- Google tag (gtag.js) -->
+            <script async src="https://www.googletagmanager.com/gtag/js?id={{ $analyticsId }}"></script>
+            <script>
+                window.dataLayer = window.dataLayer || [];
+                function gtag(){dataLayer.push(arguments);}
+                gtag('js', new Date());
 
-            gtag('config', '{{ env('GA_KEY') }}');
-        </script>
+                gtag('config', '{{ $analyticsId }}');
+            </script>
+        @endif
 
         <!-- Latest compiled and minified CSS -->
         <link
