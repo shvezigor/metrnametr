@@ -273,7 +273,7 @@ class SeoKnowledgeTest extends TestCase
                 ->assertSee('BreadcrumbList')
                 ->assertSee('WebPage')
                 ->assertSee('LocalBusiness')
-                ->assertSee('пр. Перемоги, 24')
+                ->assertSee('проспект Перемоги, 24')
                 ->assertSee('Популярні питання');
         }
     }
@@ -448,6 +448,47 @@ class SeoKnowledgeTest extends TestCase
         $this->get('/llms.txt')
             ->assertStatus(200)
             ->assertSee('Google Maps profile', false);
+    }
+
+    public function testContactMapHasStableIframeDirectionsCtaAndNoJavascriptMapCode()
+    {
+        foreach (['/', route('contacts')] as $url) {
+            $this->get($url)
+                ->assertStatus(200)
+                ->assertSee('Метр на Метр на Google Maps')
+                ->assertSee('https://www.google.com/maps?q=Метр%20на%20Метр,%20проспект%20Перемоги%2024,%20Луцьк,%20Волинська%20область,%2043000&output=embed', false)
+                ->assertSee('loading="lazy"', false)
+                ->assertSee('referrerpolicy="no-referrer-when-downgrade"', false)
+                ->assertSee('Як нас знайти')
+                ->assertSee('Метр на Метр на карті Луцька')
+                ->assertSee('двері Луцьк')
+                ->assertSee('вхідні двері Луцьк')
+                ->assertSee('міжкімнатні двері Луцьк')
+                ->assertSee('двері з монтажем Луцьк')
+                ->assertSee('Волинська область')
+                ->assertSee('https://www.google.com/maps/dir/?api=1&destination=проспект%20Перемоги%2024%20Луцьк', false)
+                ->assertSee('Прокласти маршрут')
+                ->assertSee('https://www.google.com/maps/search/?api=1&query=Метр%20на%20Метр%20проспект%20Перемоги%2024%20Луцьк', false)
+                ->assertSee('Відкрити в Google Maps')
+                ->assertSee('tel:+380673343368', false)
+                ->assertSee('Зателефонувати')
+                ->assertDontSee('maps.googleapis.com/maps/api/js', false)
+                ->assertDontSee('map-canvas', false);
+        }
+
+        $this->assertStringNotContainsString('google.maps', file_get_contents(resource_path('client/js/app.js')));
+        $this->assertStringNotContainsString('maps.googleapis.com/maps/api/js', file_get_contents(resource_path('client/js/app.js')));
+
+        $schema = SeoContent::localBusinessSchema();
+        $this->assertSame('LocalBusiness', $schema['@type']);
+        $this->assertSame('Метр на Метр', $schema['name']);
+        $this->assertSame('https://metrnametr.com.ua/', $schema['url']);
+        $this->assertSame('+380673343368', $schema['telephone']);
+        $this->assertSame('проспект Перемоги, 24', $schema['address']['streetAddress']);
+        $this->assertSame('Луцьк', $schema['address']['addressLocality']);
+        $this->assertSame('Волинська область', $schema['address']['addressRegion']);
+        $this->assertSame('43000', $schema['address']['postalCode']);
+        $this->assertSame('UA', $schema['address']['addressCountry']);
     }
 
     public function testSitemapIncludesNewSeoPageAndExcludesLowQualityOrParametricUrls()

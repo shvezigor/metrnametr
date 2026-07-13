@@ -231,7 +231,7 @@ class SeoContent
             '@context' => 'https://schema.org',
             '@type' => 'LocalBusiness',
             'name' => self::site('name'),
-            'url' => self::site('domain'),
+            'url' => self::site('domain') . '/',
             'image' => self::canonical(self::site('default_image')),
             'hasMap' => $googleMapsUrl,
             'geo' => [
@@ -245,7 +245,7 @@ class SeoContent
                 'addressRegion' => 'Волинська область',
                 'postalCode' => '43000',
                 'addressCountry' => 'UA',
-                'streetAddress' => self::site('address'),
+                'streetAddress' => 'проспект Перемоги, 24',
             ],
             'telephone' => self::site('phone'),
             'areaServed' => [
