@@ -278,6 +278,61 @@ class SeoKnowledgeTest extends TestCase
         }
     }
 
+    public function testDoorInstallationLutskLandingRendersUkrainianSeoContentAndServiceSchema()
+    {
+        $this->get('/dveri-z-montazhem-lutsk')
+            ->assertStatus(200)
+            ->assertSee('<h1>Двері з монтажем у Луцьку</h1>', false)
+            ->assertSee('<title>Двері з монтажем Луцьк — замір, доставка і встановлення | Метр на Метр</title>', false)
+            ->assertSee('<link rel="canonical" href="https://metrnametr.com.ua/dveri-z-montazhem-lutsk"', false)
+            ->assertSee('встановлення дверей Луцьк')
+            ->assertSee('монтаж вхідних дверей Луцьк')
+            ->assertSee('монтаж міжкімнатних дверей Луцьк')
+            ->assertSee('"@type": "Service"', false)
+            ->assertSee('"@type": "FAQPage"', false)
+            ->assertSee('"@type": "BreadcrumbList"', false)
+            ->assertSee('+380673343368');
+    }
+
+    public function testUpdatedLocalSeoLandingsExposeRequestedUkrainianCommercialBlocks()
+    {
+        $this->get('/mizhkimnatni-dveri-lutsk')
+            ->assertStatus(200)
+            ->assertSee('Міжкімнатні двері Луцьк — купити з коробкою, лиштвою та монтажем | Метр на Метр')
+            ->assertSee('двері міжкімнатні з коробкою і лиштвою ціна Луцьк')
+            ->assertSee('Двері зі склом')
+            ->assertSee('Монтаж міжкімнатних дверей у Луцьку');
+
+        $this->get('/vkhidni-dveri-lutsk')
+            ->assertStatus(200)
+            ->assertSee('Вхідні двері в квартиру у Луцьку')
+            ->assertSee('Вхідні двері ціна')
+            ->assertSee('Замір і монтаж');
+
+        foreach (['/dveri-rivne', '/vkhidni-dveri-rivne', '/mizhkimnatni-dveri-rivne'] as $url) {
+            $this->get($url)
+                ->assertStatus(200)
+                ->assertSee('доставка дверей у Рівне')
+                ->assertSee('працюємо з клієнтами з Рівного')
+                ->assertDontSee('магазин у Рівному');
+        }
+    }
+
+    public function testSitemapIncludesNewSeoPageAndExcludesLowQualityOrParametricUrls()
+    {
+        $content = $this->get('/sitemap.xml')
+            ->assertStatus(200)
+            ->getContent();
+
+        $this->assertStringContainsString('<loc>https://metrnametr.com.ua/dveri-z-montazhem-lutsk</loc>', $content);
+        $this->assertStringContainsString('<loc>https://metrnametr.com.ua/vkhidni-dveri-rivne</loc>', $content);
+        $this->assertStringNotContainsString('localhost', $content);
+        $this->assertStringNotContainsString('%20', $content);
+        $this->assertStringNotContainsString('...', $content);
+        $this->assertStringNotContainsString('catalog?categories', $content);
+        $this->assertStringNotContainsString('catalog?catalog=', $content);
+    }
+
     public function testRivneLandingPagesDoNotClaimPhysicalStoreInRivne()
     {
         foreach (['/dveri-rivne', '/vkhidni-dveri-rivne', '/mizhkimnatni-dveri-rivne'] as $url) {
