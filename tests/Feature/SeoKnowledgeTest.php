@@ -318,6 +318,32 @@ class SeoKnowledgeTest extends TestCase
         }
     }
 
+    public function testVolynSeoNextStepsExposeCityBlocksHomeLinksAndInstallationFaq()
+    {
+        $this->get('/dveri-volyn')
+            ->assertStatus(200)
+            ->assertSee('Двері Луцьк')
+            ->assertSee('Двері Ковель')
+            ->assertSee('Двері Нововолинськ')
+            ->assertSee('Двері Володимир')
+            ->assertSee('Двері Рожище')
+            ->assertSee('Двері Ківерці');
+
+        $this->get('/')
+            ->assertStatus(200)
+            ->assertSee('href="/dveri-volyn"', false)
+            ->assertSee('href="/vkhidni-dveri-lutsk"', false)
+            ->assertSee('href="/mizhkimnatni-dveri-lutsk"', false)
+            ->assertSee('href="/dveri-z-montazhem-lutsk"', false);
+
+        $this->get('/dveri-z-montazhem-lutsk')
+            ->assertStatus(200)
+            ->assertSee('Скільки коштує монтаж дверей у Луцьку?')
+            ->assertSee('Що входить у замір дверей?')
+            ->assertSee('Які терміни монтажу дверей?')
+            ->assertSee('Чи можна замовити демонтаж старих дверей?');
+    }
+
     public function testSitemapIncludesNewSeoPageAndExcludesLowQualityOrParametricUrls()
     {
         $content = $this->get('/sitemap.xml')
@@ -369,9 +395,14 @@ class SeoKnowledgeTest extends TestCase
     {
         foreach (['dveri-volyn', 'dveri-rivne', 'vkhidni-dveri-rivne', 'mizhkimnatni-dveri-rivne'] as $slug) {
             $landing = SeoContent::landingPage($slug);
-            $content = $landing['intro']
+            $sectionBodies = array_map(function ($section) {
+                return is_array($section) ? implode(' ', $section) : $section;
+            }, $landing['sections']);
+            $intro = is_array($landing['intro']) ? implode(' ', $landing['intro']) : $landing['intro'];
+
+            $content = $intro
                 . ' ' . implode(' ', array_keys($landing['sections']))
-                . ' ' . implode(' ', $landing['sections'])
+                . ' ' . implode(' ', $sectionBodies)
                 . ' ' . implode(' ', array_map(function ($item) {
                     return $item['question'] . ' ' . $item['answer'];
                 }, $landing['faq']));
