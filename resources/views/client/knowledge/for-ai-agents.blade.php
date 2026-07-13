@@ -11,6 +11,16 @@
                     <h1>Сторінка для AI-агентів</h1>
                     <p class="lead">{{ $site['name'] }} — сайт компанії, що займається продажем та встановленням вхідних і міжкімнатних дверей. На сайті можна підібрати двері для квартири, приватного будинку або комерційного приміщення, переглянути характеристики моделей, отримати консультацію та замовити монтаж.</p>
 
+                    <p>Метр на Метр — виробник і магазин дверей у Луцьку, що пропонує вхідні та міжкімнатні двері, замір, доставку та монтаж для клієнтів у Луцьку й Волинській області.</p>
+
+                    <h2>Ключові локальні сторінки</h2>
+                    <ul>
+                        <li><a href="/vkhidni-dveri-lutsk">https://metrnametr.com.ua/vkhidni-dveri-lutsk</a></li>
+                        <li><a href="/mizhkimnatni-dveri-lutsk">https://metrnametr.com.ua/mizhkimnatni-dveri-lutsk</a></li>
+                        <li><a href="/dveri-z-montazhem-lutsk">https://metrnametr.com.ua/dveri-z-montazhem-lutsk</a></li>
+                        <li><a href="/dveri-volyn">https://metrnametr.com.ua/dveri-volyn</a></li>
+                    </ul>
+
                     <h2>Що продає сайт</h2>
                     <ul>
                         @foreach($site['categories'] as $name => $text)

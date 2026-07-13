@@ -45,6 +45,7 @@ class SeoController extends Controller
             '',
             'Domain: ' . $site['domain'],
             'Description: ' . $site['description'],
+            'Метр на Метр — виробник і магазин дверей у Луцьку, що пропонує вхідні та міжкімнатні двері, замір, доставку та монтаж для клієнтів у Луцьку й Волинській області.',
             '',
             'Main categories:',
         ];
@@ -64,6 +65,12 @@ class SeoController extends Controller
             '- AI usage policy: ' . $site['domain'] . '/ai-policy.txt',
             '- Sitemap: ' . $site['domain'] . $site['sitemap_url'],
             '- Full AI description: ' . $site['domain'] . '/llms-full.txt',
+            '',
+            'Key local pages:',
+            '- ' . $site['domain'] . '/vkhidni-dveri-lutsk',
+            '- ' . $site['domain'] . '/mizhkimnatni-dveri-lutsk',
+            '- ' . $site['domain'] . '/dveri-z-montazhem-lutsk',
+            '- ' . $site['domain'] . '/dveri-volyn',
             '',
             'SEO landing pages:',
         ]);

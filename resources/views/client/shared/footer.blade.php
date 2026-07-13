@@ -33,7 +33,17 @@
                         </ul>
                     </div>
 
-                    <div class="col-sm-5 col-md-5 col-md-offset-1 wrap-subscribe">
+                    <div class="col-sm-2 col-md-2">
+                        <p><strong>Популярні запити</strong></p>
+                        <ul>
+                            <li><a href="/vkhidni-dveri-lutsk">Вхідні двері Луцьк</a></li>
+                            <li><a href="/mizhkimnatni-dveri-lutsk">Міжкімнатні двері Луцьк</a></li>
+                            <li><a href="/dveri-z-montazhem-lutsk">Двері з монтажем Луцьк</a></li>
+                            <li><a href="/dveri-volyn">Двері Волинь</a></li>
+                        </ul>
+                    </div>
+
+                    <div class="col-sm-3 col-md-3 col-md-offset-1 wrap-subscribe">
                         <p>Підпишіться на нашу розсилку, щоб ми могли проінформувати вас про наші новини та пропозиції</p>
                         <form action="{{ route('subscribe') }}" method="POST" class="subscribe-form">
 

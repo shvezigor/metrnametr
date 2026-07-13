@@ -234,8 +234,24 @@ class SeoContent
             'address' => [
                 '@type' => 'PostalAddress',
                 'addressLocality' => 'Луцьк',
+                'addressRegion' => 'Волинська область',
+                'postalCode' => '43000',
                 'addressCountry' => 'UA',
                 'streetAddress' => self::site('address'),
+            ],
+            'telephone' => self::site('phone'),
+            'areaServed' => [
+                'Луцьк',
+                'Волинська область',
+                'Ковель',
+                'Володимир',
+                'Нововолинськ',
+                'Рівне',
+            ],
+            'sameAs' => [
+                'https://www.facebook.com/Metr-Door-%D0%A2%D0%9C-%D0%9C%D0%B5%D1%82%D1%80-%D0%BD%D0%B0-%D0%9C%D0%B5%D1%82%D1%80-543983232393683/',
+                'https://www.instagram.com/metrdoor/',
+                'https://www.youtube.com/channel/UCq6UHUwphtD8tCnsCTe2rFw/featured',
             ],
             'contactPoint' => [
                 '@type' => 'ContactPoint',

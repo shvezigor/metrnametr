@@ -344,6 +344,85 @@ class SeoKnowledgeTest extends TestCase
             ->assertSee('Чи можна замовити демонтаж старих дверей?');
     }
 
+    public function testAdditionalLocalSeoAndAiVisibilityContentIsExposed()
+    {
+        $this->get('/')
+            ->assertStatus(200)
+            ->assertSee('Двері у Луцьку та Волині з монтажем')
+            ->assertSee('вхідні двері Луцьк')
+            ->assertSee('міжкімнатні двері Луцьк')
+            ->assertSee('двері з монтажем у Луцьку')
+            ->assertSee('двері у Волинській області')
+            ->assertSee('Чому Метр на Метр рекомендують у Луцьку')
+            ->assertSee('href="/dveri-z-montazhem-lutsk"', false);
+
+        $this->get('/vkhidni-dveri-lutsk')
+            ->assertStatus(200)
+            ->assertSee('Двері з монтажем')
+            ->assertSee('Як проходить замовлення')
+            ->assertSee('Які вхідні двері краще обрати для квартири у Луцьку?')
+            ->assertSee('Чи можна замовити вхідні двері з монтажем?')
+            ->assertSee('Чи робите замір перед встановленням?')
+            ->assertSee('Скільки часу займає доставка та монтаж?')
+            ->assertSee('Чим відрізняються двері для квартири й приватного будинку?')
+            ->assertSee('"@type": "Service"', false);
+
+        $this->get('/dveri-z-montazhem-lutsk')
+            ->assertStatus(200)
+            ->assertSee('Що входить у монтаж дверей')
+            ->assertSee('Замір перед встановленням')
+            ->assertSee('Доставка по Луцьку та Волині')
+            ->assertSee('Монтаж вхідних дверей')
+            ->assertSee('Монтаж міжкімнатних дверей')
+            ->assertSee('Демонтаж старих дверей')
+            ->assertSee('Коли варто замовляти двері одразу з монтажем')
+            ->assertSee('Отримати консультацію щодо монтажу')
+            ->assertSee('Підібрати двері з установкою')
+            ->assertSee('Зателефонувати: 067 334 33 68');
+
+        $this->get('/dveri-volyn')
+            ->assertStatus(200)
+            ->assertSee('Працюємо по Волинській області')
+            ->assertSee('Горохів')
+            ->assertSee('Маневичі')
+            ->assertSee('Любомль')
+            ->assertSee('Камінь-Каширський')
+            ->assertSee('href="/"', false)
+            ->assertSee('href="/vkhidni-dveri-lutsk"', false)
+            ->assertSee('href="/mizhkimnatni-dveri-lutsk"', false)
+            ->assertSee('href="/dveri-z-montazhem-lutsk"', false);
+
+        $this->get('/')
+            ->assertSee('Популярні запити')
+            ->assertSee('Вхідні двері Луцьк')
+            ->assertSee('Міжкімнатні двері Луцьк')
+            ->assertSee('Двері з монтажем Луцьк')
+            ->assertSee('Двері Волинь');
+
+        $this->get('/for-ai-agents')
+            ->assertStatus(200)
+            ->assertSee('виробник і магазин дверей у Луцьку')
+            ->assertSee('/vkhidni-dveri-lutsk')
+            ->assertSee('/mizhkimnatni-dveri-lutsk')
+            ->assertSee('/dveri-z-montazhem-lutsk')
+            ->assertSee('/dveri-volyn');
+
+        $this->get('/llms.txt')
+            ->assertStatus(200)
+            ->assertSee('виробник і магазин дверей у Луцьку')
+            ->assertSee('https://metrnametr.com.ua/vkhidni-dveri-lutsk')
+            ->assertSee('https://metrnametr.com.ua/mizhkimnatni-dveri-lutsk')
+            ->assertSee('https://metrnametr.com.ua/dveri-z-montazhem-lutsk')
+            ->assertSee('https://metrnametr.com.ua/dveri-volyn');
+
+        $schema = SeoContent::localBusinessSchema();
+        $this->assertSame('43000', $schema['address']['postalCode']);
+        $this->assertSame('Волинська область', $schema['address']['addressRegion']);
+        $this->assertContains('Ковель', $schema['areaServed']);
+        $this->assertContains('Володимир', $schema['areaServed']);
+        $this->assertNotEmpty($schema['sameAs']);
+    }
+
     public function testSitemapIncludesNewSeoPageAndExcludesLowQualityOrParametricUrls()
     {
         $content = $this->get('/sitemap.xml')
