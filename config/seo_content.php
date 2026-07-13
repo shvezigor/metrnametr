@@ -13,7 +13,7 @@ return [
         'logo' => '/images/logo-2.png',
         'default_image' => '/images/logo-2.png',
         'address' => 'м. Луцьк, пр. Перемоги, 24',
-        'phone' => '+380',
+        'phone' => '+380673343368',
         'email' => 'info@metrnametr.com.ua',
         'categories' => [
             'Вхідні двері' => 'Металеві двері для квартир, приватних будинків і комерційних приміщень.',

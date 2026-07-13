@@ -28,6 +28,7 @@ class SeoController extends Controller
             ->with('faq', $landing['faq'])
             ->with('schema', [
                 SeoContent::landingPageSchema($landing),
+                SeoContent::serviceSchema($landing),
                 SeoContent::breadcrumbSchema([
                     '/' => 'Головна',
                     $landing['path'] => $landing['h1'],

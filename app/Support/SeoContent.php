@@ -3,8 +3,6 @@
 namespace App\Support;
 
 use App\Models\Article;
-use App\Models\Catalog;
-use App\Models\Category;
 use App\Models\Product;
 use Illuminate\Support\Arr;
 use Illuminate\Support\Facades\DB;
@@ -57,7 +55,10 @@ class SeoContent
 
     public static function landingPages()
     {
-        return collect(config('seo_landings', []));
+        return collect(array_replace(
+            config('seo_landings', []),
+            config('seo_landings_overrides', [])
+        ));
     }
 
     public static function landingPage($slug)
@@ -260,6 +261,33 @@ class SeoContent
                 'name' => self::site('name'),
                 'url' => self::site('domain'),
             ],
+        ];
+    }
+
+    public static function serviceSchema(array $landing)
+    {
+        if (empty($landing['service'])) {
+            return null;
+        }
+
+        return [
+            '@context' => 'https://schema.org',
+            '@type' => 'Service',
+            'name' => $landing['service']['name'] ?? $landing['h1'],
+            'serviceType' => $landing['service']['serviceType'] ?? $landing['h1'],
+            'provider' => [
+                '@type' => 'LocalBusiness',
+                'name' => self::site('name'),
+                'telephone' => self::site('phone'),
+                'url' => self::site('domain'),
+            ],
+            'areaServed' => array_map(function ($area) {
+                return [
+                    '@type' => 'Place',
+                    'name' => $area,
+                ];
+            }, $landing['service']['areaServed'] ?? ['Луцьк']),
+            'url' => self::canonical($landing['path']),
         ];
     }
 
@@ -528,16 +556,21 @@ SVG;
                 $urls[] = ['loc' => $article->location, 'lastmod' => optional($article->updated_at)->toDateString() ?: now()->toDateString(), 'changefreq' => 'monthly', 'priority' => '0.6'];
             });
 
-            Catalog::published()->select(['id', 'updated_at'])->get()->each(function ($catalog) use (&$urls) {
-                $urls[] = ['loc' => '/catalog?catalog=' . $catalog->id, 'lastmod' => optional($catalog->updated_at)->toDateString() ?: now()->toDateString(), 'changefreq' => 'weekly', 'priority' => '0.7'];
-            });
-
-            Category::published()->select(['id', 'updated_at'])->get()->each(function ($category) use (&$urls) {
-                $urls[] = ['loc' => '/catalog?categories[]=' . $category->id, 'lastmod' => optional($category->updated_at)->toDateString() ?: now()->toDateString(), 'changefreq' => 'weekly', 'priority' => '0.7'];
-            });
         }
 
-        return $urls;
+        return collect($urls)
+            ->filter(function ($url) {
+                $loc = $url['loc'] ?? '';
+
+                return $loc
+                    && strpos($loc, 'localhost') === false
+                    && strpos($loc, '%20') === false
+                    && strpos($loc, '...') === false
+                    && strpos($loc, '?') === false;
+            })
+            ->unique('loc')
+            ->values()
+            ->all();
     }
 
     private static function databaseIsAvailable()
