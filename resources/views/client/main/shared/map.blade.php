@@ -13,17 +13,23 @@
         </div>
 
         <div class="row wrap-maps">
-            <div class="col-xs-12 map-canvas" id="map-canvas"
-                 data-map-latitude="50.754183"
-                 data-map-longitude="25.3356367"
-                 data-cursor-latitude="50.754183"
-                 data-cursor-longitude="25.3416367">
-                @unless(config('common.google.map.key'))
-                    <div class="map-fallback">
-                        <strong>{{ \App\Models\Setting::getValue('address') }}</strong>
-                        <span>{{ \App\Models\Setting::getValue('phones') }}</span>
-                    </div>
-                @endunless
+            <div class="col-xs-12 map-canvas" id="map-canvas">
+                <iframe
+                    title="Метр на Метр на Google Maps"
+                    src="https://www.google.com/maps?q=%D0%9C%D0%B5%D1%82%D1%80%20%D0%BD%D0%B0%20%D0%9C%D0%B5%D1%82%D1%80%2C%20%D0%BF%D1%80%D0%BE%D1%81%D0%BF%D0%B5%D0%BA%D1%82%20%D0%9F%D0%B5%D1%80%D0%B5%D0%BC%D0%BE%D0%B3%D0%B8%2024%2C%20%D0%9B%D1%83%D1%86%D1%8C%D0%BA&output=embed"
+                    width="100%"
+                    height="420"
+                    style="border:0;"
+                    loading="lazy"
+                    referrerpolicy="no-referrer-when-downgrade"
+                    allowfullscreen></iframe>
+                <div class="map-embed-meta" style="padding: 14px 20px; text-align: center; background: #eef2f4;">
+                    <strong>{{ \App\Models\Setting::getValue('address') }}</strong>
+                    <span>{{ \App\Models\Setting::getValue('phones') }}</span>
+                    <a href="https://www.google.com/maps?cid=15751063054979951698"
+                       target="_blank"
+                       rel="noopener">Відкрити в Google Maps</a>
+                </div>
             </div>
 
             <div class="col-xs-12 wrap-cont-box">
@@ -57,131 +63,3 @@
     </div>
 
 </section>
-
-@if(config('common.google.map.key'))
-    @section('scripts-for-map')
-    <script>
-
-        // Create the script tag, set the appropriate attributes
-        const script = document.createElement('script');
-        script.src = 'https://maps.googleapis.com/maps/api/js?key={{ config("common.google.map.key") }}&callback=initializeMap';
-        script.defer = true;
-        script.async = true;
-
-        const LAT = {{ config("common.google.map.lat") }};
-        const LNG = {{ config("common.google.map.lng") }};
-
-        window.initializeMap = () => {
-
-            const styles = [
-                {elementType: 'geometry', stylers: [{color: '#242f3e'}]},
-                {elementType: 'labels.text.stroke', stylers: [{color: '#242f3e'}]},
-                {elementType: 'labels.text.fill', stylers: [{color: '#746855'}]},
-                {
-                    featureType: 'administrative.locality',
-                    elementType: 'labels.text.fill',
-                    stylers: [{color: '#555555'}]
-                },
-                {
-                    featureType: 'poi',
-                    elementType: 'labels.text.fill',
-                    stylers: [{color: '#555555'}]
-                },
-                {
-                    featureType: 'poi.park',
-                    elementType: 'geometry',
-                    stylers: [{color: '#263c3f'}]
-                },
-                {
-                    featureType: 'poi.park',
-                    elementType: 'labels.text.fill',
-                    stylers: [{color: '#6b9a76'}]
-                },
-                {
-                    featureType: 'road',
-                    elementType: 'geometry',
-                    stylers: [{color: '#38414e'}]
-                },
-                {
-                    featureType: 'road',
-                    elementType: 'geometry.stroke',
-                    stylers: [{color: '#212a37'}]
-                },
-                {
-                    featureType: 'road',
-                    elementType: 'labels.text.fill',
-                    stylers: [{color: '#9ca5b3'}]
-                },
-                {
-                    featureType: 'road.highway',
-                    elementType: 'geometry',
-                    stylers: [{color: '#746855'}]
-                },
-                {
-                    featureType: 'road.highway',
-                    elementType: 'geometry.stroke',
-                    stylers: [{color: '#1f2835'}]
-                },
-                {
-                    featureType: 'road.highway',
-                    elementType: 'labels.text.fill',
-                    stylers: [{color: '#f3d19c'}]
-                },
-                {
-                    featureType: 'transit',
-                    elementType: 'geometry',
-                    stylers: [{color: '#2f3948'}]
-                },
-                {
-                    featureType: 'transit.station',
-                    elementType: 'labels.text.fill',
-                    stylers: [{color: '#555555'}]
-                },
-                {
-                    featureType: 'water',
-                    elementType: 'geometry',
-                    stylers: [{color: '#17263c'}]
-                },
-                {
-                    featureType: 'water',
-                    elementType: 'labels.text.fill',
-                    stylers: [{color: '#515c6d'}]
-                },
-                {
-                    featureType: 'water',
-                    elementType: 'labels.text.stroke',
-                    stylers: [{color: '#17263c'}]
-                }
-            ];
-
-            const center = {
-                lat: 50.754183,
-                lng: 25.3356367
-            };
-
-            const map = new google.maps.Map(
-                document.getElementById('map-canvas'), {
-                    center: center,
-                    zoom: 16,
-                    styles: styles,
-                    disableDefaultUI: true,
-                    mapTypeId:google.maps.MapTypeId.ROADMAP
-                });
-
-            const markerPosition = new google.maps.LatLng(LAT, LNG);
-            const image = '/images/icons/marker.png';
-
-            const marker = new google.maps.Marker({
-                position: markerPosition,
-                icon: image,
-            });
-
-            marker.setMap(map);
-        }
-
-        // Append the 'script' element to 'head'
-        document.head.appendChild(script);
-
-    </script>
-    @endsection
-@endif

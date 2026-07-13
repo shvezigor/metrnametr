@@ -225,12 +225,20 @@ class SeoContent
 
     public static function localBusinessSchema()
     {
+        $googleMapsUrl = 'https://www.google.com/maps?cid=15751063054979951698';
+
         return [
             '@context' => 'https://schema.org',
             '@type' => 'LocalBusiness',
             'name' => self::site('name'),
             'url' => self::site('domain'),
             'image' => self::canonical(self::site('default_image')),
+            'hasMap' => $googleMapsUrl,
+            'geo' => [
+                '@type' => 'GeoCoordinates',
+                'latitude' => 50.754183,
+                'longitude' => 25.3356367,
+            ],
             'address' => [
                 '@type' => 'PostalAddress',
                 'addressLocality' => 'Луцьк',
@@ -249,6 +257,7 @@ class SeoContent
                 'Рівне',
             ],
             'sameAs' => [
+                $googleMapsUrl,
                 'https://www.facebook.com/Metr-Door-%D0%A2%D0%9C-%D0%9C%D0%B5%D1%82%D1%80-%D0%BD%D0%B0-%D0%9C%D0%B5%D1%82%D1%80-543983232393683/',
                 'https://www.instagram.com/metrdoor/',
                 'https://www.youtube.com/channel/UCq6UHUwphtD8tCnsCTe2rFw/featured',

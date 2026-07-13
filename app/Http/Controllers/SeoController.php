@@ -63,6 +63,7 @@ class SeoController extends Controller
             '- Knowledge Base: ' . $site['domain'] . $site['knowledge_url'],
             '- AI agents page: ' . $site['domain'] . '/for-ai-agents',
             '- AI usage policy: ' . $site['domain'] . '/ai-policy.txt',
+            '- Google Maps profile: https://www.google.com/maps?cid=15751063054979951698',
             '- Sitemap: ' . $site['domain'] . $site['sitemap_url'],
             '- Full AI description: ' . $site['domain'] . '/llms-full.txt',
             '',

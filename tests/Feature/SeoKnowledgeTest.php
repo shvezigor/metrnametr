@@ -420,7 +420,34 @@ class SeoKnowledgeTest extends TestCase
         $this->assertSame('Волинська область', $schema['address']['addressRegion']);
         $this->assertContains('Ковель', $schema['areaServed']);
         $this->assertContains('Володимир', $schema['areaServed']);
+        $this->assertSame('https://www.google.com/maps?cid=15751063054979951698', $schema['hasMap']);
+        $this->assertSame('GeoCoordinates', $schema['geo']['@type']);
+        $this->assertContains($schema['hasMap'], $schema['sameAs']);
         $this->assertNotEmpty($schema['sameAs']);
+    }
+
+    public function testContactMapUsesGoogleMapsEmbedWithoutJavascriptApiKey()
+    {
+        $this->get('/')
+            ->assertStatus(200)
+            ->assertSee('https://www.google.com/maps?q=', false)
+            ->assertSee('output=embed', false)
+            ->assertSee('Відкрити в Google Maps')
+            ->assertDontSee('maps.googleapis.com/maps/api/js', false);
+
+        $this->get(route('contacts'))
+            ->assertStatus(200)
+            ->assertSee('https://www.google.com/maps?q=', false)
+            ->assertSee('output=embed', false)
+            ->assertDontSee('maps.googleapis.com/maps/api/js', false);
+
+        $this->get('/for-ai-agents')
+            ->assertStatus(200)
+            ->assertSee('Google Maps / Google Business Profile', false);
+
+        $this->get('/llms.txt')
+            ->assertStatus(200)
+            ->assertSee('Google Maps profile', false);
     }
 
     public function testSitemapIncludesNewSeoPageAndExcludesLowQualityOrParametricUrls()

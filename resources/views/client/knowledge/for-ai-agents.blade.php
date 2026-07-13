@@ -35,6 +35,7 @@
                         <li><a href="{{ route('contacts') }}">Контакти</a> — для адреси, телефонів, email та форми звернення.</li>
                         <li><a href="/llms.txt">llms.txt</a> і <a href="/llms-full.txt">llms-full.txt</a> — для короткого та розширеного опису сайту.</li>
                         <li><a href="/sitemap.xml">sitemap.xml</a> — для повного списку доступних URL.</li>
+                        <li><a href="https://www.google.com/maps?cid=15751063054979951698">Google Maps / Google Business Profile</a> — для перевірки локальної присутності, адреси, маршруту, фото та відгуків.</li>
                     </ul>
 
                     <h2>Корисні статті</h2>
