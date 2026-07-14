@@ -506,6 +506,32 @@ class SeoKnowledgeTest extends TestCase
         $this->assertStringNotContainsString('catalog?catalog=', $content);
     }
 
+    public function testSitemapUsesCanonicalUrlsWithHistoricalLastModifiedDates()
+    {
+        $today = now()->toDateString();
+        $urls = collect(SeoContent::sitemapUrls());
+        $staticLocations = [
+            'https://metrnametr.com.ua/',
+            'https://metrnametr.com.ua/catalog',
+            'https://metrnametr.com.ua/knowledge',
+            'https://metrnametr.com.ua/about',
+        ];
+
+        $this->assertSame($urls->count(), $urls->pluck('loc')->unique()->count());
+
+        $urls->each(function ($url) use ($today) {
+            $this->assertStringStartsWith('https://metrnametr.com.ua/', $url['loc']);
+            $this->assertStringNotContainsString('?', $url['loc']);
+            $this->assertLessThanOrEqual($today, $url['lastmod']);
+            $this->assertRegExp('/^\\d{4}-\\d{2}-\\d{2}$/', $url['lastmod']);
+        });
+
+        $urls->whereIn('loc', $staticLocations)->each(function ($url) use ($today) {
+            $this->assertNotSame($today, $url['lastmod']);
+            $this->get(parse_url($url['loc'], PHP_URL_PATH))->assertStatus(200);
+        });
+    }
+
     public function testRivneLandingPagesDoNotClaimPhysicalStoreInRivne()
     {
         foreach (['/dveri-rivne', '/vkhidni-dveri-rivne', '/mizhkimnatni-dveri-rivne'] as $url) {

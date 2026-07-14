@@ -549,53 +549,92 @@ SVG;
 
     public static function sitemapUrls()
     {
-        $today = now()->toDateString();
         $urls = [
-            ['loc' => '/', 'lastmod' => $today, 'changefreq' => 'weekly', 'priority' => '1.0'],
-            ['loc' => '/catalog', 'lastmod' => $today, 'changefreq' => 'daily', 'priority' => '0.9'],
-            ['loc' => '/knowledge', 'lastmod' => $today, 'changefreq' => 'weekly', 'priority' => '0.8'],
-            ['loc' => '/for-ai-agents', 'lastmod' => $today, 'changefreq' => 'monthly', 'priority' => '0.5'],
-            ['loc' => '/ai-policy.txt', 'lastmod' => $today, 'changefreq' => 'monthly', 'priority' => '0.4'],
-            ['loc' => '/contacts', 'lastmod' => $today, 'changefreq' => 'monthly', 'priority' => '0.7'],
-            ['loc' => '/guarantee', 'lastmod' => $today, 'changefreq' => 'monthly', 'priority' => '0.5'],
-            ['loc' => '/payment', 'lastmod' => $today, 'changefreq' => 'monthly', 'priority' => '0.5'],
-            ['loc' => '/about', 'lastmod' => $today, 'changefreq' => 'monthly', 'priority' => '0.5'],
-            ['loc' => '/wholesale', 'lastmod' => $today, 'changefreq' => 'monthly', 'priority' => '0.5'],
-            ['loc' => '/news', 'lastmod' => $today, 'changefreq' => 'weekly', 'priority' => '0.6'],
+            self::staticSitemapUrl('/', 'resources/views/client/main/index.blade.php', 'weekly', '1.0'),
+            self::staticSitemapUrl('/catalog', 'resources/views/client/products/index.blade.php', 'daily', '0.9'),
+            self::staticSitemapUrl('/knowledge', 'app/Support/KnowledgePlan.php', 'weekly', '0.8'),
+            self::staticSitemapUrl('/for-ai-agents', 'resources/views/client/knowledge/for-ai-agents.blade.php', 'monthly', '0.5'),
+            self::staticSitemapUrl('/ai-policy.txt', 'app/Http/Controllers/SeoController.php', 'monthly', '0.4'),
+            self::staticSitemapUrl('/contacts', 'resources/views/client/main/contacts.blade.php', 'monthly', '0.7'),
+            self::staticSitemapUrl('/guarantee', 'resources/views/client/main/guarantee.blade.php', 'monthly', '0.5'),
+            self::staticSitemapUrl('/payment', 'resources/views/client/main/payment.blade.php', 'monthly', '0.5'),
+            self::staticSitemapUrl('/about', 'resources/views/client/main/about.blade.php', 'monthly', '0.5'),
+            self::staticSitemapUrl('/wholesale', 'resources/views/client/main/wholesale.blade.php', 'monthly', '0.5'),
+            self::staticSitemapUrl('/news', 'app/Http/Controllers/ArticlesController.php', 'weekly', '0.6'),
         ];
 
         foreach (self::landingPages() as $landing) {
-            $urls[] = ['loc' => $landing['path'], 'lastmod' => $today, 'changefreq' => 'monthly', 'priority' => '0.8'];
+            $urls[] = self::staticSitemapUrl($landing['path'], 'config/seo_landings.php', 'monthly', '0.8');
         }
 
         foreach (self::articles() as $article) {
-            $urls[] = ['loc' => '/knowledge/' . $article['slug'], 'lastmod' => $today, 'changefreq' => 'monthly', 'priority' => '0.7'];
+            $urls[] = self::staticSitemapUrl('/knowledge/' . $article['slug'], 'config/seo_content.php', 'monthly', '0.7');
         }
 
         if (self::databaseIsAvailable()) {
             Product::published()->select(['alias', 'updated_at'])->orderBy('updated_at', 'desc')->get()->each(function ($product) use (&$urls) {
-                $urls[] = ['loc' => $product->location, 'lastmod' => optional($product->updated_at)->toDateString() ?: now()->toDateString(), 'changefreq' => 'weekly', 'priority' => '0.8'];
+                if ($product->updated_at) {
+                    $urls[] = ['loc' => $product->location, 'lastmod' => $product->updated_at->toDateString(), 'changefreq' => 'weekly', 'priority' => '0.8'];
+                }
             });
 
             Article::published()->select(['alias', 'updated_at'])->orderBy('updated_at', 'desc')->get()->each(function ($article) use (&$urls) {
-                $urls[] = ['loc' => $article->location, 'lastmod' => optional($article->updated_at)->toDateString() ?: now()->toDateString(), 'changefreq' => 'monthly', 'priority' => '0.6'];
+                if ($article->updated_at) {
+                    $urls[] = ['loc' => $article->location, 'lastmod' => $article->updated_at->toDateString(), 'changefreq' => 'monthly', 'priority' => '0.6'];
+                }
             });
 
         }
 
         return collect($urls)
+            ->map(function ($url) {
+                $url['loc'] = self::sitemapCanonical($url['loc']);
+
+                return $url;
+            })
             ->filter(function ($url) {
                 $loc = $url['loc'] ?? '';
 
                 return $loc
-                    && strpos($loc, 'localhost') === false
+                    && strpos($loc, self::site('domain')) === 0
+                    && strpos($loc, '?') === false
+                    && strpos($loc, '#') === false
                     && strpos($loc, '%20') === false
                     && strpos($loc, '...') === false
-                    && strpos($loc, '?') === false;
+                    && ($url['lastmod'] ?? null)
+                    && $url['lastmod'] <= now()->toDateString();
             })
             ->unique('loc')
             ->values()
             ->all();
+    }
+
+    private static function staticSitemapUrl($loc, $source, $changefreq, $priority)
+    {
+        return [
+            'loc' => $loc,
+            'lastmod' => self::sourceLastModified($source),
+            'changefreq' => $changefreq,
+            'priority' => $priority,
+        ];
+    }
+
+    private static function sourceLastModified($source)
+    {
+        $path = base_path($source);
+
+        if (!is_file($path)) {
+            $path = config_path('seo_content.php');
+        }
+
+        return now()->setTimestamp(filemtime($path))->toDateString();
+    }
+
+    private static function sitemapCanonical($loc)
+    {
+        $path = parse_url($loc, PHP_URL_PATH) ?: '/';
+
+        return self::canonical($path);
     }
 
     private static function databaseIsAvailable()
