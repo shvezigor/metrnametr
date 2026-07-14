@@ -244,9 +244,34 @@ class SeoKnowledgeTest extends TestCase
         $schema = SeoContent::productSchema($product);
 
         $this->assertSame('https://metrnametr.com.ua/images/placeholder-product.png', $schema['image']);
+        $this->assertArrayNotHasKey('availability', $schema['offers'] ?? []);
         $this->assertNull(SeoContent::faqSchema([]));
         $this->assertSame('https://metrnametr.com.ua/images/og.jpg', SeoContent::ogImageFor((object) ['og_image' => '/images/og.jpg'], '/fallback.jpg'));
         $this->assertNotContains(null, SeoContent::defaultPageSchemas([SeoContent::faqSchema([])]));
+    }
+
+    public function testProductSchemaIncludesOnlyConfirmedSpecifications()
+    {
+        $product = new Product([
+            'title' => 'Test Door',
+            'alias' => 'test-door',
+            'price' => 10000,
+            'extra_fields' => json_encode([
+                'brand' => 'Test Brand',
+                'sku' => 'TD-100',
+                'availability' => 'InStock',
+                'width' => '900 mm',
+                'height' => '2050 mm',
+            ]),
+        ]);
+        $product->setRelation('images', collect());
+
+        $schema = SeoContent::productSchema($product);
+
+        $this->assertSame('TD-100', $schema['sku']);
+        $this->assertSame('Test Brand', $schema['brand']['name']);
+        $this->assertSame('900 mm × 2050 mm', $schema['size']);
+        $this->assertSame('https://schema.org/InStock', $schema['offers']['availability']);
     }
 
     public function testSeoLandingPagesRenderMetaCanonicalFaqAndSchemas()

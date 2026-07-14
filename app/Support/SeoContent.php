@@ -217,6 +217,7 @@ class SeoContent
         return [
             '@context' => 'https://schema.org',
             '@type' => 'Organization',
+            '@id' => self::site('domain') . '/#organization',
             'name' => self::site('name'),
             'url' => self::site('domain'),
             'logo' => self::canonical(self::site('logo')),
@@ -229,8 +230,10 @@ class SeoContent
         return [
             '@context' => 'https://schema.org',
             '@type' => 'WebSite',
+            '@id' => self::site('domain') . '/#website',
             'name' => self::site('name'),
             'url' => self::site('domain'),
+            'publisher' => ['@id' => self::site('domain') . '/#organization'],
             'potentialAction' => [
                 '@type' => 'SearchAction',
                 'target' => self::canonical('/catalog') . '?q={search_term_string}',
@@ -246,7 +249,9 @@ class SeoContent
         return [
             '@context' => 'https://schema.org',
             '@type' => 'LocalBusiness',
+            '@id' => self::site('domain') . '/#localbusiness',
             'name' => self::site('name'),
+            'parentOrganization' => ['@id' => self::site('domain') . '/#organization'],
             'url' => self::site('domain') . '/',
             'image' => self::canonical(self::site('default_image')),
             'hasMap' => $googleMapsUrl,
@@ -516,6 +521,7 @@ SVG;
 
     public static function productSchema(Product $product)
     {
+        $specifications = self::productSpecifications($product);
         $schema = [
             '@context' => 'https://schema.org',
             '@type' => 'Product',
@@ -525,17 +531,57 @@ SVG;
             'url' => self::canonical($product->location),
         ];
 
+        foreach (['sku', 'mpn', 'color'] as $key) {
+            if (!empty($specifications[$key])) {
+                $schema[$key] = $specifications[$key];
+            }
+        }
+
+        if (!empty($specifications['brand'])) {
+            $schema['brand'] = ['@type' => 'Brand', 'name' => $specifications['brand']];
+        }
+
+        if (!empty($specifications['door_type'])) {
+            $schema['category'] = $specifications['door_type'];
+        }
+
+        if (!empty($specifications['finish'])) {
+            $schema['material'] = $specifications['finish'];
+        }
+
+        $size = array_filter([$specifications['width'], $specifications['height']]);
+        if (!empty($size)) {
+            $schema['size'] = implode(' × ', $size);
+        }
+
         if ($product->price > 0) {
             $schema['offers'] = [
                 '@type' => 'Offer',
                 'priceCurrency' => 'UAH',
                 'price' => $product->price,
-                'availability' => 'https://schema.org/InStock',
                 'url' => self::canonical($product->location),
             ];
+
+            $availability = self::availabilitySchemaUrl($specifications['availability']);
+            if ($availability) {
+                $schema['offers']['availability'] = $availability;
+            }
         }
 
         return $schema;
+    }
+
+    private static function availabilitySchemaUrl($availability)
+    {
+        $values = [
+            'instock' => 'https://schema.org/InStock',
+            'outofstock' => 'https://schema.org/OutOfStock',
+            'preorder' => 'https://schema.org/PreOrder',
+            'backorder' => 'https://schema.org/BackOrder',
+        ];
+        $key = strtolower(str_replace([' ', '-', '_'], '', (string) $availability));
+
+        return $values[$key] ?? null;
     }
 
     public static function collectionSchema($items)
