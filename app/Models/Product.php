@@ -40,6 +40,10 @@ class Product extends Model
         'label_class',
     ];
 
+    protected $casts = [
+        'extra_fields' => 'array',
+    ];
+
     public function scopePublished($query, $status = true) {
         return $query->where('published', '=', $status);
     }

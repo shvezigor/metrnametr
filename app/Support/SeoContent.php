@@ -103,6 +103,18 @@ class SeoContent
         return array_replace_recursive(self::productExtra(), $extra);
     }
 
+    public static function productSpecifications(Product $product)
+    {
+        $values = self::decodedList($product->extra_fields);
+        $keys = ['door_type', 'installation_place', 'sku', 'mpn', 'brand', 'availability', 'price', 'currency', 'width', 'height', 'leaf_thickness', 'metal_thickness', 'frame', 'insulation', 'thermal_break', 'locks', 'finish', 'color', 'warranty', 'certification', 'installation_available', 'delivery_regions'];
+
+        return collect($keys)->mapWithKeys(function ($key) use ($values) {
+            $value = isset($values[$key]) ? trim((string) $values[$key]) : null;
+
+            return [$key => $value ?: null];
+        })->all();
+    }
+
     public static function titleFor($model, $fallback)
     {
         return !empty($model->seo_title) ? $model->seo_title : $fallback;
@@ -125,22 +137,26 @@ class SeoContent
 
         $category = $categories->first();
         $type = $category && $category->relationLoaded('type') ? $category->type : ($category ? $category->type()->first() : null);
-        $typeTitle = $type ? $type->title : 'двері';
-        $categoryTitle = $category ? $category->title : 'каталог дверей';
-        $purpose = self::productPurpose($product, $typeTitle, $categoryTitle);
+        $specifications = self::productSpecifications($product);
+        $typeTitle = $specifications['door_type'] ?: ($type ? $type->title : null);
+        $categoryTitle = $category ? $category->title : null;
+        $purpose = self::productPurpose($specifications, $typeTitle, $categoryTitle);
+        $parts = array_filter([$product->title, $typeTitle, $purpose, $specifications['brand']]);
 
-        return trim(sprintf(
-            '%s %s з категорії %s %s. Підбір за розміром, комплектацією і бюджетом, консультація щодо замків, утеплення та монтажу.',
-            $typeTitle,
-            $product->title,
-            $categoryTitle,
-            $purpose
-        ));
+        if ($categoryTitle) {
+            $parts[] = 'категорія ' . $categoryTitle;
+        }
+
+        return implode(' — ', $parts) . '. Підбір за підтвердженими характеристиками моделі.';
     }
 
-    private static function productPurpose(Product $product, $typeTitle, $categoryTitle)
+    private static function productPurpose(array $specifications, $typeTitle, $categoryTitle)
     {
-        $text = mb_strtolower($product->title . ' ' . $typeTitle . ' ' . $categoryTitle);
+        if (!empty($specifications['installation_place'])) {
+            return 'для ' . $specifications['installation_place'];
+        }
+
+        $text = mb_strtolower($typeTitle . ' ' . $categoryTitle);
 
         if (strpos($text, 'термо') !== false || strpos($text, 'будин') !== false || strpos($text, 'котедж') !== false) {
             return 'для будинку';
@@ -154,7 +170,7 @@ class SeoContent
             return 'для технічних і комерційних приміщень';
         }
 
-        return 'для квартири';
+        return null;
     }
 
     public static function canonicalFor($model, $path)

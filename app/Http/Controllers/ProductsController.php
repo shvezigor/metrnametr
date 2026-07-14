@@ -162,6 +162,6 @@ class ProductsController extends Controller
                 route('catalog') => 'Каталог',
                 route('product.show', ['alias' => $product->alias]) => $product->title,
             ])
-            ->with('title', SeoContent::titleFor($product, $product->title . ' — вхідні двері з монтажем | Метр на Метр'));
+            ->with('title', SeoContent::titleFor($product, SeoContent::productMetaDescription($product)));
     }
 }
