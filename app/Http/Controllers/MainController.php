@@ -122,7 +122,11 @@ class MainController extends Controller
         // Send mail
         event(new OrderCreated($order));
 
-        return redirect()->back()->with('success', 'Ваше повідомлення відправлено успішно !');
+        return redirect()->back()->with([
+            'success' => 'Ваше повідомлення відправлено успішно !',
+            'conversion_event' => 'generate_lead',
+            'conversion_form_type' => 'order',
+        ]);
     }
 
     public function message(Request $request) {

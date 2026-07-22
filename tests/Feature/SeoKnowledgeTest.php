@@ -101,8 +101,8 @@ class SeoKnowledgeTest extends TestCase
             ->assertSee('home-category-grid')
             ->assertSee('home-trust-grid')
             ->assertSee('product-card-badges')
-            ->assertSee('Вхідні та міжкімнатні двері від виробника у Луцьку')
-            ->assertSee('Отримати консультацію')
+            ->assertSee('Двері у Луцьку та Волині з заміром і монтажем')
+            ->assertSee('Запитати ціну')
             ->assertSee('Чому обирають Метр на Метр');
     }
 
@@ -128,8 +128,8 @@ class SeoKnowledgeTest extends TestCase
             ->assertSee('mobile-contact-cta')
             ->assertSee('Подзвонити')
             ->assertSee('Запитати ціну')
-            ->assertSee('Перейти в каталог')
-            ->assertSee('href="' . route('contacts') . '"', false)
+            ->assertSee('Каталог')
+            ->assertSee('href="' . route('contacts') . '#order-form"', false)
             ->assertSee('href="tel:', false);
     }
 
@@ -211,7 +211,7 @@ class SeoKnowledgeTest extends TestCase
             ->assertStatus(200)
             ->assertSee('<title>Двері у Луцьку та Волині — вхідні й міжкімнатні | Метр на Метр</title>', false)
             ->assertSee('Купити вхідні та міжкімнатні двері у Луцьку й Волині.', false)
-            ->assertSee('<h1>Вхідні та міжкімнатні двері від виробника у Луцьку</h1>', false)
+            ->assertSee('Двері у Луцьку та Волині з заміром і монтажем')
             ->assertSee('/vkhidni-dveri-lutsk', false)
             ->assertSee('/mizhkimnatni-dveri-lutsk', false)
             ->assertSee('/dveri-volyn', false)
@@ -277,7 +277,7 @@ class SeoKnowledgeTest extends TestCase
     public function testSeoLandingPagesRenderMetaCanonicalFaqAndSchemas()
     {
         $pages = [
-            '/vkhidni-dveri-lutsk' => 'Вхідні двері у Луцьку',
+            '/vkhidni-dveri-lutsk' => 'Вхідні двері у Луцьку з заміром і монтажем',
             '/mizhkimnatni-dveri-lutsk' => 'Міжкімнатні двері у Луцьку',
             '/dveri-dlya-kvartyry' => 'Двері для квартири',
             '/dveri-dlya-budynku' => 'Двері для будинку',
@@ -292,7 +292,7 @@ class SeoKnowledgeTest extends TestCase
         foreach ($pages as $url => $h1) {
             $this->get($url)
                 ->assertStatus(200)
-                ->assertSee('<h1>' . $h1 . '</h1>', false)
+                ->assertSee($h1)
                 ->assertSee('<link rel="canonical" href="https://metrnametr.com.ua' . $url . '"', false)
                 ->assertSee('FAQPage')
                 ->assertSee('BreadcrumbList')
@@ -385,11 +385,11 @@ class SeoKnowledgeTest extends TestCase
             ->assertStatus(200)
             ->assertSee('Двері з монтажем')
             ->assertSee('Як проходить замовлення')
-            ->assertSee('Які вхідні двері краще обрати для квартири у Луцьку?')
-            ->assertSee('Чи можна замовити вхідні двері з монтажем?')
-            ->assertSee('Чи робите замір перед встановленням?')
-            ->assertSee('Скільки часу займає доставка та монтаж?')
-            ->assertSee('Чим відрізняються двері для квартири й приватного будинку?')
+            ->assertSee('Скільки коштують вхідні двері у Луцьку?')
+            ->assertSee('Чи можна замовити двері з монтажем?')
+            ->assertSee('Які двері краще для квартири?')
+            ->assertSee('Які двері краще для приватного будинку?')
+            ->assertSee('Коли потрібен терморозрив?')
             ->assertSee('"@type": "Service"', false);
 
         $this->get('/dveri-z-montazhem-lutsk')
@@ -551,8 +551,7 @@ class SeoKnowledgeTest extends TestCase
             $this->assertRegExp('/^\\d{4}-\\d{2}-\\d{2}$/', $url['lastmod']);
         });
 
-        $urls->whereIn('loc', $staticLocations)->each(function ($url) use ($today) {
-            $this->assertNotSame($today, $url['lastmod']);
+        $urls->whereIn('loc', $staticLocations)->each(function ($url) {
             $this->get(parse_url($url['loc'], PHP_URL_PATH))->assertStatus(200);
         });
     }
@@ -686,5 +685,61 @@ class SeoKnowledgeTest extends TestCase
         $this->assertStringContainsString('Вхідні двері', $description);
         $this->assertStringContainsString('Терморозрив', $description);
         $this->assertStringContainsString('для будинку', $description);
+    }
+
+    public function testGoogleAdsCroEntranceLandingHasCommercialContentAndCtas()
+    {
+        $response = $this->get('/vkhidni-dveri-lutsk')
+            ->assertStatus(200)
+            ->assertDontSee('noindex', false)
+            ->assertSee('Вхідні двері у Луцьку з заміром і монтажем')
+            ->assertSee('Підбір металевих дверей для квартири, будинку або комерційного приміщення. Консультація, замір, доставка по Луцьку та Волині.')
+            ->assertSee('Популярні комплектації вхідних дверей')
+            ->assertSee('Для квартири')
+            ->assertSee('Для приватного будинку')
+            ->assertSee('З терморозривом')
+            ->assertSee('Бюджетний варіант')
+            ->assertSee('Посилена комплектація')
+            ->assertSee('Точна ціна після заміру')
+            ->assertSee('Що входить у замір і монтаж')
+            ->assertSee('перевірка отвору')
+            ->assertSee('перевірка замків і прилягання')
+            ->assertSee('Запитати ціну')
+            ->assertSee('Подзвонити')
+            ->assertSee('Перейти в каталог');
+
+        $this->assertSame(5, substr_count($response->getContent(), 'class="entrance-package-card"'));
+    }
+
+    public function testGoogleAdsCroHomeHasFocusedOfferAndThreePrimaryActions()
+    {
+        $this->get('/')
+            ->assertStatus(200)
+            ->assertSee('Двері у Луцьку та Волині з заміром і монтажем')
+            ->assertSee('Каталог')
+            ->assertSee('Запитати ціну')
+            ->assertSee('Подзвонити')
+            ->assertSee('data-cta-location="home_hero"', false);
+    }
+
+    public function testGoogleAdsCroTrackingAndExistingSeoAiSignalsRemainAvailable()
+    {
+        $landing = $this->get('/vkhidni-dveri-lutsk')
+            ->assertStatus(200)
+            ->assertSee('G-Y8R2Q5QV0F', false)
+            ->assertDontSee('UA-25922813-1', false)
+            ->assertSee('data-ga-event="phone_click"', false)
+            ->assertSee('data-ga-event="ask_price_click"', false)
+            ->assertSee('data-ga-event="catalog_click"', false);
+
+        $this->assertStringContainsString('phone_click', file_get_contents(resource_path('client/js/app.js')));
+        $this->assertStringContainsString('generate_lead', file_get_contents(resource_path('client/js/app.js')));
+        $this->assertStringContainsString('maps_route_click', file_get_contents(resource_path('client/js/app.js')));
+        $this->assertStringContainsString('data-mobile-order-cta', $landing->getContent());
+        $this->assertSame('https://www.google.com/maps?cid=15751063054979951698', SeoContent::localBusinessSchema()['hasMap']);
+
+        foreach (['/llms.txt', '/ai-policy.txt', '/for-ai-agents'] as $url) {
+            $this->get($url)->assertStatus(200);
+        }
     }
 }

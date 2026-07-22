@@ -7,6 +7,29 @@ var selAll = function (e) {
   return document.querySelectorAll(e)
 };
 
+var supportedGa4Events = [
+  'phone_click',
+  'ask_price_click',
+  'catalog_click',
+  'maps_route_click',
+  'generate_lead'
+];
+
+var trackGa4Event = function (eventName, element, extraParameters) {
+  if (supportedGa4Events.indexOf(eventName) === -1 || typeof window.gtag !== 'function') {
+    return;
+  }
+
+  var parameters = $.extend({
+    link_url: element && element.href ? element.href : window.location.href,
+    link_text: element ? $.trim($(element).text()) : '',
+    page_location: window.location.href,
+    cta_location: element ? ($(element).data('cta-location') || 'sitewide') : 'form_confirmation'
+  }, extraParameters || {});
+
+  window.gtag('event', eventName, parameters);
+};
+
 var mobile = false,
   scrollWidth,
   $body = $('body'),
@@ -30,6 +53,17 @@ const submitFilterCatalog = () => {
 };
 
 $(document).ready(function () {
+
+  $(document).on('click', '[data-ga-event], a[href^="tel:"]', function () {
+    var eventName = $(this).data('ga-event') || 'phone_click';
+    trackGa4Event(eventName, this);
+  });
+
+  $('[data-ga-success-event]').each(function () {
+    trackGa4Event($(this).data('ga-success-event'), this, {
+      form_type: $(this).data('form-type') || 'contact'
+    });
+  });
 
   let timer = null;
   const timeForWait = 600;

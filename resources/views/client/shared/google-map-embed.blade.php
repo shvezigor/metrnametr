@@ -39,9 +39,9 @@
                     </ul>
 
                     <div class="map-actions">
-                        <a class="yellow-btn blue-hover" href="https://www.google.com/maps/dir/?api=1&destination=проспект%20Перемоги%2024%20Луцьк" target="_blank" rel="noopener">Прокласти маршрут</a>
-                        <a class="yellow-btn blue-hover" href="https://www.google.com/maps/search/?api=1&query=Метр%20на%20Метр%20проспект%20Перемоги%2024%20Луцьк" target="_blank" rel="noopener">Відкрити в Google Maps</a>
-                        <a class="yellow-btn blue-hover" href="tel:+380673343368">Зателефонувати</a>
+                        <a class="yellow-btn blue-hover" href="https://www.google.com/maps/dir/?api=1&destination=проспект%20Перемоги%2024%20Луцьк" target="_blank" rel="noopener" data-ga-event="maps_route_click" data-cta-location="contacts_map">Прокласти маршрут</a>
+                        <a class="yellow-btn blue-hover" href="https://www.google.com/maps/search/?api=1&query=Метр%20на%20Метр%20проспект%20Перемоги%2024%20Луцьк" target="_blank" rel="noopener" data-ga-event="maps_route_click" data-cta-location="contacts_map">Відкрити в Google Maps</a>
+                        <a class="yellow-btn blue-hover" href="tel:+380673343368" data-ga-event="phone_click" data-cta-location="contacts_map">Зателефонувати</a>
                     </div>
                 </div>
             </div>

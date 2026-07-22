@@ -3,11 +3,103 @@
 @section('content')
     @include('client.shared.breadcrumb', ['breadcrumbs' => $breadcrumbs ?? []])
 
+    @if($landing['path'] === '/vkhidni-dveri-lutsk')
+        @include('client.shared.commercial-hero', [
+            'heroTitle' => 'Вхідні двері у Луцьку з заміром і монтажем',
+            'heroText' => 'Підбір металевих дверей для квартири, будинку або комерційного приміщення. Консультація, замір, доставка по Луцьку та Волині.',
+            'heroImage' => '/images/content/slider-3.jpg',
+            'heroImageAlt' => 'Вхідні металеві двері у Луцьку з заміром і монтажем',
+            'heroLocation' => 'entrance_landing_hero',
+            'heroTrustItems' => [
+                ['label' => 'Власне виробництво'],
+                ['label' => 'Шоурум: проспект Перемоги, 24'],
+                ['label' => 'Замір і монтаж'],
+                ['label' => 'Google Business Profile', 'url' => 'https://www.google.com/maps?cid=15751063054979951698'],
+            ],
+        ])
+
+        @php
+            $entrancePackages = [
+                [
+                    'title' => 'Для квартири',
+                    'description' => 'Для підʼїзду, де важливі безпека, тиша та стабільна робота замків. Підбираємо комплектацію під інтенсивність користування і ваш бюджет.',
+                    'includes' => 'Коробка, замки, утеплення, внутрішнє й зовнішнє покриття; добори, лиштва та монтаж — після огляду отвору.',
+                ],
+                [
+                    'title' => 'Для приватного будинку',
+                    'description' => 'Для входу, що контактує з вулицею, опадами та перепадами температур. Враховуємо навіс, тамбур, поріг і умови експлуатації.',
+                    'includes' => 'Посилена коробка, замки, утеплення, стійке покриття; добори, лиштва та монтаж узгоджуються після заміру.',
+                ],
+                [
+                    'title' => 'З терморозривом',
+                    'description' => 'Для приватного будинку або холодної вхідної зони, де потрібно зменшити передачу холоду через метал. Доцільність перевіряємо за умовами конкретного входу.',
+                    'includes' => 'Коробка й полотно з терморозривом, замки, утеплення, зовнішнє покриття; добори, лиштва та монтаж — за заміром.',
+                ],
+                [
+                    'title' => 'Бюджетний варіант',
+                    'description' => 'Для квартири, офісу або технічного приміщення з базовими вимогами до захисту. Допоможемо не переплачувати за характеристики, які не потрібні.',
+                    'includes' => 'Базова коробка, замки, утеплення й покриття; потребу в доборах, лиштві та монтажі визначаємо на замірі.',
+                ],
+                [
+                    'title' => 'Посилена комплектація',
+                    'description' => 'Для обʼєктів із підвищеними вимогами до надійності та ресурсу. Конструкцію і фурнітуру погоджуємо під реальний сценарій використання.',
+                    'includes' => 'Посилена коробка, два замки, додаткове утеплення та зносостійке покриття; добори, лиштва й монтаж — після заміру.',
+                ],
+            ];
+        @endphp
+
+        <section class="entrance-packages" aria-labelledby="entrance-packages-title">
+            <div class="container">
+                <div class="section-heading-wrap">
+                    <h2 id="entrance-packages-title">Популярні комплектації вхідних дверей</h2>
+                    <p>Орієнтуйтеся на умови встановлення, а не лише на зовнішній вигляд. Фінальну комплектацію підтверджуємо після перевірки отвору.</p>
+                </div>
+                <div class="entrance-packages-grid">
+                    @foreach($entrancePackages as $package)
+                        <article class="entrance-package-card">
+                            <h3>{{ $package['title'] }}</h3>
+                            <p>{{ $package['description'] }}</p>
+                            <p class="entrance-package-card__includes"><strong>Що входить:</strong> {{ $package['includes'] }}</p>
+                            <p class="entrance-package-card__price">Точна ціна після заміру</p>
+                            <a
+                                href="{{ route('contacts') }}#order-form"
+                                class="yellow-btn blue-hover"
+                                data-ga-event="ask_price_click"
+                                data-cta-location="package_{{ $loop->iteration }}"
+                            >Запитати ціну</a>
+                        </article>
+                    @endforeach
+                </div>
+            </div>
+        </section>
+
+        <section class="measurement-installation" aria-labelledby="measurement-installation-title">
+            <div class="container">
+                <div class="measurement-installation__panel">
+                    <div>
+                        <h2 id="measurement-installation-title">Що входить у замір і монтаж</h2>
+                        <p>До початку робіт узгоджуємо конструкцію, додаткові елементи та стан отвору, щоб коректно порахувати повний комплект.</p>
+                    </div>
+                    <ul>
+                        <li>перевірка отвору</li>
+                        <li>сторона відкривання</li>
+                        <li>поріг і добори</li>
+                        <li>демонтаж старих дверей</li>
+                        <li>встановлення</li>
+                        <li>перевірка замків і прилягання</li>
+                    </ul>
+                </div>
+            </div>
+        </section>
+    @endif
+
     <section class="seo-landing">
         <div class="container">
             <div class="row">
                 <article class="col-xs-12 col-md-10 col-md-offset-1 main-content">
-                    <h1>{{ $landing['h1'] }}</h1>
+                    @if($landing['path'] !== '/vkhidni-dveri-lutsk')
+                        <h1>{{ $landing['h1'] }}</h1>
+                    @endif
 
                     @foreach((array) $landing['intro'] as $paragraph)
                         <p class="{{ $loop->first ? 'lead' : '' }}">{{ $paragraph }}</p>

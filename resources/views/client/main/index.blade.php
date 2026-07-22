@@ -44,32 +44,22 @@
     ];
 @endphp
 
-<section class="home-hero-modern">
-    <div class="container">
-        <div class="home-hero-grid">
-            <div class="home-hero-copy">
-                <h1>Вхідні та міжкімнатні двері від виробника у Луцьку</h1>
-                <p>Виготовляємо, продаємо та постачаємо двері у Луцьку й Волинській області: вхідні двері, міжкімнатні двері, рішення для квартир, будинків, комерційних і технічних приміщень. Гурт і роздріб, консультація, монтаж і доставка.</p>
-
-                <div class="home-hero-actions">
-                    <a href="{{ route('catalog') }}" class="yellow-btn blue-hover">Перейти в каталог</a>
-                    <a href="#order-form" class="blue-btn" data-toggle="modal" data-target="#order-form">Отримати консультацію</a>
-                </div>
-
-                <ul class="home-hero-proof">
-                    <li>Власне виробництво</li>
-                    <li>ДСТУ та ISO 9001</li>
-                    <li>Гурт і роздріб</li>
-                    <li>Доставка по Україні</li>
-                </ul>
-            </div>
-
-            <div class="home-hero-media">
-                <img src="{{ $heroImage }}" alt="Вхідні металеві та міжкімнатні двері у Луцьку від Метр на Метр" loading="eager">
-            </div>
-        </div>
-    </div>
-</section>
+@include('client.shared.commercial-hero', [
+    'heroTitle' => 'Двері у Луцьку та Волині з заміром і монтажем',
+    'heroText' => 'Вхідні та міжкімнатні двері для квартири, будинку й комерційного приміщення. Допоможемо підібрати комплектацію, організувати замір, доставку та монтаж.',
+    'heroImage' => $heroImage,
+    'heroImageAlt' => 'Вхідні та міжкімнатні двері у Луцьку від Метр на Метр',
+    'heroLocation' => 'home_hero',
+    'askPriceUrl' => '#order-form',
+    'askPriceModal' => true,
+    'catalogLabel' => 'Каталог',
+    'heroTrustItems' => [
+        ['label' => 'Власне виробництво'],
+        ['label' => 'Шоурум: проспект Перемоги, 24'],
+        ['label' => 'Замір і монтаж'],
+        ['label' => 'Доставка по Волині'],
+    ],
+])
 
 <section class="about-us">
     <div class="container">

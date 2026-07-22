@@ -5,7 +5,13 @@
                 <div class="col-md-offset-3 col-md-6">
 
                     @if(session()->has('success'))
-                        <div class="alert alert-success">
+                        <div
+                            class="alert alert-success"
+                            @if(session('conversion_event'))
+                                data-ga-success-event="{{ session('conversion_event') }}"
+                                data-form-type="{{ session('conversion_form_type', 'contact') }}"
+                            @endif
+                        >
                             {!! session()->get('success') !!}
                             <button type="button" class="close" data-dismiss="alert" aria-label="Close">
                                 <span aria-hidden="true">&times;</span>
