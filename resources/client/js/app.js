@@ -14,6 +14,7 @@ var supportedGa4Events = [
   'ask_price_click',
   'catalog_click',
   'maps_route_click',
+  'real_works_click',
   'generate_lead'
 ];
 

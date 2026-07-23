@@ -111,4 +111,46 @@ class RealWorksTest extends TestCase
         $this->assertStringNotContainsString('<video src=', $content);
         $this->assertStringNotContainsString('<source src="/images/real-works/door-overview.mp4"', $content);
     }
+
+    public function testHomepageShowsFourRealWorkPhotosAndWorksLink()
+    {
+        $response = $this->get('/')
+            ->assertStatus(200)
+            ->assertSee('Реальні встановлення дверей')
+            ->assertSee('/nashi-roboty', false)
+            ->assertSee('data-real-works-preview="home"', false);
+
+        $this->assertSame(4, substr_count($response->getContent(), 'data-preview-work-image'));
+    }
+
+    public function testThreeLocalLandingsShowRelevantRealWorkProof()
+    {
+        $expected = [
+            '/vkhidni-dveri-lutsk' => 2,
+            '/mizhkimnatni-dveri-lutsk' => 3,
+            '/dveri-volyn' => 3,
+        ];
+
+        foreach ($expected as $url => $count) {
+            $response = $this->get($url)
+                ->assertStatus(200)
+                ->assertSee('Реальні встановлення дверей')
+                ->assertSee('/nashi-roboty', false);
+
+            $this->assertSame($count, substr_count($response->getContent(), 'data-preview-work-image'), $url);
+        }
+    }
+
+    public function testRealWorksPreviewCtaUsesAnAllowedGa4Event()
+    {
+        $this->get('/')
+            ->assertStatus(200)
+            ->assertSee('data-ga-event="real_works_click"', false)
+            ->assertSee('data-cta-location="home_real_works"', false);
+
+        $this->assertStringContainsString(
+            "'real_works_click'",
+            file_get_contents(resource_path('client/js/app.js'))
+        );
+    }
 }

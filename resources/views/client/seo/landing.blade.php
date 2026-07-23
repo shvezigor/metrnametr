@@ -198,5 +198,12 @@
         </div>
     </section>
 
+    @if(in_array($landing['path'], ['/vkhidni-dveri-lutsk', '/mizhkimnatni-dveri-lutsk', '/dveri-volyn'], true))
+        @include('client.shared.real-works-preview', [
+            'works' => $realWorksPreview,
+            'context' => ltrim($landing['path'], '/'),
+        ])
+    @endif
+
     @include('client.shared.faq', ['faq' => $faq ?? []])
 @endsection

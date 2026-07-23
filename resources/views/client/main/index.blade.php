@@ -279,6 +279,11 @@
     </div>
 </section>
 
+@include('client.shared.real-works-preview', [
+    'works' => $realWorksPreview,
+    'context' => 'home',
+])
+
 <section class="news-box">
     <div class="background">
         <div class="layer" style="background: #fff;"></div>

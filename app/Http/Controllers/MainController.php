@@ -12,6 +12,7 @@ use App\Models\Subscriber;
 use App\Models\Order;
 use App\Models\Message;
 use App\Models\Setting;
+use App\Support\RealWorks;
 use App\Support\SeoContent;
 use Illuminate\Http\Request;
 
@@ -45,6 +46,7 @@ class MainController extends Controller
                 SeoContent::localBusinessSchema(),
                 SeoContent::faqSchema(SeoContent::faq('home_faq')),
             ])
+            ->with('realWorksPreview', RealWorks::featured('home'))
             ->with('slides', $slides);
     }
 

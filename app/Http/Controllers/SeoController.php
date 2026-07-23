@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Support\RealWorks;
 use App\Support\SeoContent;
 use Illuminate\Http\Response;
 
@@ -26,6 +27,7 @@ class SeoController extends Controller
             ->with('canonical', SeoContent::canonical($landing['path']))
             ->with('breadcrumbs', $breadcrumbs)
             ->with('faq', $landing['faq'])
+            ->with('realWorksPreview', RealWorks::featured($slug))
             ->with('schema', [
                 SeoContent::landingPageSchema($landing),
                 SeoContent::serviceSchema($landing),
