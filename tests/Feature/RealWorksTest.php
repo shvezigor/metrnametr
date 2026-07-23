@@ -41,4 +41,33 @@ class RealWorksTest extends TestCase
         $this->assertCount(3, RealWorks::featured('dveri-volyn'));
         $this->assertTrue(RealWorks::featured('unsupported-context')->isEmpty());
     }
+
+    public function testEveryConfiguredRealWorkAssetExistsAndMatchesDimensions()
+    {
+        RealWorks::allImages()->each(function ($image) {
+            $jpg = resource_path('client' . $image['jpg']);
+            $webp = resource_path('client' . $image['webp']);
+
+            $this->assertFileExists($jpg);
+            $this->assertFileExists($webp);
+            $this->assertSame([$image['width'], $image['height']], array_slice(getimagesize($jpg), 0, 2));
+            $this->assertSame([$image['width'], $image['height']], array_slice(getimagesize($webp), 0, 2));
+            $this->assertLessThan(350 * 1024, filesize($jpg));
+            $this->assertLessThan(250 * 1024, filesize($webp));
+        });
+    }
+
+    public function testOnlyTheApprovedDoorVideoAndItsPostersArePublished()
+    {
+        $this->assertCount(1, RealWorks::videos());
+
+        RealWorks::videos()->each(function ($video) {
+            $this->assertFileExists(resource_path('client' . $video['src']));
+            $this->assertFileExists(resource_path('client' . $video['poster_jpg']));
+            $this->assertFileExists(resource_path('client' . $video['poster_webp']));
+        });
+
+        $this->assertFileExists(resource_path('client' . RealWorks::page()['og_image']));
+        $this->assertFileNotExists(resource_path('client/images/real-works/video-9.mp4'));
+    }
 }

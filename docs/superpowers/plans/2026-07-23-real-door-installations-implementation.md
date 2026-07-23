@@ -433,7 +433,7 @@ public function testOnlyTheApprovedDoorVideoAndItsPostersArePublished()
         $this->assertFileExists(resource_path('client' . $video['poster_webp']));
     });
 
-    $this->assertFileDoesNotExist(resource_path('client/images/real-works/video-9.mp4'));
+    $this->assertFileNotExists(resource_path('client/images/real-works/video-9.mp4'));
 }
 ```
 
@@ -516,7 +516,7 @@ source = Path(os.environ["MM_APPROVED_VIDEO"])
 output = Path(os.environ["MM_MEDIA_OUTPUT"])
 capture = cv2.VideoCapture(str(source))
 frame_count = int(capture.get(cv2.CAP_PROP_FRAME_COUNT))
-capture.set(cv2.CAP_PROP_POS_FRAMES, round(frame_count * 0.9))
+capture.set(cv2.CAP_PROP_POS_FRAMES, round(frame_count * 0.1))
 ok, frame = capture.read()
 capture.release()
 if not ok:
