@@ -10,7 +10,7 @@
                 <div class="row">
 
                     <div class="col-sm-2 col-md-2">
-                        <div class="logo-box"><a href="{{ route('home') }}"><img src="/images/logo-2.png" alt="Метр на Метр"></a></div>
+                        <div class="logo-box"><a href="{{ route('home') }}"><img src="/images/logo-2.png" width="309" height="360" alt="Метр на Метр"></a></div>
                     </div>
 
                     <div class="col-sm-3 col-md-2">
@@ -68,19 +68,19 @@
                 <ul>
 
                     @if (\App\Models\Setting::existValue('facebook'))
-                        <li><a href="{{ \App\Models\Setting::getValue('facebook') }}" target="_blank"><i class="fa fa-facebook-f"></i></a></li>
+                        <li><a href="{{ \App\Models\Setting::getValue('facebook') }}" target="_blank" rel="noopener noreferrer" aria-label="Facebook"><i class="fa fa-facebook-f" aria-hidden="true"></i></a></li>
                     @endif
 
                     @if (\App\Models\Setting::existValue('instagram'))
-                        <li><a href="{{ \App\Models\Setting::getValue('instagram') }}" target="_blank"><i class="fa fa-instagram"></i></a></li>
+                        <li><a href="{{ \App\Models\Setting::getValue('instagram') }}" target="_blank" rel="noopener noreferrer" aria-label="Instagram"><i class="fa fa-instagram" aria-hidden="true"></i></a></li>
                     @endif
 
                     @if (\App\Models\Setting::existValue('youtube'))
-                        <li><a href="{{ \App\Models\Setting::getValue('youtube') }}" target="_blank"><i class="fa fa-youtube-play"></i></a></li>
+                        <li><a href="{{ \App\Models\Setting::getValue('youtube') }}" target="_blank" rel="noopener noreferrer" aria-label="YouTube"><i class="fa fa-youtube-play" aria-hidden="true"></i></a></li>
                     @endif
 
                     @if (\App\Models\Setting::existValue('telegram'))
-                        <li><a href="{{ \App\Models\Setting::getValue('telegram') }}" target="_blank"><i class="fa fa-telegram"></i></a></li>
+                        <li><a href="{{ \App\Models\Setting::getValue('telegram') }}" target="_blank" rel="noopener noreferrer" aria-label="Telegram"><i class="fa fa-telegram" aria-hidden="true"></i></a></li>
                     @endif
 
                 </ul>

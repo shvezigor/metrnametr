@@ -41,19 +41,19 @@
             <div class="social-box">
                 <ul>
                     @if (\App\Models\Setting::existValue('facebook'))
-                        <li><a href="{{ \App\Models\Setting::getValue('facebook') }}" target="_blank"><i class="fa fa-facebook-f"></i></a></li>
+                        <li><a href="{{ \App\Models\Setting::getValue('facebook') }}" target="_blank" rel="noopener noreferrer" aria-label="Facebook"><i class="fa fa-facebook-f" aria-hidden="true"></i></a></li>
                     @endif
 
                     @if (\App\Models\Setting::existValue('instagram'))
-                        <li><a href="{{ \App\Models\Setting::getValue('instagram') }}" target="_blank"><i class="fa fa-instagram"></i></a></li>
+                        <li><a href="{{ \App\Models\Setting::getValue('instagram') }}" target="_blank" rel="noopener noreferrer" aria-label="Instagram"><i class="fa fa-instagram" aria-hidden="true"></i></a></li>
                     @endif
 
                     @if (\App\Models\Setting::existValue('youtube'))
-                        <li><a href="{{ \App\Models\Setting::getValue('youtube') }}" target="_blank"><i class="fa fa-youtube-play"></i></a></li>
+                        <li><a href="{{ \App\Models\Setting::getValue('youtube') }}" target="_blank" rel="noopener noreferrer" aria-label="YouTube"><i class="fa fa-youtube-play" aria-hidden="true"></i></a></li>
                     @endif
 
                     @if (\App\Models\Setting::existValue('telegram'))
-                        <li><a href="{{ \App\Models\Setting::getValue('telegram') }}" target="_blank"><i class="fa fa-telegram"></i></a></li>
+                        <li><a href="{{ \App\Models\Setting::getValue('telegram') }}" target="_blank" rel="noopener noreferrer" aria-label="Telegram"><i class="fa fa-telegram" aria-hidden="true"></i></a></li>
                     @endif
                 </ul>
             </div>
@@ -69,7 +69,7 @@
 
                 <div class="logo-box">
                     <a href="{{ route('home') }}">
-                        <img src="/images/logo-2.png" alt="Метр на Метр - двері у Луцьку та Волині">
+                        <img src="/images/logo-2.png" width="309" height="360" alt="Метр на Метр - двері у Луцьку та Волині">
                     </a>
                 </div>
 
@@ -77,7 +77,8 @@
                     <!-- Brand and toggle get grouped for better mobile display -->
                     <div class="navbar-header">
                         <button type="button" class="navbar-toggle collapsed my-button" data-toggle="collapse"
-                                data-target="#bs-example-navbar-collapse-1" aria-expanded="false">
+                                data-target="#bs-example-navbar-collapse-1" aria-expanded="false"
+                                aria-controls="bs-example-navbar-collapse-1" aria-label="Відкрити навігацію">
                             <span></span>
                             <span></span>
                             <span></span>

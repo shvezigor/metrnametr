@@ -639,6 +639,7 @@ SVG;
     {
         $urls = [
             self::staticSitemapUrl('/', 'resources/views/client/main/index.blade.php', 'weekly', '1.0'),
+            self::staticSitemapUrl(RealWorks::page()['path'], 'config/real_works.php', 'monthly', '0.8'),
             self::staticSitemapUrl('/catalog', 'resources/views/client/products/index.blade.php', 'daily', '0.9'),
             self::staticSitemapUrl('/knowledge', 'app/Support/KnowledgePlan.php', 'weekly', '0.8'),
             self::staticSitemapUrl('/for-ai-agents', 'resources/views/client/knowledge/for-ai-agents.blade.php', 'monthly', '0.5'),

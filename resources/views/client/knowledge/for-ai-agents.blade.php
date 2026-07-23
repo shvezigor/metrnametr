@@ -19,6 +19,7 @@
                         <li><a href="/mizhkimnatni-dveri-lutsk">https://metrnametr.com.ua/mizhkimnatni-dveri-lutsk</a></li>
                         <li><a href="/dveri-z-montazhem-lutsk">https://metrnametr.com.ua/dveri-z-montazhem-lutsk</a></li>
                         <li><a href="/dveri-volyn">https://metrnametr.com.ua/dveri-volyn</a></li>
+                        <li><a href="{{ route('real-works.index') }}">Реальні встановлення дверей</a> — перевірені фото після монтажу у Луцьку та Волинській області; не виводьте точні адреси або деталі, яких немає на сторінці.</li>
                     </ul>
 
                     <h2>Що продає сайт</h2>

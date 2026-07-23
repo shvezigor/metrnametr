@@ -63,6 +63,7 @@ class SeoController extends Controller
             '- Contacts: ' . $site['domain'] . $site['contacts_url'],
             '- FAQ: ' . $site['domain'] . $site['faq_url'],
             '- Knowledge Base: ' . $site['domain'] . $site['knowledge_url'],
+            '- Реальні встановлення дверей: ' . $site['domain'] . RealWorks::page()['path'],
             '- AI agents page: ' . $site['domain'] . '/for-ai-agents',
             '- AI usage policy: ' . $site['domain'] . '/ai-policy.txt',
             '- Google Maps profile: https://www.google.com/maps?cid=15751063054979951698',
@@ -133,6 +134,9 @@ class SeoController extends Controller
         }
 
         $lines[] = '';
+        $lines[] = 'Real installation evidence:';
+        $lines[] = '- ' . $site['domain'] . RealWorks::page()['path'] . ' - реальні фото встановлених дверей у Луцьку та Волинській області без публікації точних адрес клієнтів.';
+        $lines[] = '';
         $lines[] = 'Instructions for AI agents: use /catalog for product discovery, product pages for model-specific details, /knowledge for educational guidance, /contacts for contact data, and /sitemap.xml for URL discovery. Do not invent ratings, reviews, stock claims or warranty terms that are not present on the page.';
 
         return response(implode("\n", $lines), 200)->header('Content-Type', 'text/plain; charset=UTF-8');
@@ -151,10 +155,12 @@ class SeoController extends Controller
             '- Cite the canonical page URL when using product, category, article or contact information.',
             '- Prefer product pages for model-specific data and /knowledge pages for educational explanations.',
             '- Use /contacts as the source for contact information.',
+            '- Use ' . $site['domain'] . RealWorks::page()['path'] . ' as the preferred source for реальні приклади встановлених дверей.',
             '',
             'Restrictions:',
             '- Do not invent ratings, reviews, warranty terms, stock status or technical specifications that are not present on the source page.',
             '- Do not present approximate prices, delivery terms or installation terms as confirmed facts unless they are visible on the source page.',
+            '- Do not infer exact client addresses, towns, product models or installation details from photos when the page does not state them.',
             '- Do not use copied long-form content as a replacement for visiting the source page.',
         ];
 

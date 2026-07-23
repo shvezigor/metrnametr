@@ -153,4 +153,44 @@ class RealWorksTest extends TestCase
             file_get_contents(resource_path('client/js/app.js'))
         );
     }
+
+    public function testWorksPageIsDiscoverableInSitemapAndAiSources()
+    {
+        $sitemap = $this->get('/sitemap.xml')
+            ->assertStatus(200)
+            ->assertSee('<loc>https://metrnametr.com.ua/nashi-roboty</loc>', false)
+            ->getContent();
+
+        $this->assertStringNotContainsString('localhost', $sitemap);
+        $this->assertStringNotContainsString('%20', $sitemap);
+        preg_match_all('/<loc>(.*?)<\/loc>/', $sitemap, $locations);
+
+        foreach ($locations[1] as $location) {
+            $this->assertStringNotContainsString(' ', $location);
+        }
+
+        foreach (['/for-ai-agents', '/llms.txt', '/llms-full.txt', '/ai-policy.txt'] as $url) {
+            $this->get($url)
+                ->assertStatus(200)
+                ->assertSee('/nashi-roboty', false);
+        }
+    }
+
+    public function testSharedNavigationHasAccessibleNamesAndSizedCurrentLogo()
+    {
+        $content = $this->get('/nashi-roboty')->assertStatus(200)->getContent();
+
+        $this->assertStringContainsString('aria-label="Відкрити навігацію"', $content);
+        $this->assertStringContainsString('aria-label="Facebook"', $content);
+        $this->assertStringContainsString('aria-label="Instagram"', $content);
+        $this->assertStringContainsString('aria-label="YouTube"', $content);
+        $this->assertStringContainsString(
+            '<img src="/images/logo-2.png" width="309" height="360"',
+            $content
+        );
+        $this->assertStringContainsString(
+            'color: #666666;',
+            file_get_contents(resource_path('client/scss/_common.scss'))
+        );
+    }
 }

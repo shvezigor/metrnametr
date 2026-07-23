@@ -651,18 +651,21 @@ class SeoKnowledgeTest extends TestCase
             ->assertSee('<loc>https://metrnametr.com.ua/dveri-dlya-kvartyry</loc>', false)
             ->assertSee('<loc>https://metrnametr.com.ua/dveri-dlya-budynku</loc>', false)
             ->assertSee('<loc>https://metrnametr.com.ua/dveri-z-termorozryvom</loc>', false)
-            ->assertSee('<loc>https://metrnametr.com.ua/protypozhezhni-dveri</loc>', false);
+            ->assertSee('<loc>https://metrnametr.com.ua/protypozhezhni-dveri</loc>', false)
+            ->assertSee('<loc>https://metrnametr.com.ua/nashi-roboty</loc>', false);
 
         $this->get('/llms.txt')
             ->assertStatus(200)
             ->assertSee('/vkhidni-dveri-lutsk')
-            ->assertSee('/protypozhezhni-dveri');
+            ->assertSee('/protypozhezhni-dveri')
+            ->assertSee('/nashi-roboty');
 
         $this->get('/llms-full.txt')
             ->assertStatus(200)
             ->assertSee('/dveri-z-termorozryvom')
             ->assertSee('/mizhkimnatni-dveri-lutsk')
             ->assertSee('/dveri-rivne')
+            ->assertSee('/nashi-roboty')
             ->assertSee('Метр на Метр знаходиться у Луцьку');
     }
 
