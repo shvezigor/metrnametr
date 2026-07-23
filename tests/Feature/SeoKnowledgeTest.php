@@ -927,4 +927,36 @@ class SeoKnowledgeTest extends TestCase
             $this->assertRegExp('/\balt="[^"]+"/i', $productImage);
         }
     }
+
+    public function testPublishedKnowledgeArticlesAreCleanAndLinkToRelevantCommercialPages()
+    {
+        $articles = SeoContent::articles();
+
+        $this->assertGreaterThanOrEqual(100, $articles->count());
+        foreach ($articles as $article) {
+            $this->assertNotEmpty($article['title'], $article['slug']);
+            $this->assertNotEmpty($article['description'], $article['slug']);
+            $this->assertNotEmpty($article['intro'], $article['slug']);
+            $this->assertSame(
+                count($article['sections']),
+                count(array_unique(array_keys($article['sections']))),
+                $article['slug']
+            );
+
+            $questions = array_column($article['faq'], 'question');
+            $this->assertSame(count($questions), count(array_unique($questions)), $article['slug']);
+        }
+
+        $this->get('/knowledge/yak-vybraty-vkhidni-dveri-dlia-kvartyry')
+            ->assertStatus(200)
+            ->assertSee('<nav class="knowledge-commercial-links"', false)
+            ->assertSee('/vkhidni-dveri-v-kvartyru-lutsk', false)
+            ->assertSee('/bronovani-dveri-lutsk', false)
+            ->assertSee(route('catalog'), false);
+
+        $this->get('/knowledge/yak-pidhotuvatysia-do-zamovlennia-dverei')
+            ->assertStatus(200)
+            ->assertSee('/dveri-z-montazhem-lutsk', false)
+            ->assertSee('/mizhkimnatni-dveri-z-montazhem-lutsk', false);
+    }
 }

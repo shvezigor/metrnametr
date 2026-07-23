@@ -63,6 +63,7 @@ class KnowledgeController extends Controller
         return view('client.knowledge.show')
             ->with('article', $article)
             ->with('related', SeoContent::articles()->where('slug', '!=', $slug)->take(3))
+            ->with('commercialLinks', SeoContent::articleCommercialLinks($article))
             ->with('title', $article['title'] . ' — поради виробника | Метр на Метр')
             ->with('description', $article['description'])
             ->with('breadcrumbs', [

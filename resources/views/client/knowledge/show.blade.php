@@ -71,10 +71,15 @@
                         </div>
                     @endif
 
-                    <div class="knowledge-links">
-                        <h2>Що подивитися далі</h2>
+                    <nav class="knowledge-commercial-links" aria-labelledby="knowledge-commercial-links-title">
+                        <h2 id="knowledge-commercial-links-title">Що подивитися далі</h2>
                         <p>Для підбору конкретної моделі перейдіть у <a href="{{ route('catalog') }}">каталог дверей</a> або зверніться через сторінку <a href="{{ route('contacts') }}">контактів</a>. Якщо потрібні загальні пояснення, перегляньте інші матеріали бази знань.</p>
-                    </div>
+                        <ul>
+                            @foreach($commercialLinks as $link)
+                                <li><a href="{{ $link['path'] }}">{{ $link['label'] }}</a></li>
+                            @endforeach
+                        </ul>
+                    </nav>
                 </article>
 
                 <aside class="col-xs-12 col-md-3 sidebar">

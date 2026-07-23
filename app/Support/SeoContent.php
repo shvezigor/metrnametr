@@ -48,6 +48,51 @@ class SeoContent
         return self::articles()->firstWhere('slug', $slug);
     }
 
+    public static function articleCommercialLinks(array $article)
+    {
+        $context = mb_strtolower(implode(' ', [
+            $article['slug'] ?? '',
+            $article['title'] ?? '',
+            $article['intro'] ?? '',
+        ]));
+        $links = [];
+
+        $add = function ($path, $label) use (&$links) {
+            $links[$path] = ['path' => $path, 'label' => $label];
+        };
+
+        if (preg_match('/kvartyr|квартир/u', $context)) {
+            $add('/vkhidni-dveri-v-kvartyru-lutsk', 'Вхідні двері у квартиру в Луцьку');
+            $add('/bronovani-dveri-lutsk', 'Броньовані двері в Луцьку');
+        }
+
+        if (preg_match('/budyn|будин|termo|термо|vulyts|вулиц/u', $context)) {
+            $add('/vkhidni-dveri-v-budynok-lutsk', 'Вхідні двері в будинок у Луцьку');
+            $add('/metalovi-dveri-lutsk', 'Металеві двері в Луцьку');
+        }
+
+        if (preg_match('/mizhkimnat|міжкімнат/u', $context)) {
+            $add('/mizhkimnatni-dveri-z-montazhem-lutsk', 'Міжкімнатні двері з монтажем у Луцьку');
+        }
+
+        if (preg_match('/montazh|монтаж|vstanov|встанов|zamovlenn|замовлен|zamir|замір|demont|демонт/u', $context)) {
+            $add('/dveri-z-montazhem-lutsk', 'Двері з монтажем у Луцьку');
+            $add('/mizhkimnatni-dveri-z-montazhem-lutsk', 'Міжкімнатні двері з монтажем у Луцьку');
+        }
+
+        if (preg_match('/zamk|замк|bezpek|безпек|bron|брон|metal|метал/u', $context)) {
+            $add('/bronovani-dveri-lutsk', 'Броньовані двері в Луцьку');
+            $add('/metalovi-dveri-lutsk', 'Металеві двері в Луцьку');
+        }
+
+        if (empty($links)) {
+            $add('/vkhidni-dveri-lutsk', 'Вхідні двері в Луцьку');
+            $add('/dveri-volyn', 'Двері у Волинській області');
+        }
+
+        return collect($links)->take(4)->values();
+    }
+
     public static function faq($key = 'door_faq')
     {
         return config("seo_content.{$key}", []);
