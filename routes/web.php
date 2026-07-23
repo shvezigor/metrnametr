@@ -40,6 +40,11 @@ Route::get('/nashi-roboty', ['as' => 'real-works.index', 'uses' => 'RealWorksCon
 Route::get('/vkhidni-dveri-lutsk', ['as' => 'seo.vkhidni-dveri-lutsk', 'uses' => 'SeoController@landing'])->defaults('slug', 'vkhidni-dveri-lutsk');
 Route::get('/mizhkimnatni-dveri-lutsk', ['as' => 'seo.mizhkimnatni-dveri-lutsk', 'uses' => 'SeoController@landing'])->defaults('slug', 'mizhkimnatni-dveri-lutsk');
 Route::get('/dveri-z-montazhem-lutsk', ['as' => 'seo.dveri-z-montazhem-lutsk', 'uses' => 'SeoController@landing'])->defaults('slug', 'dveri-z-montazhem-lutsk');
+Route::get('/metalovi-dveri-lutsk', ['as' => 'seo.metalovi-dveri-lutsk', 'uses' => 'SeoController@landing'])->defaults('slug', 'metalovi-dveri-lutsk');
+Route::get('/bronovani-dveri-lutsk', ['as' => 'seo.bronovani-dveri-lutsk', 'uses' => 'SeoController@landing'])->defaults('slug', 'bronovani-dveri-lutsk');
+Route::get('/vkhidni-dveri-v-budynok-lutsk', ['as' => 'seo.vkhidni-dveri-v-budynok-lutsk', 'uses' => 'SeoController@landing'])->defaults('slug', 'vkhidni-dveri-v-budynok-lutsk');
+Route::get('/vkhidni-dveri-v-kvartyru-lutsk', ['as' => 'seo.vkhidni-dveri-v-kvartyru-lutsk', 'uses' => 'SeoController@landing'])->defaults('slug', 'vkhidni-dveri-v-kvartyru-lutsk');
+Route::get('/mizhkimnatni-dveri-z-montazhem-lutsk', ['as' => 'seo.mizhkimnatni-dveri-z-montazhem-lutsk', 'uses' => 'SeoController@landing'])->defaults('slug', 'mizhkimnatni-dveri-z-montazhem-lutsk');
 Route::get('/dveri-dlya-kvartyry', ['as' => 'seo.dveri-dlya-kvartyry', 'uses' => 'SeoController@landing'])->defaults('slug', 'dveri-dlya-kvartyry');
 Route::get('/dveri-dlya-budynku', ['as' => 'seo.dveri-dlya-budynku', 'uses' => 'SeoController@landing'])->defaults('slug', 'dveri-dlya-budynku');
 Route::get('/dveri-z-termorozryvom', ['as' => 'seo.dveri-z-termorozryvom', 'uses' => 'SeoController@landing'])->defaults('slug', 'dveri-z-termorozryvom');

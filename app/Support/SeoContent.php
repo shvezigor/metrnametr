@@ -57,7 +57,8 @@ class SeoContent
     {
         return collect(array_replace(
             config('seo_landings', []),
-            config('seo_landings_overrides', [])
+            config('seo_landings_overrides', []),
+            config('seo_commercial_landings', [])
         ));
     }
 

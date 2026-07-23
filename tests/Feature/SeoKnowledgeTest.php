@@ -745,4 +745,43 @@ class SeoKnowledgeTest extends TestCase
             $this->get($url)->assertStatus(200);
         }
     }
+
+    public function testRequestedCommercialLandingRoutesExposeExactMetadata()
+    {
+        $pages = [
+            '/metalovi-dveri-lutsk' => [
+                'title' => 'Металеві двері Луцьк — вхідні двері від виробника | Метр на Метр',
+                'h1' => 'Металеві двері у Луцьку',
+            ],
+            '/bronovani-dveri-lutsk' => [
+                'title' => 'Броньовані двері Луцьк — підбір, доставка, монтаж | Метр на Метр',
+                'h1' => 'Броньовані двері у Луцьку',
+            ],
+            '/vkhidni-dveri-v-budynok-lutsk' => [
+                'title' => 'Вхідні двері в будинок Луцьк — утеплення, терморозрив, монтаж | Метр на Метр',
+                'h1' => 'Вхідні двері в будинок у Луцьку',
+            ],
+            '/vkhidni-dveri-v-kvartyru-lutsk' => [
+                'title' => 'Вхідні двері в квартиру Луцьк — металеві двері з монтажем | Метр на Метр',
+                'h1' => 'Вхідні двері в квартиру у Луцьку',
+            ],
+            '/mizhkimnatni-dveri-z-montazhem-lutsk' => [
+                'title' => 'Міжкімнатні двері з монтажем у Луцьку | Метр на Метр',
+                'h1' => 'Міжкімнатні двері з монтажем у Луцьку',
+            ],
+        ];
+
+        foreach ($pages as $path => $expected) {
+            $response = $this->get($path)
+                ->assertStatus(200)
+                ->assertSee('<title>' . $expected['title'] . '</title>', false)
+                ->assertSee('<h1>' . $expected['h1'] . '</h1>', false)
+                ->assertSee('<link rel="canonical" href="https://metrnametr.com.ua' . $path . '"', false)
+                ->assertSee('<meta property="og:image" content="https://metrnametr.com.ua/', false)
+                ->assertSee('"@type": "BreadcrumbList"', false)
+                ->assertSee('"@type": "Service"', false);
+
+            $this->assertSame(1, substr_count($response->getContent(), '<h1>'), $path);
+        }
+    }
 }
