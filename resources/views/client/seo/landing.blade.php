@@ -211,7 +211,7 @@
         </div>
     </section>
 
-    @if(in_array($landing['path'], ['/vkhidni-dveri-lutsk', '/mizhkimnatni-dveri-lutsk', '/dveri-volyn'], true))
+    @if($realWorksPreview->isNotEmpty())
         @include('client.shared.real-works-preview', [
             'works' => $realWorksPreview,
             'context' => ltrim($landing['path'], '/'),

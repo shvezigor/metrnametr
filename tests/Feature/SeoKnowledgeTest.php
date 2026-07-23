@@ -818,4 +818,47 @@ class SeoKnowledgeTest extends TestCase
             $this->assertStringNotContainsString('<div class="commercial-products__grid"></div>', $response->getContent(), $path);
         }
     }
+
+    public function testCommercialInternalLinkGraphAndRealWorkPreviewsAreConnected()
+    {
+        foreach ([
+            '/mizhkimnatni-dveri-lutsk',
+            '/dveri-z-montazhem-lutsk',
+            '/dveri-volyn',
+        ] as $path) {
+            $this->get($path)
+                ->assertStatus(200)
+                ->assertSee('Популярні')
+                ->assertSee('Що входить у підбір і монтаж')
+                ->assertSee('Суміжні сторінки')
+                ->assertSee('/nashi-roboty', false);
+        }
+
+        $previewPages = [
+            '/metalovi-dveri-lutsk' => 'mirror-entrance-house',
+            '/bronovani-dveri-lutsk' => 'installed-entrance-examples',
+            '/vkhidni-dveri-v-budynok-lutsk' => 'mirror-entrance-house',
+            '/vkhidni-dveri-v-kvartyru-lutsk' => 'installed-entrance-examples',
+            '/mizhkimnatni-dveri-z-montazhem-lutsk' => 'white-black-modern',
+        ];
+
+        foreach ($previewPages as $path => $caseId) {
+            $this->get($path)
+                ->assertStatus(200)
+                ->assertSee('data-real-works-preview=', false)
+                ->assertSee('/nashi-roboty#' . $caseId, false);
+        }
+
+        $this->get('/metalovi-dveri-lutsk')
+            ->assertSee('href="/vkhidni-dveri-v-kvartyru-lutsk"', false)
+            ->assertSee('href="/vkhidni-dveri-v-budynok-lutsk"', false);
+
+        $this->get('/')
+            ->assertStatus(200)
+            ->assertSee('/nashi-roboty', false);
+
+        $this->get('/contacts')
+            ->assertStatus(200)
+            ->assertSee('href="http://localhost:8080/nashi-roboty"', false);
+    }
 }

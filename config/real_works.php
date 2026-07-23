@@ -165,5 +165,11 @@ return [
         'vkhidni-dveri-lutsk' => ['mirror-entrance-house', 'installed-entrance-examples'],
         'mizhkimnatni-dveri-lutsk' => ['white-black-modern', 'light-apartment', 'interior-fittings'],
         'dveri-volyn' => ['mirror-entrance-house', 'installed-entrance-examples', 'white-black-modern'],
+        'dveri-z-montazhem-lutsk' => ['mirror-entrance-house', 'white-black-modern', 'installed-entrance-examples'],
+        'metalovi-dveri-lutsk' => ['mirror-entrance-house', 'installed-entrance-examples'],
+        'bronovani-dveri-lutsk' => ['installed-entrance-examples'],
+        'vkhidni-dveri-v-budynok-lutsk' => ['mirror-entrance-house'],
+        'vkhidni-dveri-v-kvartyru-lutsk' => ['installed-entrance-examples'],
+        'mizhkimnatni-dveri-z-montazhem-lutsk' => ['white-black-modern', 'light-apartment', 'interior-fittings'],
     ],
 ];

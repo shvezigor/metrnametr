@@ -44,6 +44,7 @@
                     </div>
 
                     <div class="col-sm-3 col-md-3 col-md-offset-1 wrap-subscribe">
+                        <p><a href="{{ route('real-works.index') }}">Наші роботи — встановлення дверей</a></p>
                         <p>Підпишіться на нашу розсилку, щоб ми могли проінформувати вас про наші новини та пропозиції</p>
                         <form action="{{ route('subscribe') }}" method="POST" class="subscribe-form">
 
