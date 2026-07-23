@@ -861,4 +861,42 @@ class SeoKnowledgeTest extends TestCase
             ->assertStatus(200)
             ->assertSee('href="http://localhost:8080/nashi-roboty"', false);
     }
+
+    public function testRequestedCommercialLandingsAreTechnicallyDiscoverable()
+    {
+        $pages = [
+            '/metalovi-dveri-lutsk' => '/images/content/slider-3.jpg',
+            '/bronovani-dveri-lutsk' => '/images/real-works/entrance-apartment-main.jpg',
+            '/vkhidni-dveri-v-budynok-lutsk' => '/images/real-works/entrance-house-main.jpg',
+            '/vkhidni-dveri-v-kvartyru-lutsk' => '/images/real-works/entrance-apartment-main.jpg',
+            '/mizhkimnatni-dveri-z-montazhem-lutsk' => '/images/real-works/white-black-interior-main.jpg',
+        ];
+
+        $sitemap = $this->get('/sitemap.xml')->assertStatus(200)->getContent();
+        $llms = $this->get('/llms-full.txt')->assertStatus(200)->getContent();
+        $robots = $this->get('/robots.txt')->assertStatus(200)->getContent();
+
+        foreach ($pages as $path => $image) {
+            $canonical = 'https://metrnametr.com.ua' . $path;
+            $absoluteImage = 'https://metrnametr.com.ua' . $image;
+
+            $this->assertSame(1, substr_count($sitemap, '<loc>' . $canonical . '</loc>'), $path);
+            $this->assertStringContainsString($canonical, $llms, $path);
+
+            $this->get($path)
+                ->assertStatus(200)
+                ->assertSee('<link rel="canonical" href="' . $canonical . '"', false)
+                ->assertSee('<meta property="og:image" content="' . $absoluteImage . '"', false)
+                ->assertSee('"@type": "BreadcrumbList"', false)
+                ->assertSee('"@type": "Service"', false)
+                ->assertSee('"@type": "FAQPage"', false)
+                ->assertSee('"@type": "ImageObject"', false)
+                ->assertSee('"contentUrl": "' . $absoluteImage . '"', false);
+        }
+
+        $this->assertStringNotContainsString('Disallow: /', $robots);
+        $this->assertStringNotContainsString('localhost', $sitemap);
+        $this->assertStringNotContainsString('%20', $sitemap);
+        $this->assertStringNotContainsString('<loc>https://metrnametr.com.ua/catalog?', $sitemap);
+    }
 }

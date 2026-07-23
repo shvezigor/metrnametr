@@ -26,6 +26,7 @@ class SeoController extends Controller
             ->with('title', $landing['title'])
             ->with('description', $landing['description'])
             ->with('canonical', SeoContent::canonical($landing['path']))
+            ->with('ogImage', SeoContent::absoluteUrl($landing['og_image'] ?? SeoContent::site('default_image')))
             ->with('breadcrumbs', $breadcrumbs)
             ->with('faq', $landing['faq'])
             ->with('commercialProducts', CommercialLanding::products($landing)->map(function ($product) {
@@ -40,6 +41,11 @@ class SeoController extends Controller
                     $landing['path'] => $landing['h1'],
                 ]),
                 SeoContent::faqSchema($landing['faq']),
+                SeoContent::imageObjectSchema(
+                    $landing['og_image'] ?? null,
+                    $landing['h1'],
+                    $landing['description']
+                ),
             ]);
     }
 

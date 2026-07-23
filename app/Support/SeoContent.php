@@ -373,6 +373,27 @@ class SeoContent
         ];
     }
 
+    public static function imageObjectSchema($image, $name, $caption = null)
+    {
+        if (empty($image)) {
+            return null;
+        }
+
+        $path = parse_url($image, PHP_URL_PATH);
+
+        if ($path && strpos($path, '/') === 0 && !is_file(public_path(ltrim($path, '/')))) {
+            return null;
+        }
+
+        return [
+            '@context' => 'https://schema.org',
+            '@type' => 'ImageObject',
+            'name' => $name,
+            'caption' => $caption ?: $name,
+            'contentUrl' => self::absoluteUrl($image),
+        ];
+    }
+
     public static function defaultPageSchemas(array $schema = [])
     {
         $schema = array_values(array_filter($schema));
