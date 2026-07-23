@@ -1,7 +1,7 @@
 # SEO and Commercial Landing Pages Design
 
-**Date:** 2026-07-23  
-**Project:** metrnametr.com.ua  
+**Date:** 2026-07-23
+**Project:** metrnametr.com.ua
 **Status:** Approved for implementation planning
 
 ## Objective
@@ -283,4 +283,3 @@ Implementation follows test-first development:
 - New real-work cases or claims about exact client locations.
 - Radical redesign, rebranding, or a new frontend framework.
 - A new file-upload backend unless separately approved.
-
