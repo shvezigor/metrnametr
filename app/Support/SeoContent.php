@@ -337,6 +337,32 @@ class SeoContent
         ];
     }
 
+    public static function realWorksGallerySchema($cases)
+    {
+        $images = collect($cases)->flatMap(function ($case) {
+            return collect($case['images'])->map(function ($image) use ($case) {
+                return [
+                    '@type' => 'ImageObject',
+                    'name' => $case['title'],
+                    'caption' => $image['alt'],
+                    'contentUrl' => self::canonical($image['jpg']),
+                    'thumbnailUrl' => self::canonical($image['webp']),
+                    'width' => $image['width'],
+                    'height' => $image['height'],
+                ];
+            });
+        })->values()->all();
+
+        return [
+            '@context' => 'https://schema.org',
+            '@type' => 'ImageGallery',
+            'name' => RealWorks::page()['h1'],
+            'description' => RealWorks::page()['description'],
+            'url' => self::canonical(RealWorks::page()['path']),
+            'associatedMedia' => $images,
+        ];
+    }
+
     public static function defaultPageSchemas(array $schema = [])
     {
         $schema = array_values(array_filter($schema));

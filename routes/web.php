@@ -36,6 +36,7 @@ Route::get('/llms-full.txt', ['as' => 'llms-full', 'uses' => 'SeoController@llms
 Route::get('/ai-policy.txt', ['as' => 'ai-policy', 'uses' => 'SeoController@aiPolicy']);
 Route::get('/robots.txt', ['as' => 'robots', 'uses' => 'SeoController@robots']);
 Route::get('/sitemap.xml', ['as' => 'sitemap', 'uses' => 'SeoController@sitemap']);
+Route::get('/nashi-roboty', ['as' => 'real-works.index', 'uses' => 'RealWorksController@index']);
 Route::get('/vkhidni-dveri-lutsk', ['as' => 'seo.vkhidni-dveri-lutsk', 'uses' => 'SeoController@landing'])->defaults('slug', 'vkhidni-dveri-lutsk');
 Route::get('/mizhkimnatni-dveri-lutsk', ['as' => 'seo.mizhkimnatni-dveri-lutsk', 'uses' => 'SeoController@landing'])->defaults('slug', 'mizhkimnatni-dveri-lutsk');
 Route::get('/dveri-z-montazhem-lutsk', ['as' => 'seo.dveri-z-montazhem-lutsk', 'uses' => 'SeoController@landing'])->defaults('slug', 'dveri-z-montazhem-lutsk');

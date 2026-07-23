@@ -70,4 +70,45 @@ class RealWorksTest extends TestCase
         $this->assertFileExists(resource_path('client' . RealWorks::page()['og_image']));
         $this->assertFileNotExists(resource_path('client/images/real-works/video-9.mp4'));
     }
+
+    public function testRealWorksPageHasExactMetadataCanonicalAndContent()
+    {
+        $response = $this->get('/nashi-roboty')
+            ->assertStatus(200)
+            ->assertSee('<title>Реальні встановлення дверей у Луцьку та Волині | Метр на Метр</title>', false)
+            ->assertSee('name="description" content="Приклади встановлених вхідних та міжкімнатних дверей у Луцьку й Волинській області. Замір, підбір, доставка та монтаж від Метр на Метр."', false)
+            ->assertSee('<link rel="canonical" href="https://metrnametr.com.ua/nashi-roboty"', false)
+            ->assertSee('<h1>Реальні встановлення дверей у Луцьку та Волині</h1>', false)
+            ->assertSee('og:image', false)
+            ->assertSee('https://metrnametr.com.ua/images/real-works/real-installations-og.jpg', false)
+            ->assertSee('class="real-work-case"', false)
+            ->assertSee('Відео з реальних робіт')
+            ->assertDontSee('video (9).mp4', false);
+
+        $this->assertSame(5, substr_count($response->getContent(), 'class="real-work-case"'));
+    }
+
+    public function testRealWorksPageEmitsBreadcrumbAndImageGallerySchema()
+    {
+        $content = $this->get('/nashi-roboty')->assertStatus(200)->getContent();
+
+        $this->assertStringContainsString('"@type": "BreadcrumbList"', $content);
+        $this->assertStringContainsString('"@type": "ImageGallery"', $content);
+        $this->assertStringContainsString('"@type": "ImageObject"', $content);
+        $this->assertStringContainsString('"contentUrl": "https://metrnametr.com.ua/images/real-works/', $content);
+    }
+
+    public function testRealWorksPicturesHaveFallbackDimensionsAndDeferredLoading()
+    {
+        $content = $this->get('/nashi-roboty')->assertStatus(200)->getContent();
+
+        $this->assertStringContainsString('<source type="image/webp"', $content);
+        $this->assertStringContainsString('width="960"', $content);
+        $this->assertStringContainsString('height="1280"', $content);
+        $this->assertStringContainsString('loading="lazy"', $content);
+        $this->assertStringContainsString('decoding="async"', $content);
+        $this->assertStringContainsString('data-video-src="/images/real-works/door-overview.mp4"', $content);
+        $this->assertStringNotContainsString('<video src=', $content);
+        $this->assertStringNotContainsString('<source src="/images/real-works/door-overview.mp4"', $content);
+    }
 }
