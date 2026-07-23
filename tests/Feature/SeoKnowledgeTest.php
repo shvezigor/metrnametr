@@ -899,4 +899,32 @@ class SeoKnowledgeTest extends TestCase
         $this->assertStringNotContainsString('%20', $sitemap);
         $this->assertStringNotContainsString('<loc>https://metrnametr.com.ua/catalog?', $sitemap);
     }
+
+    public function testCommercialLandingMarkupIsAccessible()
+    {
+        $response = $this->get('/dveri-volyn')
+            ->assertStatus(200)
+            ->assertSee('<article class="commercial-product-card">', false)
+            ->assertSee('<ol class="commercial-process__steps">', false)
+            ->assertSee('aria-labelledby="commercial-products-title"', false)
+            ->assertSee('aria-label="Заявка на підбір дверей"', false)
+            ->assertSee('alt="', false)
+            ->assertSee('width="640"', false)
+            ->assertSee('height="640"', false)
+            ->assertSee('loading="lazy"', false)
+            ->assertSee('Запитати ціну')
+            ->assertSee('Замовити замір')
+            ->assertSee('Детальніше');
+
+        $this->assertSame(1, preg_match_all('/<h1\b/i', $response->getContent()));
+        preg_match_all(
+            '/<a class="commercial-product-card__image"[^>]*>\s*<img\b[^>]*>/i',
+            $response->getContent(),
+            $productImages
+        );
+        $this->assertNotEmpty($productImages[0]);
+        foreach ($productImages[0] as $productImage) {
+            $this->assertRegExp('/\balt="[^"]+"/i', $productImage);
+        }
+    }
 }

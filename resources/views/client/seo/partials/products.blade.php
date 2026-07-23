@@ -17,7 +17,7 @@
             @foreach($commercialProducts as $card)
                 <article class="commercial-product-card">
                     <a class="commercial-product-card__image" href="{{ $card['url'] }}">
-                        <img src="{{ $card['image'] }}" alt="{{ $card['image_alt'] }}" loading="lazy" decoding="async">
+                        <img src="{{ $card['image'] }}" alt="{{ $card['image_alt'] }}" width="640" height="640" loading="lazy" decoding="async">
                     </a>
                     <div class="commercial-product-card__body">
                         <h3><a href="{{ $card['url'] }}">{{ $card['title'] }}</a></h3>
