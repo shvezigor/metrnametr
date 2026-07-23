@@ -1644,9 +1644,13 @@ section {
                 padding: 30px 20px 22px 20px;
 
                 .img-box {
+                    min-height: 50px;
                     margin-bottom: 20px;
 
                     img {
+                        width: auto;
+                        height: 50px;
+                        max-width: 68px;
                         margin-top: 0;
                         max-height: 50px;
                     }
