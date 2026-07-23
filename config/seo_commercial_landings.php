@@ -17,6 +17,8 @@ $service = function ($name, $type) {
 
 return [
     'metalovi-dveri-lutsk' => [
+        'commercial' => true,
+        'popular_heading' => 'Популярні моделі металевих дверей',
         'path' => '/metalovi-dveri-lutsk',
         'title' => 'Металеві двері Луцьк — вхідні двері від виробника | Метр на Метр',
         'description' => 'Металеві вхідні двері у Луцьку для квартири, будинку й технічних приміщень. Підбір за підтвердженими характеристиками, замір, доставка та монтаж.',
@@ -48,6 +50,8 @@ return [
         'og_image' => '/images/content/slider-3.jpg',
     ],
     'bronovani-dveri-lutsk' => [
+        'commercial' => true,
+        'popular_heading' => 'Популярні моделі броньованих дверей',
         'path' => '/bronovani-dveri-lutsk',
         'title' => 'Броньовані двері Луцьк — підбір, доставка, монтаж | Метр на Метр',
         'description' => 'Броньовані вхідні двері у Луцьку: підбір конструкції, коробки та замків за підтвердженими даними каталогу, замір, доставка і монтаж.',
@@ -79,6 +83,8 @@ return [
         'og_image' => '/images/real-works/entrance-apartment-main.jpg',
     ],
     'vkhidni-dveri-v-budynok-lutsk' => [
+        'commercial' => true,
+        'popular_heading' => 'Популярні вхідні двері для будинку',
         'path' => '/vkhidni-dveri-v-budynok-lutsk',
         'title' => 'Вхідні двері в будинок Луцьк — утеплення, терморозрив, монтаж | Метр на Метр',
         'description' => 'Вхідні двері в приватний будинок у Луцьку: підбір утеплення, терморозриву та покриття під умови входу, замір, доставка і монтаж.',
@@ -110,6 +116,8 @@ return [
         'og_image' => '/images/real-works/entrance-house-main.jpg',
     ],
     'vkhidni-dveri-v-kvartyru-lutsk' => [
+        'commercial' => true,
+        'popular_heading' => 'Популярні вхідні двері для квартири',
         'path' => '/vkhidni-dveri-v-kvartyru-lutsk',
         'title' => 'Вхідні двері в квартиру Луцьк — металеві двері з монтажем | Метр на Метр',
         'description' => 'Вхідні двері в квартиру у Луцьку: підбір металевих моделей за замками, ущільненням, оздобленням і підтвердженими характеристиками, замір та монтаж.',
@@ -141,6 +149,8 @@ return [
         'og_image' => '/images/real-works/entrance-apartment-main.jpg',
     ],
     'mizhkimnatni-dveri-z-montazhem-lutsk' => [
+        'commercial' => true,
+        'popular_heading' => 'Популярні моделі міжкімнатних дверей',
         'path' => '/mizhkimnatni-dveri-z-montazhem-lutsk',
         'title' => 'Міжкімнатні двері з монтажем у Луцьку | Метр на Метр',
         'description' => 'Міжкімнатні двері з монтажем у Луцьку: підбір полотна, коробки, лиштви й фурнітури під інтер’єр, замір, доставка та встановлення.',

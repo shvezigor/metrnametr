@@ -64,7 +64,16 @@ class SeoContent
 
     public static function landingPage($slug)
     {
-        return self::landingPages()->get($slug);
+        $landing = self::landingPages()->get($slug);
+
+        if (empty($landing)) {
+            return null;
+        }
+
+        return array_replace_recursive(
+            $landing,
+            config("seo_commercial_extensions.{$slug}", [])
+        );
     }
 
     public static function productExtra()

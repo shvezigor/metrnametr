@@ -781,7 +781,41 @@ class SeoKnowledgeTest extends TestCase
                 ->assertSee('"@type": "BreadcrumbList"', false)
                 ->assertSee('"@type": "Service"', false);
 
-            $this->assertSame(1, substr_count($response->getContent(), '<h1>'), $path);
+            $this->assertSame(1, preg_match_all('/<h1\b/i', $response->getContent()), $path);
+        }
+    }
+
+    public function testCommercialLandingsRenderReusableConversionSections()
+    {
+        $pages = [
+            '/vkhidni-dveri-lutsk',
+            '/metalovi-dveri-lutsk',
+            '/bronovani-dveri-lutsk',
+            '/vkhidni-dveri-v-budynok-lutsk',
+            '/vkhidni-dveri-v-kvartyru-lutsk',
+            '/mizhkimnatni-dveri-z-montazhem-lutsk',
+        ];
+
+        foreach ($pages as $path) {
+            $response = $this->get($path)
+                ->assertStatus(200)
+                ->assertSee('Популярні')
+                ->assertSee('Що входить у підбір і монтаж')
+                ->assertSee('Як проходить замовлення')
+                ->assertSee('Консультація')
+                ->assertSee('Попередній підбір')
+                ->assertSee('Замір')
+                ->assertSee('Узгодження комплектації')
+                ->assertSee('Доставка')
+                ->assertSee('Монтаж')
+                ->assertSee('Що впливає на ціну')
+                ->assertSee('Запитати ціну')
+                ->assertSee('Замовити замір')
+                ->assertSee('/catalog', false);
+
+            $this->assertSame(1, preg_match_all('/<h1\b/i', $response->getContent()), $path);
+            $this->assertStringNotContainsString('<ul class="commercial-products__specs"></ul>', $response->getContent(), $path);
+            $this->assertStringNotContainsString('<div class="commercial-products__grid"></div>', $response->getContent(), $path);
         }
     }
 }

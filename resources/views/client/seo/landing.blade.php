@@ -105,6 +105,10 @@
                         <p class="{{ $loop->first ? 'lead' : '' }}">{{ $paragraph }}</p>
                     @endforeach
 
+                    @if(!empty($landing['commercial']))
+                        @include('client.seo.partials.products')
+                    @endif
+
                     @foreach($landing['sections'] as $heading => $body)
                         <h2>{{ $heading }}</h2>
 
@@ -193,6 +197,15 @@
                         <li><a href="/dveri-z-termorozryvom">Двері з терморозривом</a></li>
                         <li><a href="{{ route('contacts') }}">Зв’язатися для консультації</a></li>
                     </ul>
+
+                    @if(!empty($landing['commercial']))
+                        @include('client.seo.partials.installation')
+                        @include('client.seo.partials.enquiry-cta', ['position' => 'middle'])
+                        @include('client.seo.partials.order-process')
+                        @include('client.seo.partials.price-factors')
+                        @include('client.seo.partials.internal-links')
+                        @include('client.seo.partials.enquiry-cta', ['position' => 'final'])
+                    @endif
                 </article>
             </div>
         </div>
