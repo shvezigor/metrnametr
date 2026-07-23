@@ -11,6 +11,7 @@ Homestead.yaml
 npm-debug.log
 yarn-error.log
 /.idea
+/.superpowers
 *.sql.gz
 *.sql
 /public/assets
