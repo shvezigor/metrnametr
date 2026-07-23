@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Support\CommercialLanding;
 use App\Support\RealWorks;
 use App\Support\SeoContent;
 use Illuminate\Http\Response;
@@ -27,6 +28,9 @@ class SeoController extends Controller
             ->with('canonical', SeoContent::canonical($landing['path']))
             ->with('breadcrumbs', $breadcrumbs)
             ->with('faq', $landing['faq'])
+            ->with('commercialProducts', CommercialLanding::products($landing)->map(function ($product) {
+                return CommercialLanding::card($product);
+            }))
             ->with('realWorksPreview', RealWorks::featured($slug))
             ->with('schema', [
                 SeoContent::landingPageSchema($landing),
