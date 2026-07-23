@@ -937,6 +937,8 @@ class SeoKnowledgeTest extends TestCase
             $this->assertNotEmpty($article['title'], $article['slug']);
             $this->assertNotEmpty($article['description'], $article['slug']);
             $this->assertNotEmpty($article['intro'], $article['slug']);
+            $this->assertNotEmpty($article['image']['src'], $article['slug']);
+            $this->assertNotEmpty($article['image']['alt'], $article['slug']);
             $this->assertSame(
                 count($article['sections']),
                 count(array_unique(array_keys($article['sections']))),
@@ -945,18 +947,24 @@ class SeoKnowledgeTest extends TestCase
 
             $questions = array_column($article['faq'], 'question');
             $this->assertSame(count($questions), count(array_unique($questions)), $article['slug']);
+            foreach ($questions as $question) {
+                $this->assertNotContains($question, array_keys($article['sections']), $article['slug']);
+            }
+            $this->assertNotEmpty(SeoContent::articleCommercialLinks($article), $article['slug']);
         }
 
-        $this->get('/knowledge/yak-vybraty-vkhidni-dveri-dlia-kvartyry')
+        $apartmentResponse = $this->get('/knowledge/yak-vybraty-vkhidni-dveri-dlia-kvartyry')
             ->assertStatus(200)
             ->assertSee('<nav class="knowledge-commercial-links"', false)
             ->assertSee('/vkhidni-dveri-v-kvartyru-lutsk', false)
             ->assertSee('/bronovani-dveri-lutsk', false)
             ->assertSee(route('catalog'), false);
+        $this->assertSame(1, preg_match_all('/<h1\b/i', $apartmentResponse->getContent()));
 
-        $this->get('/knowledge/yak-pidhotuvatysia-do-zamovlennia-dverei')
+        $orderResponse = $this->get('/knowledge/yak-pidhotuvatysia-do-zamovlennia-dverei')
             ->assertStatus(200)
             ->assertSee('/dveri-z-montazhem-lutsk', false)
             ->assertSee('/mizhkimnatni-dveri-z-montazhem-lutsk', false);
+        $this->assertSame(1, preg_match_all('/<h1\b/i', $orderResponse->getContent()));
     }
 }
