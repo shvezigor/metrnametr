@@ -133,7 +133,7 @@ class RealWorksTest extends TestCase
 Run:
 
 ```powershell
-docker compose exec -T app php artisan test --filter RealWorksTest
+docker compose exec -T app vendor/bin/phpunit --filter RealWorksTest
 ```
 
 Expected: FAIL because `App\Support\RealWorks` does not exist.
@@ -373,7 +373,7 @@ return [
 Run:
 
 ```powershell
-docker compose exec -T app php artisan test --filter RealWorksTest
+docker compose exec -T app vendor/bin/phpunit --filter RealWorksTest
 ```
 
 Expected: 2 tests pass.
@@ -442,7 +442,7 @@ public function testOnlyTheApprovedDoorVideoAndItsPostersArePublished()
 Run:
 
 ```powershell
-docker compose exec -T app php artisan test --filter "EveryConfiguredRealWorkAsset|OnlyTheApprovedDoorVideo"
+docker compose exec -T app vendor/bin/phpunit --filter "EveryConfiguredRealWorkAsset|OnlyTheApprovedDoorVideo"
 ```
 
 Expected: FAIL because the optimized assets do not exist.
@@ -536,7 +536,7 @@ Expected: two poster formats and `door-overview.mp4` exist; no file is created f
 Run:
 
 ```powershell
-docker compose exec -T app php artisan test --filter RealWorksTest
+docker compose exec -T app vendor/bin/phpunit --filter RealWorksTest
 ```
 
 Expected: all content and asset tests pass.
@@ -640,7 +640,7 @@ public function testRealWorksPicturesHaveFallbackDimensionsAndDeferredLoading()
 Run:
 
 ```powershell
-docker compose exec -T app php artisan test --filter "RealWorksPage"
+docker compose exec -T app vendor/bin/phpunit --filter "RealWorksPage"
 ```
 
 Expected: FAIL with HTTP 404.
@@ -906,7 +906,7 @@ Create `resources/views/client/works/index.blade.php`:
 Run:
 
 ```powershell
-docker compose exec -T app php artisan test --filter RealWorksTest
+docker compose exec -T app vendor/bin/phpunit --filter RealWorksTest
 ```
 
 Expected: all current `RealWorksTest` tests pass.
@@ -1457,7 +1457,7 @@ public function testThreeLocalLandingsShowRelevantRealWorkProof()
 Run:
 
 ```powershell
-docker compose exec -T app php artisan test --filter "HomepageShowsFourRealWork|ThreeLocalLandings"
+docker compose exec -T app vendor/bin/phpunit --filter "HomepageShowsFourRealWork|ThreeLocalLandings"
 ```
 
 Expected: FAIL because the blocks are absent.
@@ -1603,7 +1603,7 @@ Append:
 Run:
 
 ```powershell
-docker compose exec -T app php artisan test --filter RealWorksTest
+docker compose exec -T app vendor/bin/phpunit --filter RealWorksTest
 npm run production
 ```
 
@@ -1670,7 +1670,7 @@ Also extend `testSeoLandingPagesAreIncludedInSitemapAndLlmsFiles()` in `SeoKnowl
 Run:
 
 ```powershell
-docker compose exec -T app php artisan test --filter "WorksPageIsDiscoverable|SeoLandingPagesAreIncluded"
+docker compose exec -T app vendor/bin/phpunit --filter "WorksPageIsDiscoverable|SeoLandingPagesAreIncluded"
 ```
 
 Expected: FAIL because the new URL is absent from sitemap and AI sources.
@@ -1731,7 +1731,7 @@ In `resources/views/client/knowledge/for-ai-agents.blade.php`, add one visible s
 Run:
 
 ```powershell
-docker compose exec -T app php artisan test
+docker compose exec -T app vendor/bin/phpunit
 npm test
 npm run production
 ```
