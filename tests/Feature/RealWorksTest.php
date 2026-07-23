@@ -192,5 +192,13 @@ class RealWorksTest extends TestCase
             'color: #666666;',
             file_get_contents(resource_path('client/scss/_common.scss'))
         );
+        $this->assertStringContainsString(
+            'height: auto;',
+            file_get_contents(resource_path('client/scss/_header.scss'))
+        );
+        $this->assertStringContainsString(
+            'height: auto;',
+            file_get_contents(resource_path('client/scss/_common.scss'))
+        );
     }
 }
