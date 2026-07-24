@@ -2789,7 +2789,7 @@ footer {
 
         &:focus,
         &:focus-visible {
-            outline: 3px solid $blue;
+            outline: 3px solid $blue !important;
             outline-offset: 3px;
             box-shadow: 0 0 0 6px $yellow;
         }

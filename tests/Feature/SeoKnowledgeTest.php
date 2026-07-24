@@ -7,6 +7,7 @@ use App\Models\Category;
 use App\Models\Type;
 use App\Support\SeoContent;
 use Illuminate\Foundation\Testing\DatabaseTransactions;
+use Illuminate\Support\Facades\DB;
 use Tests\TestCase;
 
 class SeoKnowledgeTest extends TestCase
@@ -1002,6 +1003,56 @@ class SeoKnowledgeTest extends TestCase
             $this->assertStringContainsString($href, $footerHtml, 'Footer is missing ' . $path);
         }
 
+        $localIntroductionPosition = strpos($content, 'Двері у Луцьку та Волині з монтажем');
+        $commercialNavigationPosition = strpos($content, '<nav class="home-commercial-links"');
+        $generalCategoryGridPosition = strpos($content, 'Категорії дверей');
+
+        $this->assertNotFalse($localIntroductionPosition, 'The local commercial introduction was not found.');
+        $this->assertNotFalse($commercialNavigationPosition, 'The homepage commercial navigation was not found.');
+        $this->assertNotFalse($generalCategoryGridPosition, 'The general category grid was not found.');
+        $this->assertLessThan(
+            $commercialNavigationPosition,
+            $localIntroductionPosition,
+            'The commercial navigation must follow the local commercial introduction.'
+        );
+        $this->assertLessThan(
+            $generalCategoryGridPosition,
+            $commercialNavigationPosition,
+            'The commercial navigation must precede the general category grid.'
+        );
+
         $this->assertSame(1, preg_match_all('/<h1\b/i', $content));
+    }
+
+    public function testPublishedProductRendersNormalizedCopyFromRawLegacyValues()
+    {
+        $product = Product::published()
+            ->whereNotNull('alias')
+            ->where('alias', '<>', '')
+            ->whereHas('categories')
+            ->firstOrFail();
+
+        DB::table('products')->where('id', $product->id)->update([
+            'title' => 'Двері вхідін Тестова модель',
+            'text' => '<p>Накладки МДФ с двух сторін</p>',
+            'seo_title' => 'Двері вхідін Тест SEO',
+            'seo_description' => 'Накладки МДФ с двух сторін',
+        ]);
+
+        $stored = DB::table('products')->where('id', $product->id)->first();
+        $this->assertSame('Двері вхідін Тестова модель', $stored->title);
+        $this->assertSame('Накладки МДФ с двух сторін', $stored->seo_description);
+
+        $response = $this->get(route('product.show', ['alias' => $product->alias], false))
+            ->assertStatus(200)
+            ->assertSee('<title>Двері вхідні Тест SEO</title>', false)
+            ->assertSee('<meta name="description" content="Накладки МДФ з двох сторін" />', false)
+            ->assertSee('<meta property="og:title" content="Двері вхідні Тест SEO" />', false)
+            ->assertSee('<meta property="og:description" content="Накладки МДФ з двох сторін" />', false)
+            ->assertSee('<h1>Двері вхідні Тестова модель</h1>', false)
+            ->assertSee('<p>Накладки МДФ з двох сторін</p>', false);
+
+        $response->assertDontSee('вхідін');
+        $response->assertDontSee('с двух сторін');
     }
 }

@@ -1,7 +1,7 @@
 # Homepage SEO Links and Product Language Cleanup Design
 
-**Date:** 2026-07-24  
-**Status:** Approved design, pending written-spec review
+**Date:** 2026-07-24
+**Status:** Approved and implemented
 
 ## Goal
 

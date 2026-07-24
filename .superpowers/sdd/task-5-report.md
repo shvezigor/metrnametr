@@ -69,3 +69,53 @@ Against `http://localhost:8081`:
 - Only correction-related source, migrations, tests, and this report are included. No `.env`, database dump, credentials, generated assets, or unrelated files are staged.
 - Existing ignored knowledge-image assets remain ignored and were not modified by this task.
 - This report and the correction are committed as `fix: normalize remaining mixed-language product copy`; pushing is intentionally skipped for the whole-branch review.
+
+## Whole-branch review corrections
+
+The final review identified three implementation gaps and one documentation
+whitespace issue. They were corrected together:
+
+- The commercial-card focus outline now uses
+  `outline: 3px solid $blue !important`, so the blue indicator survives the
+  legacy global `a { outline: none !important; }` reset while retaining the
+  yellow accent ring.
+- The commercial navigation now follows the local commercial introduction and
+  precedes the general category grid, as required by the approved design.
+- A transactional feature regression writes dirty values directly with the
+  query builder, requests the selected published product’s real route, and
+  verifies normalized title, body, metadata, and Open Graph output with no dirty
+  variants in the rendered HTML.
+- The design document’s trailing whitespace was removed and its status now
+  reflects the implemented state.
+
+### Additional TDD evidence
+
+- Homepage ordering RED: the ordering assertion failed because the commercial
+  navigation appeared before the local introduction.
+- Homepage ordering GREEN after moving the section: both focused feature tests
+  passed with `OK (2 tests, 33 assertions)`.
+- Rendered-product mutation RED: temporarily returning raw values from the four
+  accessors exercised by the response caused the new rendered-product test to
+  fail on the dirty `<title>`.
+- Rendered-product GREEN after restoring the normalization boundary:
+  `OK (1 test, 11 assertions)`.
+
+### Final correction verification
+
+- `docker compose exec -T app vendor/bin/phpunit`
+  - `OK (88 tests, 7405 assertions)`.
+- `npm test`
+  - 3 tests passed; 0 failed, skipped, cancelled, or todo.
+- `npm run production`
+  - completed successfully in 17,281 ms.
+  - the client CSS manifest hash is `2c6bf4161ea2f1e1614a`.
+  - compiled CSS contains
+    `outline:3px solid #008bd2!important` for the commercial cards.
+- HTTP smoke checks:
+  - `/`, all five requested commercial routes, and `/product/md002` returned
+    HTTP 200 with one H1 each.
+  - the homepage contained all five direct links in the expected order:
+    local introduction, commercial navigation, general category grid.
+- Browser automation remains unavailable, so screenshot, console, and live
+  keyboard-traversal checks were not performed and no browser dependency was
+  installed.

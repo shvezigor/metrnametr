@@ -120,24 +120,6 @@
 
 </section>
 
-<section class="home-commercial-links-section">
-    <div class="container">
-        <nav class="home-commercial-links" aria-labelledby="home-commercial-links-title">
-            <h2 id="home-commercial-links-title">Популярні рішення для дверей у Луцьку</h2>
-            <p>Оберіть тип дверей і перейдіть до моделей, особливостей комплектації, монтажу та відповідей на поширені запитання.</p>
-            <div class="home-commercial-links__grid">
-                @foreach($commercialLinks as $link)
-                    <a href="{{ $link['url'] }}">
-                        <strong>{{ $link['title'] }}</strong>
-                        <span>{{ $link['text'] }}</span>
-                        <span class="home-commercial-links__action">Переглянути</span>
-                    </a>
-                @endforeach
-            </div>
-        </nav>
-    </div>
-</section>
-
 <section class="home-category-section">
     <div class="container">
         <div class="row">
@@ -155,6 +137,24 @@
                 <p>Метр на Метр - виробництво та магазин дверей у Луцьку на проспекті Перемоги, 24. Допомагаємо підібрати вхідні та міжкімнатні двері під бюджет, умови користування і стиль приміщення, пояснюємо комплектацію, замір, доставку та монтаж. Працюємо з клієнтами з Луцька та Волині, а консультацію можна отримати телефоном перед візитом або замовленням.</p>
             </div>
         </div>
+    </div>
+</section>
+
+<section class="home-commercial-links-section">
+    <div class="container">
+        <nav class="home-commercial-links" aria-labelledby="home-commercial-links-title">
+            <h2 id="home-commercial-links-title">Популярні рішення для дверей у Луцьку</h2>
+            <p>Оберіть тип дверей і перейдіть до моделей, особливостей комплектації, монтажу та відповідей на поширені запитання.</p>
+            <div class="home-commercial-links__grid">
+                @foreach($commercialLinks as $link)
+                    <a href="{{ $link['url'] }}">
+                        <strong>{{ $link['title'] }}</strong>
+                        <span>{{ $link['text'] }}</span>
+                        <span class="home-commercial-links__action">Переглянути</span>
+                    </a>
+                @endforeach
+            </div>
+        </nav>
     </div>
 </section>
 
