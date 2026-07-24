@@ -2,6 +2,7 @@
 
 namespace App\Models;
 
+use App\Support\ProductCopy;
 use Illuminate\Database\Eloquent\Model;
 
 class Product extends Model
@@ -43,6 +44,61 @@ class Product extends Model
     protected $casts = [
         'extra_fields' => 'array',
     ];
+
+    private function setNormalizedAttribute($key, $value)
+    {
+        $this->attributes[$key] = ProductCopy::normalize($value);
+    }
+
+    public function getTitleAttribute($value)
+    {
+        return ProductCopy::normalize($value);
+    }
+
+    public function setTitleAttribute($value)
+    {
+        $this->setNormalizedAttribute('title', $value);
+    }
+
+    public function getTextAttribute($value)
+    {
+        return ProductCopy::normalize($value);
+    }
+
+    public function setTextAttribute($value)
+    {
+        $this->setNormalizedAttribute('text', $value);
+    }
+
+    public function getDescriptionAttribute($value)
+    {
+        return ProductCopy::normalize($value);
+    }
+
+    public function setDescriptionAttribute($value)
+    {
+        $this->setNormalizedAttribute('description', $value);
+    }
+
+    public function getSeoTitleAttribute($value)
+    {
+        return ProductCopy::normalize($value);
+    }
+
+    public function setSeoTitleAttribute($value)
+    {
+        $this->setNormalizedAttribute('seo_title', $value);
+    }
+
+    public function getSeoDescriptionAttribute($value)
+    {
+        return ProductCopy::normalize($value);
+    }
+
+    public function setSeoDescriptionAttribute($value)
+    {
+        $this->setNormalizedAttribute('seo_description', $value);
+    }
 
     public function scopePublished($query, $status = true) {
         return $query->where('published', '=', $status);
