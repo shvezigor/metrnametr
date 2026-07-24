@@ -967,4 +967,26 @@ class SeoKnowledgeTest extends TestCase
             ->assertSee('/mizhkimnatni-dveri-z-montazhem-lutsk', false);
         $this->assertSame(1, preg_match_all('/<h1\b/i', $orderResponse->getContent()));
     }
+
+    public function testHomepageAndFooterLinkDirectlyToRequestedCommercialPages()
+    {
+        $paths = [
+            '/metalovi-dveri-lutsk',
+            '/bronovani-dveri-lutsk',
+            '/vkhidni-dveri-v-budynok-lutsk',
+            '/vkhidni-dveri-v-kvartyru-lutsk',
+            '/mizhkimnatni-dveri-z-montazhem-lutsk',
+        ];
+
+        $response = $this->get('/')->assertStatus(200)
+            ->assertSee('<nav class="home-commercial-links"', false)
+            ->assertSee('aria-labelledby="home-commercial-links-title"', false)
+            ->assertSee('Популярні рішення для дверей у Луцьку');
+
+        foreach ($paths as $path) {
+            $response->assertSee('href="' . $path . '"', false);
+        }
+
+        $this->assertSame(1, preg_match_all('/<h1\b/i', $response->getContent()));
+    }
 }

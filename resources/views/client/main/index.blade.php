@@ -23,6 +23,33 @@
         'url' => '/dveri-z-montazhem-lutsk',
         'icon' => '/images/icons/handshake.svg',
     ]]);
+    $commercialLinks = [
+        [
+            'title' => 'Металеві двері у Луцьку',
+            'text' => 'Перегляньте металеві двері для квартир, будинків і технічних приміщень.',
+            'url' => '/metalovi-dveri-lutsk',
+        ],
+        [
+            'title' => 'Броньовані двері у Луцьку',
+            'text' => 'Ознайомтеся з конструкціями для входу до квартири, будинку чи офісу.',
+            'url' => '/bronovani-dveri-lutsk',
+        ],
+        [
+            'title' => 'Вхідні двері в будинок',
+            'text' => 'Доберіть вуличні моделі з урахуванням утеплення, покриття та умов експлуатації.',
+            'url' => '/vkhidni-dveri-v-budynok-lutsk',
+        ],
+        [
+            'title' => 'Вхідні двері в квартиру',
+            'text' => 'Порівняйте квартирні моделі за конструкцією, оздобленням і комплектацією.',
+            'url' => '/vkhidni-dveri-v-kvartyru-lutsk',
+        ],
+        [
+            'title' => 'Міжкімнатні двері з монтажем',
+            'text' => 'Оберіть міжкімнатні двері та дізнайтеся про замір і встановлення у Луцьку.',
+            'url' => '/mizhkimnatni-dveri-z-montazhem-lutsk',
+        ],
+    ];
 
     $trustItems = [
         ['icon' => '/images/icons/door.svg', 'title' => 'Власне виробництво з 2011 року', 'text' => 'Контролюємо конструкцію, комплектацію та якість дверей на виробництві.'],
@@ -91,6 +118,24 @@
         </div>
     </div>
 
+</section>
+
+<section class="home-commercial-links-section">
+    <div class="container">
+        <nav class="home-commercial-links" aria-labelledby="home-commercial-links-title">
+            <h2 id="home-commercial-links-title">Популярні рішення для дверей у Луцьку</h2>
+            <p>Оберіть тип дверей і перейдіть до моделей, особливостей комплектації, монтажу та відповідей на поширені запитання.</p>
+            <div class="home-commercial-links__grid">
+                @foreach($commercialLinks as $link)
+                    <a href="{{ $link['url'] }}">
+                        <strong>{{ $link['title'] }}</strong>
+                        <span>{{ $link['text'] }}</span>
+                        <span class="home-commercial-links__action">Переглянути</span>
+                    </a>
+                @endforeach
+            </div>
+        </nav>
+    </div>
 </section>
 
 <section class="home-category-section">

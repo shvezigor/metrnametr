@@ -40,6 +40,11 @@
                             <li><a href="/mizhkimnatni-dveri-lutsk">Міжкімнатні двері Луцьк</a></li>
                             <li><a href="/dveri-z-montazhem-lutsk">Двері з монтажем Луцьк</a></li>
                             <li><a href="/dveri-volyn">Двері Волинь</a></li>
+                            <li><a href="/metalovi-dveri-lutsk">Металеві двері Луцьк</a></li>
+                            <li><a href="/bronovani-dveri-lutsk">Броньовані двері Луцьк</a></li>
+                            <li><a href="/vkhidni-dveri-v-budynok-lutsk">Вхідні двері в будинок</a></li>
+                            <li><a href="/vkhidni-dveri-v-kvartyru-lutsk">Вхідні двері в квартиру</a></li>
+                            <li><a href="/mizhkimnatni-dveri-z-montazhem-lutsk">Міжкімнатні двері з монтажем</a></li>
                         </ul>
                     </div>
 
