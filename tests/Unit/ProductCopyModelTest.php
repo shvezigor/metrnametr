@@ -11,7 +11,7 @@ class ProductCopyModelTest extends TestCase
     {
         $product = new Product();
         $product->title = 'Двері вхідіні Престиж';
-        $product->text = '<p>Накладки МДФ с двох сторін</p>';
+        $product->text = '<p>Накладки МДФ с двух сторін</p>';
         $product->seo_description = 'В комплект входить поріг';
 
         $this->assertSame('Двері вхідні Престиж', $product->getAttributes()['title']);
@@ -28,6 +28,6 @@ class ProductCopyModelTest extends TestCase
         ], true);
 
         $this->assertSame('Двері вхідні Оберіг', $product->title);
-        $this->assertSame('Двері Під’їздні', $product->description);
+        $this->assertSame('Двері Під’їзні', $product->description);
     }
 }
