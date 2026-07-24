@@ -983,10 +983,25 @@ class SeoKnowledgeTest extends TestCase
             ->assertSee('aria-labelledby="home-commercial-links-title"', false)
             ->assertSee('Популярні рішення для дверей у Луцьку');
 
+        $content = $response->getContent();
+        $navFound = preg_match(
+            '/<nav\b[^>]*class="[^"]*\bhome-commercial-links\b[^"]*"[^>]*>.*?<\/nav>/is',
+            $content,
+            $commercialNav
+        );
+        $footerFound = preg_match('/<footer\b[^>]*>.*?<\/footer>/is', $content, $footer);
+
+        $this->assertSame(1, $navFound, 'The homepage commercial navigation region was not found.');
+        $this->assertSame(1, $footerFound, 'The footer region was not found.');
+
+        $commercialNavHtml = $commercialNav[0] ?? '';
+        $footerHtml = $footer[0] ?? '';
         foreach ($paths as $path) {
-            $response->assertSee('href="' . $path . '"', false);
+            $href = 'href="' . $path . '"';
+            $this->assertStringContainsString($href, $commercialNavHtml, 'Commercial navigation is missing ' . $path);
+            $this->assertStringContainsString($href, $footerHtml, 'Footer is missing ' . $path);
         }
 
-        $this->assertSame(1, preg_match_all('/<h1\b/i', $response->getContent()));
+        $this->assertSame(1, preg_match_all('/<h1\b/i', $content));
     }
 }
