@@ -3,12 +3,22 @@
 namespace App\Http\Controllers;
 
 use App\Support\CommercialLanding;
+use App\Support\OpenAiProductFeed;
 use App\Support\RealWorks;
 use App\Support\SeoContent;
 use Illuminate\Http\Response;
 
 class SeoController extends Controller
 {
+    public function openAiProductFeed()
+    {
+        return response(OpenAiProductFeed::csv(OpenAiProductFeed::products()), 200, [
+            'Content-Type' => 'text/csv; charset=UTF-8',
+            'Content-Disposition' => 'inline; filename="openai-products.csv"',
+            'Cache-Control' => 'public, max-age=3600',
+        ]);
+    }
+
     public function landing($slug)
     {
         $landing = SeoContent::landingPage($slug);
