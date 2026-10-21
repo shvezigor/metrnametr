@@ -1,5 +1,11 @@
 User-agent: *
 Allow: /
 
+User-agent: OAI-AdsBot
+Allow: /
+
+User-agent: OAI-SearchBot
+Allow: /
+
 # AI usage policy: https://metrnametr.com.ua/ai-policy.txt
 Sitemap: https://metrnametr.com.ua/sitemap.xml

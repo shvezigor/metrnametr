@@ -34,6 +34,8 @@ class SeoKnowledgeTest extends TestCase
         $response->assertStatus(200);
         $response->assertSee('User-agent: *', false);
         $response->assertSee('Allow: /', false);
+        $response->assertSee("User-agent: OAI-AdsBot\nAllow: /", false);
+        $response->assertSee("User-agent: OAI-SearchBot\nAllow: /", false);
         $response->assertSee('Sitemap: https://metrnametr.com.ua/sitemap.xml', false);
         $response->assertDontSee('GPTBot');
         $response->assertDontSee('ClaudeBot');

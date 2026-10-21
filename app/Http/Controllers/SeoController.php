@@ -193,6 +193,12 @@ class SeoController extends Controller
             'User-agent: *',
             'Allow: /',
             '',
+            'User-agent: OAI-AdsBot',
+            'Allow: /',
+            '',
+            'User-agent: OAI-SearchBot',
+            'Allow: /',
+            '',
             '# AI usage policy: ' . SeoContent::site('domain') . '/ai-policy.txt',
             'Sitemap: ' . SeoContent::site('domain') . '/sitemap.xml',
         ]);
