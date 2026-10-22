@@ -533,6 +533,8 @@ class SeoKnowledgeTest extends TestCase
         $this->assertStringNotContainsString('...', $content);
         $this->assertStringNotContainsString('catalog?categories', $content);
         $this->assertStringNotContainsString('catalog?catalog=', $content);
+        $this->assertStringNotContainsString('/for-ai-agents', $content);
+        $this->assertStringNotContainsString('/ai-policy.txt', $content);
     }
 
     public function testSitemapUsesCanonicalUrlsWithHistoricalLastModifiedDates()
