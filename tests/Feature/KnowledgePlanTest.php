@@ -47,22 +47,26 @@ class KnowledgePlanTest extends TestCase
             ->assertSee('Технології виробництва');
     }
 
-    public function testKnowledgeIndexRendersPublishedArticlesNotPlannedStatuses()
+    public function testKnowledgeIndexRendersOnlyCuratedArticles()
     {
-        $publishedArticles = SeoContent::articles();
+        $allArticles = SeoContent::articles();
+        $indexableArticles = SeoContent::indexableArticles();
 
-        $this->assertGreaterThanOrEqual(100, $publishedArticles->count());
-        $this->assertSame($publishedArticles->count(), $publishedArticles->pluck('slug')->unique()->count());
+        $this->assertGreaterThanOrEqual(100, $allArticles->count());
+        $this->assertGreaterThan(0, $indexableArticles->count());
+        $this->assertLessThan($allArticles->count(), $indexableArticles->count());
+        $this->assertSame($indexableArticles->count(), $indexableArticles->pluck('slug')->unique()->count());
 
         $this->get('/knowledge')
             ->assertStatus(200)
-            ->assertSee('/knowledge/yak-vybraty-mizhkimnatni-dveri-dlia-kvartyry')
-            ->assertSee('/knowledge/dveri-dlia-ofisu-yak-obraty')
+            ->assertSee('/knowledge/yak-vybraty-vkhidni-dveri-dlia-kvartyry')
+            ->assertDontSee('/knowledge/dveri-dlia-ofisu-yak-obraty')
             ->assertDontSee('Заплановано');
 
         $this->get('/knowledge/yak-vybraty-mizhkimnatni-dveri-dlia-kvartyry')
             ->assertStatus(200)
             ->assertSee('Як вибрати міжкімнатні двері для квартири')
+            ->assertSee('noindex,follow', false)
             ->assertSee('FAQPage')
             ->assertSee('id="comparison"', false);
 
@@ -73,12 +77,12 @@ class KnowledgePlanTest extends TestCase
             ->assertSee('id="comparison"', false);
     }
 
-    public function testKnowledgeIndexIsPaginatedAndUsesArticleImages()
+    public function testKnowledgeIndexUsesCuratedArticleImagesWithoutThinPagination()
     {
         $response = $this->get('/knowledge');
 
         $response->assertStatus(200);
-        $response->assertSee('/knowledge?page=2', false);
+        $response->assertDontSee('/knowledge?page=2', false);
         $response->assertSee('/images/knowledge/yak-vybraty-vkhidni-dveri-dlia-kvartyry.webp', false);
         $response->assertDontSee('/knowledge/yak-vybraty-vkhidni-dveri-dlia-kvartyry/image.svg', false);
         $response->assertSee('loading="lazy"', false);
@@ -86,7 +90,8 @@ class KnowledgePlanTest extends TestCase
 
         $this->get('/knowledge?page=2')
             ->assertStatus(200)
-            ->assertSee('/knowledge?page=1', false);
+            ->assertSee('noindex,follow', false)
+            ->assertSee('https://metrnametr.com.ua/knowledge', false);
 
         $article = SeoContent::article('yak-pidhotuvatysia-do-zamovlennia-dverei');
 

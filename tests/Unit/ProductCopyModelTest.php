@@ -7,6 +7,14 @@ use Tests\TestCase;
 
 class ProductCopyModelTest extends TestCase
 {
+    public function testProductAliasWhitespaceIsNormalizedBeforePersistence()
+    {
+        $product = new Product();
+        $product->alias = 'dveri-vhidni test 1';
+
+        $this->assertSame('dveri-vhidni-test-1', $product->getAttributes()['alias']);
+    }
+
     public function testDirtyValuesAreNormalizedBeforeSaving()
     {
         $product = new Product();

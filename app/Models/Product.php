@@ -50,6 +50,11 @@ class Product extends Model
         $this->attributes[$key] = ProductCopy::normalize($value);
     }
 
+    public function setAliasAttribute($value)
+    {
+        $this->attributes['alias'] = preg_replace('/\s+/u', '-', trim((string) $value));
+    }
+
     public function getTitleAttribute($value)
     {
         return ProductCopy::normalize($value);

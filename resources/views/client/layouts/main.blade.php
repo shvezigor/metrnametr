@@ -29,6 +29,9 @@
         
         <meta name="description" content="{{ $metaDescription }}" />
         <meta name="keywords" content="{{ $keywords ?? '' }}" />
+        @if(!empty($robots))
+            <meta name="robots" content="{{ $robots }}" />
+        @endif
         <link rel="canonical" href="{{ $canonical }}" />
         <meta property="og:title" content="{{ $ogTitle ?? $metaTitle }}" />
         <meta property="og:description" content="{{ $ogDescription ?? $metaDescription }}" />

@@ -21,15 +21,26 @@ class SeoContent
     {
         $configuredArticles = collect(config('knowledge_articles.articles', []))
             ->map(function ($article) {
-                return KnowledgeArticleFactory::make($article);
+                $article = KnowledgeArticleFactory::make($article);
+                $article['indexable'] = false;
+
+                return $article;
             });
 
         $plannedArticles = KnowledgePlan::articles()
             ->map(function ($article) {
-                return KnowledgeArticleFactory::make($article);
+                $article = KnowledgeArticleFactory::make($article);
+                $article['indexable'] = false;
+
+                return $article;
             });
 
         return collect(config('seo_content.articles', []))
+            ->map(function ($article) {
+                $article['indexable'] = true;
+
+                return $article;
+            })
             ->merge($configuredArticles)
             ->merge($plannedArticles)
             ->unique('slug')
@@ -41,6 +52,16 @@ class SeoContent
                 return $article;
             })
             ->values();
+    }
+
+    public static function indexableArticles()
+    {
+        return self::articles()->where('indexable', true)->values();
+    }
+
+    public static function isIndexableArticle(array $article)
+    {
+        return ($article['indexable'] ?? false) === true;
     }
 
     public static function article($slug)
@@ -202,7 +223,32 @@ class SeoContent
             $parts[] = 'категорія ' . $categoryTitle;
         }
 
-        return implode(' — ', $parts) . '. Підбір за підтвердженими характеристиками моделі.';
+        $description = implode(' — ', $parts) . '.';
+
+        if ((float) $product->price > 0) {
+            $description .= ' Ціна ' . number_format((float) $product->price, 0, ',', ' ') . ' грн.';
+        }
+
+        return $description . ' Консультація, замір, доставка та монтаж у Луцьку й Волині.';
+    }
+
+    public static function productMetaTitle(Product $product)
+    {
+        if (!empty($product->seo_title)) {
+            return $product->seo_title;
+        }
+
+        $suffix = (float) $product->price > 0
+            ? ' — ' . number_format((float) $product->price, 0, ',', ' ') . ' грн | Метр на Метр'
+            : ' | Метр на Метр';
+        $available = max(20, 70 - mb_strlen($suffix));
+        $name = trim($product->title);
+
+        if (mb_strlen($name) > $available) {
+            $name = rtrim(mb_substr($name, 0, $available - 1)) . '…';
+        }
+
+        return $name . $suffix;
     }
 
     private static function productPurpose(array $specifications, $typeTitle, $categoryTitle)
@@ -628,7 +674,7 @@ SVG;
             '@context' => 'https://schema.org',
             '@type' => 'Product',
             'name' => $product->title,
-            'description' => strip_tags($product->description ?: $product->text),
+            'description' => self::plainText($product->description ?: $product->text),
             'image' => self::absoluteUrl($product->cover),
             'url' => self::canonical($product->location),
         ];
@@ -662,6 +708,11 @@ SVG;
                 'priceCurrency' => 'UAH',
                 'price' => $product->price,
                 'url' => self::canonical($product->location),
+                'itemCondition' => 'https://schema.org/NewCondition',
+                'seller' => [
+                    '@type' => 'Organization',
+                    'name' => self::site('name'),
+                ],
             ];
 
             $availability = self::availabilitySchemaUrl($specifications['availability']);
@@ -671,6 +722,14 @@ SVG;
         }
 
         return $schema;
+    }
+
+    private static function plainText($value)
+    {
+        $text = preg_replace('/<\/(?:p|div|li|h[1-6]|tr)>|<br\s*\/?\s*>/iu', ' ', (string) $value);
+        $text = html_entity_decode(strip_tags($text), ENT_QUOTES | ENT_HTML5, 'UTF-8');
+
+        return trim(preg_replace('/\s+/u', ' ', $text));
     }
 
     private static function availabilitySchemaUrl($availability)
@@ -732,7 +791,7 @@ SVG;
             $urls[] = self::staticSitemapUrl($landing['path'], 'config/seo_landings.php', 'monthly', '0.8');
         }
 
-        foreach (self::articles() as $article) {
+        foreach (self::indexableArticles() as $article) {
             $urls[] = self::staticSitemapUrl('/knowledge/' . $article['slug'], 'config/seo_content.php', 'monthly', '0.7');
         }
 

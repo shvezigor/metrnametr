@@ -10,7 +10,7 @@ class KnowledgeController extends Controller
 {
     public function index()
     {
-        $allArticles = SeoContent::articles();
+        $allArticles = SeoContent::indexableArticles();
         $page = LengthAwarePaginator::resolveCurrentPage();
         $perPage = 12;
         $articles = new LengthAwarePaginator(
@@ -28,6 +28,8 @@ class KnowledgeController extends Controller
             ->with('articles', $articles)
             ->with('title', 'База знань про двері | Метр на Метр')
             ->with('description', 'Практичні поради Метр на Метр щодо вибору, монтажу, утеплення, замків і догляду за вхідними дверима.')
+            ->with('canonical', SeoContent::canonical('/knowledge'))
+            ->with('robots', $page > 1 ? 'noindex,follow' : null)
             ->with('breadcrumbs', [
                 route('knowledge.index') => 'База знань',
             ])
@@ -62,10 +64,11 @@ class KnowledgeController extends Controller
 
         return view('client.knowledge.show')
             ->with('article', $article)
-            ->with('related', SeoContent::articles()->where('slug', '!=', $slug)->take(3))
+            ->with('related', SeoContent::indexableArticles()->where('slug', '!=', $slug)->take(3))
             ->with('commercialLinks', SeoContent::articleCommercialLinks($article))
             ->with('title', $article['title'] . ' — поради виробника | Метр на Метр')
             ->with('description', $article['description'])
+            ->with('robots', SeoContent::isIndexableArticle($article) ? null : 'noindex,follow')
             ->with('breadcrumbs', [
                 route('knowledge.index') => 'База знань',
                 route('knowledge.show', ['slug' => $article['slug']]) => $article['title'],
@@ -92,6 +95,7 @@ class KnowledgeController extends Controller
             ->with('totalArticles', $articles->count())
             ->with('title', 'План бази знань про двері | Метр на Метр')
             ->with('description', 'Редакційний план AI-friendly бази знань Метр на Метр: 100 експертних статей про вибір, виробництво, монтаж, безпеку, дизайн і догляд за дверима.')
+            ->with('robots', 'noindex,follow')
             ->with('breadcrumbs', [
                 route('knowledge.index') => 'База знань',
                 route('knowledge.plan') => 'План бази знань',
@@ -109,9 +113,10 @@ class KnowledgeController extends Controller
     {
         return view('client.knowledge.for-ai-agents')
             ->with('site', SeoContent::site())
-            ->with('articles', SeoContent::articles())
+            ->with('articles', SeoContent::indexableArticles())
             ->with('title', 'Сторінка для AI-агентів | Метр на Метр')
             ->with('description', 'Короткий опис сайту Метр на Метр, основних товарів, джерел інформації та контактних сторінок для AI-агентів.')
+            ->with('robots', 'noindex,follow')
             ->with('breadcrumbs', [
                 route('for-ai-agents') => 'Сторінка для AI-агентів',
             ])

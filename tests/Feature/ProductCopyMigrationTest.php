@@ -56,4 +56,23 @@ class ProductCopyMigrationTest extends TestCase
         $this->assertSame('copy-migration-alias', $stored->alias);
         $this->assertSame(12345.0, $stored->price);
     }
+
+    public function testProductAliasMigrationReplacesWhitespaceWithoutChangingOtherFields()
+    {
+        $product = Product::published()->firstOrFail();
+
+        DB::table('products')->where('id', $product->id)->update([
+            'alias' => 'testovi dveri 1',
+            'title' => 'Тестові двері',
+            'price' => 12345,
+        ]);
+
+        require_once database_path('migrations/2026_10_22_140000_normalize_product_alias_whitespace.php');
+        (new \NormalizeProductAliasWhitespace())->up();
+
+        $stored = DB::table('products')->where('id', $product->id)->first();
+        $this->assertSame('testovi-dveri-1', $stored->alias);
+        $this->assertSame('Тестові двері', $stored->title);
+        $this->assertSame(12345.0, $stored->price);
+    }
 }

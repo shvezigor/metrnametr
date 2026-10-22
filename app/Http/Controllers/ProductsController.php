@@ -113,7 +113,8 @@ class ProductsController extends Controller
             ])
             ->with('title', $catalogTitle)
             ->with('description', $catalogDescription)
-            ->with('canonical', $selectedCategory ? SeoContent::canonicalFor($selectedCategory, '/catalog?categories[]=' . $selectedCategory->id) : SeoContent::canonical('/catalog'))
+            ->with('canonical', SeoContent::canonical('/catalog'))
+            ->with('robots', $request->query() ? 'noindex,follow' : null)
             ->with('faq', $catalogFaq)
             ->with('schema', [
                 SeoContent::collectionSchema($listOfProducts),
@@ -134,6 +135,14 @@ class ProductsController extends Controller
         $product = Product::published()->with('categories.type')->where('alias', $alias)->first();
 
         if ($product === null) {
+            $normalizedAlias = preg_replace('/\s+/', '-', trim($alias));
+            if ($normalizedAlias !== $alias) {
+                $normalizedProduct = Product::published()->where('alias', $normalizedAlias)->first();
+                if ($normalizedProduct) {
+                    return redirect('/product/' . $normalizedProduct->alias, 301);
+                }
+            }
+
             abort(404);
         }
 
@@ -162,6 +171,6 @@ class ProductsController extends Controller
                 route('catalog') => 'Каталог',
                 route('product.show', ['alias' => $product->alias]) => $product->title,
             ])
-            ->with('title', SeoContent::titleFor($product, SeoContent::productMetaDescription($product)));
+            ->with('title', SeoContent::productMetaTitle($product));
     }
 }

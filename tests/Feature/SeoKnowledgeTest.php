@@ -238,7 +238,7 @@ class SeoKnowledgeTest extends TestCase
 
         $product = new Product([
             'title' => 'Test Door',
-            'description' => 'Door description',
+            'description' => '<p>Door</p><p>description</p>',
             'alias' => 'test-door',
             'price' => 0,
         ]);
@@ -247,6 +247,7 @@ class SeoKnowledgeTest extends TestCase
         $schema = SeoContent::productSchema($product);
 
         $this->assertSame('https://metrnametr.com.ua/images/placeholder-product.png', $schema['image']);
+        $this->assertSame('Door description', $schema['description']);
         $this->assertArrayNotHasKey('availability', $schema['offers'] ?? []);
         $this->assertNull(SeoContent::faqSchema([]));
         $this->assertSame('https://metrnametr.com.ua/images/og.jpg', SeoContent::ogImageFor((object) ['og_image' => '/images/og.jpg'], '/fallback.jpg'));
@@ -1056,5 +1057,103 @@ class SeoKnowledgeTest extends TestCase
 
         $response->assertDontSee('вхідін');
         $response->assertDontSee('с двух сторін');
+    }
+
+    public function testCatalogFiltersAreNoindexAndCanonicalizeToCatalog()
+    {
+        $this->get('/catalog?categories%5B%5D=1&min=10000&page=2')
+            ->assertStatus(200)
+            ->assertSee('<meta name="robots" content="noindex,follow" />', false)
+            ->assertSee('<link rel="canonical" href="https://metrnametr.com.ua/catalog" />', false);
+
+        $this->get('/catalog')
+            ->assertStatus(200)
+            ->assertDontSee('noindex,follow', false)
+            ->assertSee('<link rel="canonical" href="https://metrnametr.com.ua/catalog" />', false);
+    }
+
+    public function testOnlyCuratedKnowledgeArticlesRemainIndexable()
+    {
+        $curated = '/knowledge/yak-vybraty-vkhidni-dveri-dlia-kvartyry';
+        $generated = '/knowledge/yak-pidhotuvatysia-do-zamovlennia-dverei';
+
+        $this->get($curated)
+            ->assertStatus(200)
+            ->assertDontSee('noindex,follow', false);
+
+        $this->get($generated)
+            ->assertStatus(200)
+            ->assertSee('<meta name="robots" content="noindex,follow" />', false);
+
+        $sitemap = $this->get('/sitemap.xml')->assertStatus(200)->getContent();
+        $this->assertStringContainsString('https://metrnametr.com.ua' . $curated, $sitemap);
+        $this->assertStringNotContainsString('https://metrnametr.com.ua' . $generated, $sitemap);
+
+        $this->get('/knowledge/plan')
+            ->assertStatus(200)
+            ->assertSee('<meta name="robots" content="noindex,follow" />', false);
+    }
+
+    public function testKnowledgePaginationDoesNotCreateIndexableArchiveDuplicates()
+    {
+        $this->get('/knowledge?page=2')
+            ->assertStatus(200)
+            ->assertSee('<meta name="robots" content="noindex,follow" />', false)
+            ->assertSee('<link rel="canonical" href="https://metrnametr.com.ua/knowledge" />', false);
+    }
+
+    public function testProductMetadataIsConciseAndCommercial()
+    {
+        $product = Product::published()
+            ->where('price', '>', 0)
+            ->whereHas('categories')
+            ->with('categories.type')
+            ->firstOrFail();
+
+        $response = $this->get(route('product.show', ['alias' => $product->alias], false))
+            ->assertStatus(200)
+            ->assertSee('<title>' . e(SeoContent::productMetaTitle($product)) . '</title>', false);
+
+        $this->assertLessThanOrEqual(70, mb_strlen(SeoContent::productMetaTitle($product)));
+        $this->assertStringContainsString('грн', SeoContent::productMetaTitle($product));
+    }
+
+    public function testProductOfferDeclaresNewCondition()
+    {
+        $product = new Product([
+            'title' => 'Тестові двері',
+            'alias' => 'testovi-dveri',
+            'price' => 15000,
+        ]);
+        $product->setRelation('categories', collect());
+
+        $schema = SeoContent::productSchema($product);
+
+        $this->assertSame('https://schema.org/NewCondition', $schema['offers']['itemCondition']);
+    }
+
+    public function testLegacyProductAliasWithSpacesRedirectsToNormalizedAlias()
+    {
+        $product = factory(Product::class)->create([
+            'alias' => 'testovi-dveri-1',
+            'published' => 1,
+        ]);
+
+        $this->get('/product/testovi-dveri%201')
+            ->assertRedirect('/product/' . $product->alias)
+            ->assertStatus(301);
+    }
+
+    public function testMachineOnlyResourcesDoNotPolluteGoogleIndex()
+    {
+        foreach (['/llms.txt', '/llms-full.txt', '/ai-policy.txt', '/feeds/openai-products.csv'] as $path) {
+            $this->get($path)
+                ->assertStatus(200)
+                ->assertHeader('X-Robots-Tag', 'noindex');
+        }
+
+        $this->get('/for-ai-agents')
+            ->assertStatus(200)
+            ->assertSee('<meta name="robots" content="noindex,follow" />', false);
     }
 }

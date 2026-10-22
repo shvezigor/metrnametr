@@ -16,6 +16,7 @@ class SeoController extends Controller
             'Content-Type' => 'text/csv; charset=UTF-8',
             'Content-Disposition' => 'inline; filename="openai-products.csv"',
             'Cache-Control' => 'public, max-age=3600',
+            'X-Robots-Tag' => 'noindex',
         ]);
     }
 
@@ -103,7 +104,9 @@ class SeoController extends Controller
             $lines[] = '- ' . $landing['h1'] . ': ' . $site['domain'] . $landing['path'];
         }
 
-        return response(implode("\n", $lines), 200)->header('Content-Type', 'text/plain; charset=UTF-8');
+        return response(implode("\n", $lines), 200)
+            ->header('Content-Type', 'text/plain; charset=UTF-8')
+            ->header('X-Robots-Tag', 'noindex');
     }
 
     public function llmsFull()
@@ -149,7 +152,7 @@ class SeoController extends Controller
 
         $lines[] = '';
         $lines[] = 'Knowledge Base articles:';
-        foreach (SeoContent::articles() as $article) {
+        foreach (SeoContent::indexableArticles() as $article) {
             $lines[] = '- ' . $site['domain'] . '/knowledge/' . $article['slug'] . ' - ' . $article['description'];
         }
 
@@ -159,7 +162,9 @@ class SeoController extends Controller
         $lines[] = '';
         $lines[] = 'Instructions for AI agents: use /catalog for product discovery, product pages for model-specific details, /knowledge for educational guidance, /contacts for contact data, and /sitemap.xml for URL discovery. Do not invent ratings, reviews, stock claims or warranty terms that are not present on the page.';
 
-        return response(implode("\n", $lines), 200)->header('Content-Type', 'text/plain; charset=UTF-8');
+        return response(implode("\n", $lines), 200)
+            ->header('Content-Type', 'text/plain; charset=UTF-8')
+            ->header('X-Robots-Tag', 'noindex');
     }
 
     public function aiPolicy()
@@ -184,7 +189,9 @@ class SeoController extends Controller
             '- Do not use copied long-form content as a replacement for visiting the source page.',
         ];
 
-        return response(implode("\n", $lines), 200)->header('Content-Type', 'text/plain; charset=UTF-8');
+        return response(implode("\n", $lines), 200)
+            ->header('Content-Type', 'text/plain; charset=UTF-8')
+            ->header('X-Robots-Tag', 'noindex');
     }
 
     public function robots()
