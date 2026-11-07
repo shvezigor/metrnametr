@@ -20,7 +20,7 @@ class KnowledgeImage
             'version' => $version,
             'fallback' => $fallback,
             'src' => $src,
-            'alt' => sprintf('%s для статті %s', $bucket['alt'], $article['title']),
+            'alt' => $article['image_alt'] ?? sprintf('%s для статті %s', $bucket['alt'], $article['title']),
             'title' => $article['title'],
             'caption' => sprintf('%s: %s', $bucket['caption'], $article['title']),
             'prompt' => self::prompt($article, $bucket),

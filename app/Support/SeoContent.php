@@ -71,6 +71,10 @@ class SeoContent
 
     public static function articleCommercialLinks(array $article)
     {
+        if (isset($article['commercial_links'])) {
+            return collect($article['commercial_links'])->take(4)->values();
+        }
+
         $context = mb_strtolower(implode(' ', [
             $article['slug'] ?? '',
             $article['title'] ?? '',
@@ -609,6 +613,10 @@ SVG;
 
     public static function articleLongFormBlocks(array $article)
     {
+        if (array_key_exists('long_form_blocks', $article)) {
+            return $article['long_form_blocks'];
+        }
+
         $title = $article['title'];
         $sectionNames = array_keys($article['sections']);
         $primarySection = $sectionNames[0] ?? 'основні параметри';

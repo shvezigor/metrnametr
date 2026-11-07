@@ -27,7 +27,7 @@ class KnowledgeController extends Controller
         return view('client.knowledge.index')
             ->with('articles', $articles)
             ->with('title', 'База знань про двері | Метр на Метр')
-            ->with('description', 'Практичні поради Метр на Метр щодо вибору, монтажу, утеплення, замків і догляду за вхідними дверима.')
+            ->with('description', 'Практичні поради Метр на Метр щодо вибору вхідних і міжкімнатних дверей, монтажу, утеплення, замків і догляду.')
             ->with('canonical', SeoContent::canonical('/knowledge'))
             ->with('robots', $page > 1 ? 'noindex,follow' : null)
             ->with('breadcrumbs', [
@@ -66,7 +66,7 @@ class KnowledgeController extends Controller
             ->with('article', $article)
             ->with('related', SeoContent::indexableArticles()->where('slug', '!=', $slug)->take(3))
             ->with('commercialLinks', SeoContent::articleCommercialLinks($article))
-            ->with('title', $article['title'] . ' — поради виробника | Метр на Метр')
+            ->with('title', $article['seo_title'] ?? $article['title'] . ' — поради виробника | Метр на Метр')
             ->with('description', $article['description'])
             ->with('robots', SeoContent::isIndexableArticle($article) ? null : 'noindex,follow')
             ->with('breadcrumbs', [

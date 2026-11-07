@@ -30,14 +30,40 @@
                             @foreach($article['sections'] as $heading => $body)
                                 <li><a href="#{{ \Illuminate\Support\Str::slug($heading) }}">{{ $heading }}</a></li>
                             @endforeach
-                            <li><a href="#comparison">Порівняння</a></li>
+                            @if(!empty($article['comparison']))
+                                <li><a href="#comparison">{{ $article['comparison_title'] ?? 'Порівняння' }}</a></li>
+                            @endif
                             <li><a href="#faq">FAQ</a></li>
                         </ul>
                     </div>
 
                     @foreach($article['sections'] as $heading => $body)
                         <h2 id="{{ \Illuminate\Support\Str::slug($heading) }}">{{ $heading }}</h2>
-                        <p>{{ $body }}</p>
+                        @if(is_array($body))
+                            @foreach($body['paragraphs'] ?? [] as $paragraph)
+                                <p>{{ $paragraph }}</p>
+                            @endforeach
+                            @if(!empty($body['items']))
+                                @if(!empty($body['ordered']))
+                                    <ol>
+                                @else
+                                    <ul>
+                                @endif
+                                @foreach($body['items'] as $item)
+                                    <li>{{ $item }}</li>
+                                @endforeach
+                                @if(!empty($body['ordered']))
+                                    </ol>
+                                @else
+                                    </ul>
+                                @endif
+                            @endif
+                            @if(!empty($body['after']))
+                                <p>{{ $body['after'] }}</p>
+                            @endif
+                        @else
+                            <p>{{ $body }}</p>
+                        @endif
                     @endforeach
 
                     @foreach(\App\Support\SeoContent::articleLongFormBlocks($article) as $block)
@@ -48,14 +74,15 @@
                     @endforeach
 
                     @if(!empty($article['comparison']))
-                        <h2 id="comparison">Порівняння</h2>
-                        <div class="table-responsive">
+                        <h2 id="comparison">{{ $article['comparison_title'] ?? 'Порівняння' }}</h2>
+                        <div class="table-responsive" role="region" aria-labelledby="comparison" tabindex="0">
                             <table class="table table-bordered knowledge-table">
+                                <caption class="sr-only">{{ $article['comparison_title'] ?? 'Порівняння' }}</caption>
                                 <thead>
                                     <tr>
-                                        <th>Критерій</th>
-                                        <th>Базовий варіант</th>
-                                        <th>Рекомендований підхід</th>
+                                        @foreach($article['comparison_headers'] ?? ['Критерій', 'Базовий варіант', 'Рекомендований підхід'] as $header)
+                                            <th scope="col">{{ $header }}</th>
+                                        @endforeach
                                     </tr>
                                 </thead>
                                 <tbody>
@@ -69,6 +96,30 @@
                                 </tbody>
                             </table>
                         </div>
+                        @if(!empty($article['comparison_note']))
+                            <p>{{ $article['comparison_note'] }}</p>
+                        @endif
+                    @endif
+
+                    @if(!empty($article['reading_links']))
+                        <h2>Матеріали за темою</h2>
+                        <ul>
+                            @foreach($article['reading_links'] as $link)
+                                <li><a href="{{ $link['path'] }}">{{ $link['label'] }}</a></li>
+                            @endforeach
+                        </ul>
+                    @endif
+
+                    @if(!empty($article['sources']))
+                        <h2>Джерела</h2>
+                        <ul>
+                            @foreach($article['sources'] as $source)
+                                <li><a href="{{ $source['url'] }}" rel="noopener noreferrer">{{ $source['label'] }}</a></li>
+                            @endforeach
+                        </ul>
+                        @if(!empty($article['sources_note']))
+                            <p>{{ $article['sources_note'] }}</p>
+                        @endif
                     @endif
 
                     <nav class="knowledge-commercial-links" aria-labelledby="knowledge-commercial-links-title">

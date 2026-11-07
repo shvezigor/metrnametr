@@ -66,7 +66,7 @@ class KnowledgePlanTest extends TestCase
         $this->get('/knowledge/yak-vybraty-mizhkimnatni-dveri-dlia-kvartyry')
             ->assertStatus(200)
             ->assertSee('Як вибрати міжкімнатні двері для квартири')
-            ->assertSee('noindex,follow', false)
+            ->assertDontSee('noindex,follow', false)
             ->assertSee('FAQPage')
             ->assertSee('id="comparison"', false);
 
